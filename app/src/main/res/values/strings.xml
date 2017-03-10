@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">PRTracker</string>
+    <string name="action_settings">Settings</string>
+
+    <!--Barbell lifts -->
+    <string name="squat_snatch">Squat Snatch</string>
+    <string name="power_snatch">Power Snatch</string>
+    <string name="hang_squat_snatch">Hang Squat Snatch</string>
+    <string name="hang_power_snatch">Hang Power Snatch</string>
+    <string name="squat_clean">Squat Clean</string>
+    <string name="power_clean">Power Clean</string>
+    <string name="hang_squat_clean">Hang Squat Clean</string>
+    <string name="hang_power_clean">Hang Power Clean</string>
+    <string name="clean_jerk">Clean and Jerk</string>
+    <string name="back_squat">Back Squat</string>
+    <string name="front_squat">Front Squat</string>
+    <string name="overhead_squat">Overhead Squat</string>
+    <string name="bench">Bench</string>
+    <string name="close_grip_bench">Close Grip Bench</string>
+    <string name="skull_crusher">Skull Crusher</string>
+    <string name="shoulder_press">Shoulder Press</string>
+    <string name="jerk_shoulder_press">Jerk Shoulder Press</string>
+    <string name="deadlift">Deadlift</string>
+    <string name="curl">Curl</string>
+    <string name="rdl">Romanian Deadlift</string>
+    <string name="incline_bench">Incline Bench</string>
+    <string name="decline_bench">Decline Bench</string>
+</resources>
