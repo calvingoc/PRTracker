@@ -25,4 +25,107 @@
     <string name="rdl">Romanian Deadlift</string>
     <string name="incline_bench">Incline Bench</string>
     <string name="decline_bench">Decline Bench</string>
+    <string name="row">Row</string>
+
+    <!-- Dumbbell Lifts-->
+    <string name="tri_extension">Triceps Extension</string>
+    <string name="goblet_squat">Goblet Squat</string>
+    <string name="fly">Fly</string>
+
+    <!-- CrossFit Girls-->
+    <string name="fran">Fran</string>
+    <string name="cindy">Cindy</string>
+    <string name="diane">Diane</string>
+    <string name="grace">Grace</string>
+    <string name="elizabeth">Elizabeth</string>
+    <string name="isabel">Isabel</string>
+    <string name="annie">Annie</string>
+    <string name="angie">Angie</string>
+    <string name="jackie">Jackie</string>
+    <string name="helen">Helen</string>
+
+    <!-- Heroes -->
+    <string name="murph">Murph</string>
+    <string name="nutss">Nutts</string>
+    <string name="dt">DT</string>
+    <string name="adam_brown">Adam Brown</string>
+    <string name="michael">Michael</string>
+    <string name="jack">Jack</string>
+    <string name="the_seven">The Seven</string>
+    
+    <!-- Open -->
+    <string name="o12.1">12.1</string>
+    <string name="o12.2">12.2</string>
+    <string name="o12.3">12.3</string>
+    <string name="o12.4">12.4</string>
+    <string name="o12.5">12.5</string>
+
+    <string name="o13.1">13.1</string>
+    <string name="o13.2">13.2</string>
+    <string name="o13.3">13.3</string>
+    <string name="o13.4">13.4</string>
+    <string name="o13.5">13.5</string>
+
+    <string name="o14.1">14.1</string>
+    <string name="o14.2">14.2</string>
+    <string name="o14.3">14.3</string>
+    <string name="o14.4">14.4</string>
+    <string name="o14.5">14.5</string>
+
+    <string name="o15.1">15.1</string>
+    <string name="o15.2">14.2</string>
+    <string name="o15.3">15.3</string>
+    <string name="o15.4">15.4</string>
+    <string name="o15.5">15.5</string>
+
+    <string name="o16.1">16.1</string>
+    <string name="o16.2">16.2</string>
+    <string name="o16.3">16.3</string>
+    <string name="o16.4">16.4</string>
+    <string name="o16.5">14.5</string>
+
+    <string name="o17.1">17.1</string>
+    <string name="o17.2">17.2</string>
+    <string name="o17.3">17.3</string>
+    <string name="o17.4">17.4</string>
+    <string name="o17.5">17.5</string>
+
+    <!-- Gymnastics/Body weight -->
+    <string name="push_up">Push Up</string>
+    <string name="pull_up">Strict Pull Up</string>
+    <string name="kipping_pull_up">Kipping Pull Up</string>
+    <string name="ctb">Chest to Bar Pull Up</string>
+    <string name="strict_bar_muscle_up">Strict Bar Muscle Up</string>
+    <string name="kipping_bar_muscle_up">Kipping Bar Muscle Up</string>
+    <string name="ring_muscle_up">Ring Muscle Up</string>
+    <string name="strict_handstand_push_up">Strict Handstand Push Up</string>
+    <string name="kipping_handstand_push_up">Kipping Handstand Push Up</string>
+    <string name="strict_dip">Strict Dips</string>
+    <string name="kipping_dip">Kipping Dips</string>
+    <string name="toes_to_bar">Toes to Bar</string>
+    <string name="knees_to_elbow">Knees to Elbow</string>
+    <string name="burpees">Burpees</string>
+    <string name="double_unders">Double Unders</string>
+
+    <!-- Running -->
+    <string name="one_hundred_meter">100m</string>
+    <string name="two_hundred_meter">200m</string>
+    <string name="four_hundred_meter">400m</string>
+    <string name="mile">mile</string>
+    <string name="five_k">5k</string>
+    <string name="ten_k">10k</string>
+    <string name="half_marathon">Half Marathon</string>
+    <string name="marathon">Marathon</string>
+
+    <!-- Swimming -->
+    <string name="freestyle">Freestyle - Front Crawl</string>
+    <string name="backstroke">Back Stroke</string>
+    <string name="breast">Breast Stroke</string>
+    <string name="butterfly">Butterfly</string>
+    <string name="medley">Medley</string>
+    <string name="fifty_meter">50m</string>
+    <string name="five_hundred_meter">500m</string>
+    <string name="one_thousand_meter">1000m</string>
+
+
 </resources>
