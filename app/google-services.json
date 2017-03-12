@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "49825863480",
+    "firebase_url": "https://prtracker-fee60.firebaseio.com",
+    "project_id": "prtracker-fee60",
+    "storage_bucket": "prtracker-fee60.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:49825863480:android:0b6a4948ba51ca52",
+        "android_client_info": {
+          "package_name": "online.cagocapps.prtracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "49825863480-r50jbk3pjp35a9g577j4l2umcd3l44ob.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "online.cagocapps.prtracker",
+            "certificate_hash": "79a05cbf2f60859f45e1e0bdedc0ebe06bc8b8bb"
+          }
+        },
+        {
+          "client_id": "49825863480-eapqlgp1bqh3pg6crtu2j05p944ae7qc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8GxjDkOHe0Xv851P9PYJ1QwOrsFppwJ4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "49825863480-eapqlgp1bqh3pg6crtu2j05p944ae7qc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
