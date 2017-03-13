@@ -2,6 +2,15 @@
     <string name="app_name">PRTracker</string>
     <string name="action_settings">Settings</string>
 
+    <!--Shared Preferences-->
+    <string name="sp_username" translatable="false">default_username</string>
+
+
+    <!--Log In-->
+    <string name="failed_login">Log in failed. Please check your connection and try again.</string>
+    <string name="connection_failed">Connection failed. Please check your connection and restart the app</string>
+    <string name="login_prompt">Please log in with your Gmail account.</string>
+
     <!--Barbell lifts -->
     <string name="squat_snatch">Squat Snatch</string>
     <string name="power_snatch">Power Snatch</string>
