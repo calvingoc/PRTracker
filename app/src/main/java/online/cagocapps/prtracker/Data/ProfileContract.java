@@ -15,6 +15,7 @@ public class ProfileContract {
         public static final String SKILL = "skill";
         public static final String YEARS_ACTIVE = "yearsActive";
         public static final String EMAIL = "email";
+        public static final String GENDER = "gender";
     }
 
     public static final class BarbellLifts implements BaseColumns{

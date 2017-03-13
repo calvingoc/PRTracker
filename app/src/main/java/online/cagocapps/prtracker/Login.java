@@ -2,6 +2,9 @@ package online.cagocapps.prtracker;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +22,9 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import online.cagocapps.prtracker.Data.ProfileContract;
+import online.cagocapps.prtracker.Data.ProfileDBHelper;
+
 public class Login extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener
 ,View.OnClickListener{
     //log in variables
@@ -28,12 +34,20 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
     private static final int RC_SIGN_IN = 9001;
     public GoogleSignInAccount account;
 
+    //db vars
+    private ProfileDBHelper dbHelper;
+    private SQLiteDatabase dbWrite;
+
 
     private String TAG = "login";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        //set up database
+        dbHelper = new ProfileDBHelper(this);
+        dbWrite = dbHelper.getWritableDatabase();
 
         //set up log in
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -100,15 +114,36 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         if (result.isSuccess()){
             account = result.getSignInAccount();
             SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
-            editor.putString(getString(R.string.sp_username), account.getEmail());
+            editor.putString(getString(R.string.sp_email), account.getEmail());
             editor.commit();
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-            finish();
+            String where = ProfileContract.ProfileValues.EMAIL + " = ?";
+            Cursor cursor = dbWrite.query(
+                    ProfileContract.ProfileValues.TABLE_NAME,
+                    new String[] {ProfileContract.ProfileValues.EMAIL},
+                    where,
+                    new String[] {account.getEmail()},
+                    null,
+                    null,
+                    null
+            );
+            if (cursor.moveToFirst()){
+                cursor.close();
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            } else {
+                cursor.close();
+                Intent intent = new Intent(this, ProfileActivity.class);
+                intent.putExtra(getString(R.string.new_user), true);
+                startActivity(intent);
+                finish();
+
+            }
         } else {
             Toast.makeText(this, getString(R.string.failed_login),Toast.LENGTH_SHORT).show();
         }
     }
+
 
 
     @Override
@@ -119,5 +154,11 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         if (mAuthListener != null){
             mAuth.removeAuthStateListener(mAuthListener);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        dbWrite.close();
     }
 }

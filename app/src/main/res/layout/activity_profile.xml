@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="online.cagocapps.prtracker.ProfileActivity">
+
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:id="@+id/pp_tv_username"
+        android:text="@string/pp_username"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <EditText
+        android:id="@+id/pp_et_username"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:hint="@string/pp_username"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/pp_tv_username"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:id="@+id/pp_tv_birthday"
+        android:text="@string/pp_birthday"
+        app:layout_constraintTop_toBottomOf="@+id/pp_tv_username"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="@id/pp_tv_username"/>
+
+    <EditText
+        android:id="@+id/pp_et_birthday"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:ems="10"
+        android:inputType="date"
+        app:layout_constraintTop_toBottomOf="@id/pp_tv_username"
+        app:layout_constraintLeft_toRightOf="@id/pp_tv_username"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <EditText
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/pp_et_weight"
+        android:inputType="number"
+        android:hint="@string/pp_et_weight"
+        app:layout_constraintTop_toBottomOf="@id/pp_tv_birthday"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/pp_tv_weight"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:id="@+id/pp_tv_weight"
+        android:text="@string/pp_tv_weight"
+        app:layout_constraintTop_toBottomOf="@+id/pp_tv_birthday"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="@id/pp_tv_username"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:id="@+id/pp_tv_skill"
+        android:text="@string/pp_tv_skill"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="@id/pp_tv_username"
+        app:layout_constraintTop_toBottomOf="@+id/pp_tv_weight"
+        />
+
+    <Spinner
+        android:id="@+id/pp_spin_skill"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/pp_tv_weight"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/pp_tv_skill"
+        app:layout_constraintLeft_toRightOf="@+id/pp_tv_skill"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        app:layout_constraintHorizontal_bias="0.0" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:id="@+id/pp_tv_years"
+        android:text="@string/pp_tv_years"
+        app:layout_constraintTop_toBottomOf="@id/pp_tv_skill"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/pp_et_years"/>
+
+    <EditText
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/pp_et_years"
+        android:hint="@string/pp_tv_years"
+        android:inputType="number"
+        app:layout_constraintTop_toTopOf="@id/pp_tv_years"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/pp_tv_years"/>
+
+    <Button
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:id="@+id/pp_button_save"
+        android:text="@string/pp_button_save"
+        android:onClick="SaveProfile"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+</android.support.constraint.ConstraintLayout>

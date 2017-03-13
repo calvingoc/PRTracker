@@ -12,7 +12,7 @@ public class ProfileDBHelper extends SQLiteOpenHelper{
     public static final String DATABASE_NAME = "prTracker.db";
     public static final int DATABASE_VERSION = 0;
 
-    public DbHelper(Context context){ super(context, DATABASE_NAME, null, DATABASE_VERSION);}
+    public ProfileDBHelper(Context context){ super(context, DATABASE_NAME, null, DATABASE_VERSION);}
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
@@ -24,6 +24,7 @@ public class ProfileDBHelper extends SQLiteOpenHelper{
                         ProfileContract.ProfileValues.WEIGHT + " INTEGER, " +
                         ProfileContract.ProfileValues.SKILL + " INTEGER NOT NULL, " +
                         ProfileContract.ProfileValues.YEARS_ACTIVE + " INTEGER NOT NULL, " +
+                        ProfileContract.ProfileValues.GENDER + " INTEGER NOT NULL, " +
                         ProfileContract.ProfileValues.EMAIL + " STRING" + ");";
         final String SQL_CREATE_BARBELL_TABLE =
                 "CREATE TABLE " + ProfileContract.BarbellLifts.TABLE_NAME + " (" +

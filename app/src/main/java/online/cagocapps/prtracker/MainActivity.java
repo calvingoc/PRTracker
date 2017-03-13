@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        username = PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.sp_username), null);
+        username = PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.sp_email), null);
         if (username == null){
             Intent intent = new Intent(this, Login.class);
             startActivity(intent);
