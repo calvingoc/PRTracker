@@ -11,6 +11,7 @@
         android:layout_height="50dp"
         android:id="@+id/pp_tv_username"
         android:text="@string/pp_username"
+        android:gravity="center"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
@@ -21,26 +22,41 @@
         android:hint="@string/pp_username"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="@id/pp_tv_username"/>
+        android:layout_marginTop="0dp"
+        app:layout_constraintHorizontal_bias="0.0"
+        android:layout_marginBottom="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/pp_tv_birthday"
+        app:layout_constraintLeft_toRightOf="@+id/pp_tv_username"
+        android:layout_marginLeft="0dp"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:id="@+id/pp_tv_birthday"
         android:text="@string/pp_birthday"
+        android:gravity="center"
         app:layout_constraintTop_toBottomOf="@+id/pp_tv_username"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="@id/pp_tv_username"/>
+        app:layout_constraintRight_toRightOf="@+id/pp_tv_username"
+        android:layout_marginTop="0dp"
+        app:layout_constraintHorizontal_bias="0.0" />
 
     <EditText
         android:id="@+id/pp_et_birthday"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="0dp"
         android:ems="10"
+        android:hint="@string/pp_birthday"
         android:inputType="date"
+        app:layout_constraintBottom_toTopOf="@+id/pp_tv_weight"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toRightOf="@+id/pp_tv_birthday"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/pp_tv_username"
-        app:layout_constraintLeft_toRightOf="@id/pp_tv_username"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintVertical_bias="0.0" />
 
     <EditText
         android:layout_width="0dp"
@@ -50,47 +66,63 @@
         android:hint="@string/pp_et_weight"
         app:layout_constraintTop_toBottomOf="@id/pp_tv_birthday"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toRightOf="@id/pp_tv_weight"/>
+        app:layout_constraintLeft_toRightOf="@+id/pp_tv_weight"
+        android:layout_marginBottom="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/pp_tv_skill"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:id="@+id/pp_tv_weight"
         android:text="@string/pp_tv_weight"
+        android:gravity="center"
         app:layout_constraintTop_toBottomOf="@+id/pp_tv_birthday"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="@id/pp_tv_username"/>
-
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:id="@+id/pp_tv_skill"
-        android:text="@string/pp_tv_skill"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="@id/pp_tv_username"
-        app:layout_constraintTop_toBottomOf="@+id/pp_tv_weight"
-        />
-
-    <Spinner
-        android:id="@+id/pp_spin_skill"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/pp_tv_weight"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="@id/pp_tv_skill"
-        app:layout_constraintLeft_toRightOf="@+id/pp_tv_skill"
-        android:layout_marginLeft="0dp"
+        app:layout_constraintRight_toRightOf="@+id/pp_tv_username"
         android:layout_marginTop="0dp"
         app:layout_constraintHorizontal_bias="0.0" />
 
     <TextView
         android:layout_width="0dp"
         android:layout_height="50dp"
+        android:id="@+id/pp_tv_skill"
+        android:text="@string/pp_tv_skill"
+        android:gravity="center"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="@+id/pp_tv_username"
+        app:layout_constraintTop_toBottomOf="@+id/pp_tv_weight"
+        android:layout_marginTop="0dp"
+        app:layout_constraintHorizontal_bias="0.0" />
+
+    <Spinner
+        android:id="@+id/pp_spin_skill"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        android:entries="@array/skill_level_titles"
+        android:prompt="@array/skill_level_values"
+        app:layout_constraintBottom_toTopOf="@+id/pp_et_years"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toRightOf="@+id/pp_tv_skill"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pp_et_weight"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="50dp"
         android:id="@+id/pp_tv_years"
         android:text="@string/pp_tv_years"
+        android:gravity="center"
         app:layout_constraintTop_toBottomOf="@id/pp_tv_skill"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/pp_et_years"/>
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        app:layout_constraintRight_toRightOf="@+id/pp_tv_skill" />
 
     <EditText
         android:layout_width="0dp"
@@ -99,8 +131,30 @@
         android:hint="@string/pp_tv_years"
         android:inputType="number"
         app:layout_constraintTop_toTopOf="@id/pp_tv_years"
+        app:layout_constraintLeft_toRightOf="@id/pp_tv_years"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/pp_tv_years"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:id="@+id/pp_tv_gender"
+        android:text="@string/pp_gender"
+        android:gravity="center"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pp_tv_years"
+        app:layout_constraintRight_toRightOf="@id/pp_tv_years"/>
+    <Spinner
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/pp_spin_gender"
+        app:layout_constraintLeft_toRightOf="@id/pp_tv_gender"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pp_et_years"
+        app:layout_constraintBottom_toBottomOf="@id/pp_tv_gender"
+        android:entries="@array/gender_titles"
+        android:prompt="@array/gender_values"
+        />
 
     <Button
         android:layout_width="0dp"

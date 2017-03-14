@@ -114,7 +114,7 @@ public class ProfileContract {
     }
 
     public static final class Swimming implements BaseColumns{
-        public static final String TABLE_NAME = "running";
+        public static final String TABLE_NAME = "swimming";
         public static final String USER_ID = "userID";
         public static final String STROKE = "stroke";
         public static final String DISTANCE = "distance";

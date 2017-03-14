@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class ProfileDBHelper extends SQLiteOpenHelper{
     public static final String DATABASE_NAME = "prTracker.db";
-    public static final int DATABASE_VERSION = 0;
+    public static final int DATABASE_VERSION = 1;
 
     public ProfileDBHelper(Context context){ super(context, DATABASE_NAME, null, DATABASE_VERSION);}
 
@@ -20,7 +20,7 @@ public class ProfileDBHelper extends SQLiteOpenHelper{
                 "CREATE TABLE " + ProfileContract.ProfileValues.TABLE_NAME + " (" +
                         ProfileContract.ProfileValues._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         ProfileContract.ProfileValues.USER_NAME + " STRING NOT NULL, " +
-                        ProfileContract.ProfileValues.BIRTHDATE + " INTEGER NOT NULL, " +
+                        ProfileContract.ProfileValues.BIRTHDATE + " STRING NOT NULL, " +
                         ProfileContract.ProfileValues.WEIGHT + " INTEGER, " +
                         ProfileContract.ProfileValues.SKILL + " INTEGER NOT NULL, " +
                         ProfileContract.ProfileValues.YEARS_ACTIVE + " INTEGER NOT NULL, " +

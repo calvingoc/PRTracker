@@ -21,6 +21,32 @@
     <string name="pp_tv_skill">Skill Level</string>
     <string name="pp_tv_years">Years Active</string>
     <string name="pp_button_save">Save</string>
+    <string name="pp_gender">Gender</string>
+
+    <string-array name="skill_level_titles">
+        <item>Pro</item>
+        <item>Semi-Pro</item>
+        <item>Weekend Warrior</item>
+        <item>Functional Fitness</item>
+        <item>Beginner</item>
+    </string-array>
+
+    <string-array name="skill_level_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
+    <string-array name="gender_titles">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+    <string-array name="gender_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
 
 
     <!--Barbell lifts -->

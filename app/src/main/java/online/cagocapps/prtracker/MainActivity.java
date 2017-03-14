@@ -2,6 +2,8 @@ package online.cagocapps.prtracker;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -14,6 +16,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -24,10 +28,16 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import online.cagocapps.prtracker.Data.ProfileContract;
+import online.cagocapps.prtracker.Data.ProfileDBHelper;
+
 public class MainActivity extends AppCompatActivity {
 
     private String username;
     private String TAG = "Main Activity";
+
+    private ProfileDBHelper dbHelper;
+    private SQLiteDatabase dbWrite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        dbHelper = new ProfileDBHelper(this);
+        dbWrite = dbHelper.getWritableDatabase();
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -52,11 +64,39 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         username = PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.sp_email), null);
-        if (username == null){
+        if (username == null) {
             Intent intent = new Intent(this, Login.class);
             startActivity(intent);
-        }
+        } else {
+            TextView test = (TextView) findViewById(R.id.ma_tv_test);
+            String where = ProfileContract.ProfileValues.EMAIL + " = ?";
+            Cursor cursor = dbWrite.query(
+                    ProfileContract.ProfileValues.TABLE_NAME,
+                    null,
+                    where,
+                    new String[]{username},
+                    null,
+                    null,
+                    null
+            );
+            if (cursor.moveToFirst()) {
+                String ID = cursor.getString(cursor.getColumnIndex(ProfileContract.ProfileValues._ID));
+                String userName = (cursor.getString(cursor.getColumnIndex(ProfileContract.ProfileValues.USER_NAME)));
+                String bday = (cursor.getString(cursor.getColumnIndex(ProfileContract.ProfileValues.BIRTHDATE)));
+                String weight = (Integer.toString(cursor.getInt(cursor.getColumnIndex(ProfileContract.ProfileValues.WEIGHT))));
+                String years = (Integer.toString(cursor.getInt(cursor.getColumnIndex(ProfileContract.ProfileValues.YEARS_ACTIVE))));
+                String[] skillz = getResources().getStringArray(R.array.skill_level_titles);
+                String skillLevel = (skillz[cursor.getInt(cursor.getColumnIndex(ProfileContract.ProfileValues.SKILL))]);
+                String[] gender = getResources().getStringArray(R.array.gender_titles);
+                String sex = (gender[cursor.getInt(cursor.getColumnIndex(ProfileContract.ProfileValues.GENDER))]);
+                cursor.close();
+                test.setText("ID " + ID +
+                        " userName " + userName + " bday " + bday + " weight " + weight + " years " + years +
+                        " skills "
+                        + skillLevel + " sex " + sex);
 
+            }
+        }
     }
 
     @Override
