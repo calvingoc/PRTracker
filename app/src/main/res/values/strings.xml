@@ -5,6 +5,9 @@
     <!--Shared Preferences-->
     <string name="sp_email" translatable="false">default_email</string>
 
+    <!--Main Menu-->
+    <string name="mm_profile_settings">Edit Profile</string>
+
 
     <!--Log In-->
     <string name="failed_login">Log in failed. Please check your connection and try again.</string>
@@ -15,13 +18,15 @@
 
     <!--profile page-->
     <string name="pp_username">Username</string>
-    <string name="pp_birthday">Birth Date</string>
+    <string name="pp_birthday">Year Born</string>
+    <string name="pp_et_birthday">Year Born ex. 1992</string>
     <string name="pp_et_weight">Weight (in pounds)</string>
     <string name="pp_tv_weight">Weight</string>
     <string name="pp_tv_skill">Skill Level</string>
     <string name="pp_tv_years">Years Active</string>
     <string name="pp_button_save">Save</string>
     <string name="pp_gender">Gender</string>
+    <string name="pp_age_error">Invalid birth year please enter a value after 1900 ex. 1992</string>
 
     <string-array name="skill_level_titles">
         <item>Pro</item>
@@ -48,6 +53,22 @@
         <item>1</item>
     </string-array>
 
+    <!--Add Results-->
+    <string name="ar_tv_category">Category</string>
+    <string name="ar_tv_activity">Activity</string>
+    <string name="ar_tv_header">Add A Result</string>
+    <string name="ar_tv_rounds">Sets, Reps and Weight</string>
+    <string name="ar_et_rounds">Sets</string>
+    <string name="ar_tv_reps">Reps</string>
+    <string name="ar_et_weight">Weight</string>
+    <string name="ar_tv_time">Time</string>
+    <string name="ar_et_hours">Hours</string>
+    <string name="ar_et_minutes">Mins</string>
+    <string name="ar_et_seconds">Secs</string>
+    <string name="ar_check_rx">Rx</string>
+    <string name="ar_tv_distance">Distance</string>
+    <string name="ar_et_distance">Distance (in meters)</string>
+    <string name="ar_tv_notes">Notes</string>
 
     <!--Barbell lifts -->
     <string name="squat_snatch">Squat Snatch</string>

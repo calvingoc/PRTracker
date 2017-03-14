@@ -54,8 +54,8 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent intent = new Intent(this, AddResult.class);
+                startActivity(intent);
             }
         });
     }
@@ -93,7 +93,8 @@ public class MainActivity extends AppCompatActivity {
                 test.setText("ID " + ID +
                         " userName " + userName + " bday " + bday + " weight " + weight + " years " + years +
                         " skills "
-                        + skillLevel + " sex " + sex);
+                        + skillLevel + " " + Integer.toString(cursor.getInt(cursor.getColumnIndex(ProfileContract.ProfileValues.SKILL))) + " sex " + sex +
+                Integer.toString(cursor.getInt(cursor.getColumnIndex(ProfileContract.ProfileValues.GENDER))));
 
             }
         }
@@ -116,6 +117,10 @@ public class MainActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        } else if (id == R.id.edit_profile){
+            Intent intent = new Intent(this, ProfileActivity.class);
+            intent.putExtra(getString(R.string.new_user), false);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);

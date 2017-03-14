@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import online.cagocapps.prtracker.Data.ProfileContract;
 import online.cagocapps.prtracker.Data.ProfileDBHelper;
@@ -98,25 +99,31 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void SaveProfile(View view){
-        ContentValues cv = new ContentValues();
-        cv.put(ProfileContract.ProfileValues.EMAIL, userEmail);
-        cv.put(ProfileContract.ProfileValues.USER_NAME,
-                etUsername.getText().toString());
-        cv.put(ProfileContract.ProfileValues.BIRTHDATE,
-                etBirthDate.getText().toString());
-        cv.put(ProfileContract.ProfileValues.WEIGHT,
-                etWeight.getText().toString());
-        cv.put(ProfileContract.ProfileValues.YEARS_ACTIVE,
-                Integer.valueOf(etYearsAct.getText().toString()));
-        cv.put(ProfileContract.ProfileValues.SKILL,
-                String.valueOf(spinSkill.getSelectedItem()));
-        cv.put(ProfileContract.ProfileValues.GENDER,
-                String.valueOf(spinGender.getSelectedItem()));
-        if (userID == null){
-            dbWrite.insert(ProfileContract.ProfileValues.TABLE_NAME, null, cv);
-        } else  dbWrite.update(ProfileContract.ProfileValues.TABLE_NAME, cv, ProfileContract.ProfileValues._ID + " =?", new String[]{userID});
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-        finish();
+        int birthyear = Integer.valueOf(etBirthDate.getText().toString());
+        if (birthyear > 1900 && birthyear < 2030) {
+            ContentValues cv = new ContentValues();
+            cv.put(ProfileContract.ProfileValues.EMAIL, userEmail);
+            cv.put(ProfileContract.ProfileValues.USER_NAME,
+                    etUsername.getText().toString());
+            cv.put(ProfileContract.ProfileValues.BIRTHDATE,
+                    etBirthDate.getText().toString());
+            cv.put(ProfileContract.ProfileValues.WEIGHT,
+                    etWeight.getText().toString());
+            cv.put(ProfileContract.ProfileValues.YEARS_ACTIVE,
+                    Integer.valueOf(etYearsAct.getText().toString()));
+            Log.d(TAG, (spinSkill.getSelectedItem().toString()));
+            Log.d(TAG, spinGender.getSelectedItem().toString());
+            cv.put(ProfileContract.ProfileValues.SKILL,
+                    String.valueOf(spinSkill.getSelectedItem().toString()));
+            cv.put(ProfileContract.ProfileValues.GENDER,
+                    String.valueOf(spinGender.getSelectedItem().toString()));
+            if (userID == null) {
+                dbWrite.insert(ProfileContract.ProfileValues.TABLE_NAME, null, cv);
+            } else
+                dbWrite.update(ProfileContract.ProfileValues.TABLE_NAME, cv, ProfileContract.ProfileValues._ID + " =?", new String[]{userID});
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        } else Toast.makeText(this, getString(R.string.pp_age_error), Toast.LENGTH_LONG).show();
     }
 }

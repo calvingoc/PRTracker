@@ -122,4 +122,18 @@ public class ProfileContract {
         public static final String DATE = "date";
         public static final String COMMENTS = "comments";
     }
+
+    public static final class RecentLifts implements BaseColumns{
+        public static final String TABLE_NAME = "recentLifts";
+        public static final String RESULT_ONE_TABLE = "resultOneTable";
+        public static final String RESULT_ONE_ID = "resultOneID";
+        public static final String RESULT_TWO_TABLE = "resultTwoTable";
+        public static final String RESULT_TWO_ID = "resultTwoID";
+        public static final String RESULT_THREE_TABLE = "resultThreeTable";
+        public static final String RESULT_THREE_ID = "resultThreeID";
+        public static final String RESULT_FOUR_TABLE = "resultFourTable";
+        public static final String RESULT_FOUR_ID = "resultFourID";
+        public static final String RESULT_FIVE_TABLE = "resultFiveTable";
+        public static final String RESULT_FIVE_ID = "resultFiveID";
+    }
 }

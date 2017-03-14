@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class ProfileDBHelper extends SQLiteOpenHelper{
     public static final String DATABASE_NAME = "prTracker.db";
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
 
     public ProfileDBHelper(Context context){ super(context, DATABASE_NAME, null, DATABASE_VERSION);}
 
@@ -84,7 +84,21 @@ public class ProfileDBHelper extends SQLiteOpenHelper{
                         ProfileContract.Swimming.TIME + " INTEGER NOT NULL, " +
                         ProfileContract.Swimming.DATE + " INTEGER NOT NULL, " +
                         ProfileContract.Swimming.COMMENTS + " STRING" + ");";
+        final String SQL_CREATE_RECENT_LIFTS_TABLE =
+                "CREATE TABLE " + ProfileContract.RecentLifts.TABLE_NAME + " (" +
+                        ProfileContract.RecentLifts._ID + " INTEGER PRIMARY KEY, " +
+                        ProfileContract.RecentLifts.RESULT_ONE_TABLE + " STRING, " +
+                        ProfileContract.RecentLifts.RESULT_ONE_ID + " INTEGER, " +
+                        ProfileContract.RecentLifts.RESULT_TWO_TABLE + " STRING, " +
+                        ProfileContract.RecentLifts.RESULT_TWO_ID + " INTEGER, " +
+                        ProfileContract.RecentLifts.RESULT_THREE_TABLE + " STRING, " +
+                        ProfileContract.RecentLifts.RESULT_THREE_ID + " INTEGER, " +
+                        ProfileContract.RecentLifts.RESULT_FOUR_TABLE + " STRING, " +
+                        ProfileContract.RecentLifts.RESULT_FOUR_ID + " INTEGER, " +
+                        ProfileContract.RecentLifts.RESULT_FIVE_TABLE + " STRING, " +
+                        ProfileContract.RecentLifts.RESULT_FIVE_ID + " INTEGER" + ");";
 
+        sqLiteDatabase.execSQL(SQL_CREATE_RECENT_LIFTS_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_PROFILE_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_BARBELL_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_CROSSFIT_TABLE);
@@ -103,7 +117,7 @@ public class ProfileDBHelper extends SQLiteOpenHelper{
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + ProfileContract.BarbellLifts.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + ProfileContract.DumbbellLifts.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + ProfileContract.CrossFitStandards.TABLE_NAME);
-
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + ProfileContract.RecentLifts.TABLE_NAME);
         onCreate(sqLiteDatabase);
     }
 }
