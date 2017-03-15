@@ -2,6 +2,7 @@ package online.cagocapps.prtracker;
 
 import android.content.ContentValues;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
@@ -341,7 +342,7 @@ public class AddResult extends AppCompatActivity {
         tvRounds.setEnabled(true);
         etSets.setEnabled(true);
         etReps.setEnabled(true);
-        etWeight.setEnabled(true);
+        etWeight.setEnabled(false);
         tvTime.setEnabled(false);
         etHours.setEnabled(false);
         etMinutes.setEnabled(false);
@@ -371,41 +372,118 @@ public class AddResult extends AppCompatActivity {
         int convertedOneRepMax;
         String activity = spinActivity.getSelectedItem().toString();
         int sets = 1;
-        if (etSets.getText().toString() != null)
+        if (etSets.getText().length() != 0)
             sets = Integer.valueOf(etSets.getText().toString());
         double reps = 1;
-        if (etReps.getText().toString() != null)
+        if (etReps.getText().length()!= 0)
             reps = Integer.valueOf(etReps.getText().toString());
         double weight = 1;
-        if (etWeight.getText().toString() != null)
+        if (etWeight.getText().length() != 0)
             weight = Integer.valueOf(etWeight.getText().toString());
-        int hours;
-        if (etHours.getText().toString() != null)
+        int hours = 0;
+        if (etHours.getText().length() != 0)
             hours = Integer.valueOf(etHours.getText().toString());
-        int minutes;
-        if (etMinutes.getText().toString() != null)
+        int minutes = 0;
+        if (etMinutes.getText().length() != 0)
             minutes = Integer.valueOf(etMinutes.getText().toString());
-        int seconds;
-        if (etSeconds.getText().toString() != null)
+        int seconds= 0;
+        if (etSeconds.getText().length() != 0)
             seconds = Integer.valueOf(etSeconds.getText().toString());
-        boolean Rx = checkRX.isChecked();
+        int totalTime = (hours * 3600) + (minutes * 60) + seconds;
+        int rx = 0;
+        if (checkRX.isChecked()) rx = 1;
         String distance = spinDistance.getSelectedItem().toString();
         String notes = etNotes.getText().toString();
+        ContentValues cv = new ContentValues();
         int userID = PreferenceManager.getDefaultSharedPreferences(this).getInt(getString(R.string.sp_userID), -1);
-        switch (resultType){
+        cv.put(ProfileContract.BarbellLifts.USER_ID, userID);
+        cv.put(ProfileContract.BarbellLifts.COMMENTS, notes);
+        cv.put(ProfileContract.BarbellLifts.DATE, System.currentTimeMillis());
+        switch (resultType) {
             case 0:
-                convertedOneRepMaxDouble = weight /(1.0278 - (.0278 * reps));
+                convertedOneRepMaxDouble = weight / (1.0278 - (.0278 * reps));
                 convertedOneRepMax = (int) convertedOneRepMaxDouble;
-                ContentValues cv = new ContentValues();
-                cv.put(ProfileContract.BarbellLifts.USER_ID, userID);
                 cv.put(ProfileContract.BarbellLifts.LIFT, activity);
                 cv.put(ProfileContract.BarbellLifts.REPS, reps);
                 cv.put(ProfileContract.BarbellLifts.WEIGHT, weight);
                 cv.put(ProfileContract.BarbellLifts.ROUNDS, sets);
                 cv.put(ProfileContract.BarbellLifts.ADJUSTED_ONE_REP_MAX, convertedOneRepMax);
-                cv.put(ProfileContract.BarbellLifts.COMMENTS, notes);
-                cv.put(ProfileContract.BarbellLifts.DATE, System.currentTimeMillis());
-                workoutID = dbWrite.insert(tableName, null, cv);
+                break;
+
+            case 1:
+                cv.put(ProfileContract.Gymnastics.LIFT, activity);
+                cv.put(ProfileContract.Gymnastics.REPS, reps);
+                cv.put(ProfileContract.Gymnastics.ROUNDS, sets);
+                break;
+            case 2:
+                cv.put(ProfileContract.Running.DISTANCE, activity);
+                cv.put(ProfileContract.Running.TIME, totalTime);
+                break;
+            case 3:
+                String swim = distance + " " + activity;
+                cv.put(ProfileContract.Swimming.STROKE, swim);
+                cv.put(ProfileContract.Swimming.TIME, totalTime);
+                break;
+            case 4:
+                cv.put(ProfileContract.CrossFitStandards.ROUNDS, sets);
+                cv.put(ProfileContract.CrossFitStandards.LIFT, activity);
+                cv.put(ProfileContract.CrossFitStandards.RX, rx);
+                cv.put(ProfileContract.CrossFitStandards.REPS, reps);
+                cv.put(ProfileContract.CrossFitStandards.TIME, totalTime);
+                break;
+            case 5:
+                cv.put(ProfileContract.CrossFitStandards.ROUNDS, sets);
+                cv.put(ProfileContract.CrossFitStandards.LIFT, activity);
+                cv.put(ProfileContract.CrossFitStandards.RX, rx);
+                cv.put(ProfileContract.CrossFitStandards.REPS, reps);
+
         }
+        workoutID = dbWrite.insert(tableName, null, cv);
+        cv.clear();
+        Cursor cursor = dbWrite.query(
+                ProfileContract.RecentLifts.TABLE_NAME,
+                null,
+                ProfileContract.RecentLifts._ID + " = ?",
+                new String[] {Integer.toString(userID)},
+                null,
+                null,
+                null
+        );
+        if (cursor.moveToFirst()){
+            cv.put(ProfileContract.RecentLifts.RESULT_ONE_TABLE, tableName);
+            cv.put(ProfileContract.RecentLifts.RESULT_ONE_ID, workoutID);
+            cv.put(ProfileContract.RecentLifts.RESULT_TWO_TABLE,
+                    cursor.getString(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_ONE_TABLE)));
+            cv.put(ProfileContract.RecentLifts.RESULT_TWO_ID,
+                    cursor.getInt(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_ONE_ID)));
+            cv.put(ProfileContract.RecentLifts.RESULT_THREE_TABLE,
+                    cursor.getString(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_TWO_TABLE)));
+            cv.put(ProfileContract.RecentLifts.RESULT_THREE_ID,
+                    cursor.getInt(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_TWO_ID)));
+            cv.put(ProfileContract.RecentLifts.RESULT_FOUR_TABLE,
+                    cursor.getString(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_THREE_TABLE)));
+            cv.put(ProfileContract.RecentLifts.RESULT_FOUR_ID,
+                    cursor.getInt(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_THREE_ID)));
+            cv.put(ProfileContract.RecentLifts.RESULT_FIVE_TABLE,
+                    cursor.getString(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_FOUR_TABLE)));
+            cv.put(ProfileContract.RecentLifts.RESULT_FIVE_ID,
+                    cursor.getInt(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_FOUR_ID)));
+            dbWrite.update(ProfileContract.RecentLifts.TABLE_NAME, cv, ProfileContract.RecentLifts._ID + " = ?",
+                    new String[] {Integer.toString(userID)});
+        }
+        else {
+            cv.put(ProfileContract.RecentLifts._ID, userID);
+            cv.put(ProfileContract.RecentLifts.RESULT_ONE_TABLE, tableName);
+            cv.put(ProfileContract.RecentLifts.RESULT_ONE_ID, workoutID);
+            dbWrite.insert(ProfileContract.RecentLifts.TABLE_NAME, null, cv);
+        }
+        cursor.close();
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        dbWrite.close();
     }
 }

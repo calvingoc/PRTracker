@@ -82,7 +82,6 @@ public class ProfileDBHelper extends SQLiteOpenHelper{
                         ProfileContract.Swimming._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         ProfileContract.Swimming.USER_ID + " INTEGER NOT NULL, " +
                         ProfileContract.Swimming.STROKE + " STRING NOT NULL, " +
-                        ProfileContract.Swimming.DISTANCE + " INTEGER NOT NULL, " +
                         ProfileContract.Swimming.TIME + " INTEGER NOT NULL, " +
                         ProfileContract.Swimming.DATE + " INTEGER NOT NULL, " +
                         ProfileContract.Swimming.COMMENTS + " STRING" + ");";

@@ -98,31 +98,30 @@ public class ProfileContract {
 
     public static final class Gymnastics implements BaseColumns{
         public static final String TABLE_NAME = "gymnastics";
-        public static final String USER_ID = "userID";
-        public static final String LIFT = "lift";
-        public static final String ROUNDS = "rounds";
-        public static final String REPS = "reps";
-        public static final String DATE = "date";
-        public static final String COMMENTS = "comments";
+        public static final String USER_ID = BarbellLifts.USER_ID;
+        public static final String LIFT = BarbellLifts.LIFT;
+        public static final String ROUNDS = BarbellLifts.ROUNDS;
+        public static final String REPS = BarbellLifts.REPS;
+        public static final String DATE = BarbellLifts.DATE;
+        public static final String COMMENTS = BarbellLifts.COMMENTS;
     }
 
     public static final class Running implements BaseColumns{
         public static final String TABLE_NAME = "running";
-        public static final String USER_ID = "userID";
-        public static final String DISTANCE = "distance";
-        public static final String TIME = "time";
-        public static final String DATE = "date";
-        public static final String COMMENTS = "comments";
+        public static final String USER_ID = BarbellLifts.USER_ID;
+        public static final String DISTANCE = BarbellLifts.LIFT;
+        public static final String TIME = CrossFitStandards.TIME;
+        public static final String DATE = BarbellLifts.DATE;
+        public static final String COMMENTS = BarbellLifts.COMMENTS;
     }
 
     public static final class Swimming implements BaseColumns{
         public static final String TABLE_NAME = "swimming";
-        public static final String USER_ID = "userID";
-        public static final String STROKE = "stroke";
-        public static final String DISTANCE = "distance";
-        public static final String TIME = "time";
-        public static final String DATE = "date";
-        public static final String COMMENTS = "comments";
+        public static final String USER_ID = BarbellLifts.USER_ID;
+        public static final String STROKE = BarbellLifts.LIFT;
+        public static final String TIME = CrossFitStandards.LIFT;
+        public static final String DATE = BarbellLifts.DATE;
+        public static final String COMMENTS = BarbellLifts.COMMENTS;
     }
 
     public static final class RecentLifts implements BaseColumns{
