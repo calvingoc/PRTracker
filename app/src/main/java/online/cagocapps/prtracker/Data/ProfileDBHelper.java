@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class ProfileDBHelper extends SQLiteOpenHelper{
     public static final String DATABASE_NAME = "prTracker.db";
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 3;
 
     public ProfileDBHelper(Context context){ super(context, DATABASE_NAME, null, DATABASE_VERSION);}
 
@@ -33,6 +33,7 @@ public class ProfileDBHelper extends SQLiteOpenHelper{
                         ProfileContract.BarbellLifts.LIFT + " STRING NOT NULL, " +
                         ProfileContract.BarbellLifts.REPS + " INTEGER NOT NULL, " +
                         ProfileContract.BarbellLifts.WEIGHT + " INTEGER NOT NULL, " +
+                        ProfileContract.BarbellLifts.ROUNDS + " INTEGER NOT NULL, " +
                         ProfileContract.BarbellLifts.ADJUSTED_ONE_REP_MAX + " INTEGER NOT NULL, " +
                         ProfileContract.BarbellLifts.DATE + " INTEGER NOT NULL, " +
                         ProfileContract.BarbellLifts.COMMENTS + " STRING" + ");";
@@ -43,6 +44,7 @@ public class ProfileDBHelper extends SQLiteOpenHelper{
                         ProfileContract.DumbbellLifts.LIFT + " STRING NOT NULL, " +
                         ProfileContract.DumbbellLifts.REPS + " INTEGER NOT NULL, " +
                         ProfileContract.DumbbellLifts.WEIGHT + " INTEGER NOT NULL, " +
+                        ProfileContract.DumbbellLifts.ROUNDS + " INTEGER NOT NULL, " +
                         ProfileContract.DumbbellLifts.ADJUSTED_ONE_REP_MAX + " INTEGER NOT NULL, " +
                         ProfileContract.DumbbellLifts.DATE + " INTEGER NOT NULL, " +
                         ProfileContract.DumbbellLifts.COMMENTS + " STRING" + ");";

@@ -115,7 +115,6 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
             account = result.getSignInAccount();
             SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
             editor.putString(getString(R.string.sp_email), account.getEmail());
-            editor.commit();
             String where = ProfileContract.ProfileValues.EMAIL + " = ?";
             Cursor cursor = dbWrite.query(
                     ProfileContract.ProfileValues.TABLE_NAME,
@@ -127,12 +126,15 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                     null
             );
             if (cursor.moveToFirst()){
+                editor.putInt(getString(R.string.sp_userID), cursor.getInt(cursor.getColumnIndex(ProfileContract.ProfileValues._ID)));
                 cursor.close();
+                editor.commit();
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
                 finish();
             } else {
                 cursor.close();
+                editor.commit();
                 Intent intent = new Intent(this, ProfileActivity.class);
                 intent.putExtra(getString(R.string.new_user), true);
                 startActivity(intent);

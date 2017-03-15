@@ -37,7 +37,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private String TAG = "ProfileActivity";
     private String userEmail;
-    private String userID;
+    private int userID = -1;
 
 
     @Override
@@ -81,7 +81,7 @@ public class ProfileActivity extends AppCompatActivity {
                     null
             );
             if (cursor.moveToFirst()){
-                userID = cursor.getString(cursor.getColumnIndex(ProfileContract.ProfileValues._ID));
+                userID = cursor.getInt(cursor.getColumnIndex(ProfileContract.ProfileValues._ID));
                 etUsername.setText(cursor.getString(cursor.getColumnIndex(ProfileContract.ProfileValues.USER_NAME)));
                 etBirthDate.setText( cursor.getString(cursor.getColumnIndex(ProfileContract.ProfileValues.BIRTHDATE)));
                 etWeight.setText(Integer.toString(cursor.getInt(cursor.getColumnIndex(ProfileContract.ProfileValues.WEIGHT))));
@@ -116,10 +116,12 @@ public class ProfileActivity extends AppCompatActivity {
                 gender = 0;
             }
             cv.put(ProfileContract.ProfileValues.GENDER, gender);
-            if (userID == null) {
-                dbWrite.insert(ProfileContract.ProfileValues.TABLE_NAME, null, cv);
+            if (userID == -1) {
+                userID = (int) dbWrite.insert(ProfileContract.ProfileValues.TABLE_NAME, null, cv);
             } else
-                dbWrite.update(ProfileContract.ProfileValues.TABLE_NAME, cv, ProfileContract.ProfileValues._ID + " =?", new String[]{userID});
+                dbWrite.update(ProfileContract.ProfileValues.TABLE_NAME, cv, ProfileContract.ProfileValues._ID + " =?", new String[]{Integer.toString(userID)});
+            SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+            editor.putInt(getString(R.string.sp_userID), userID);
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();

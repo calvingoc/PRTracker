@@ -81,22 +81,22 @@
         android:layout_width="75dp"
         android:layout_height="0dp"
         android:text="@string/ar_tv_reps"
-        android:enabled="false"
-        app:layout_constraintTop_toBottomOf="@id/ar_tv_activity"
         app:layout_constraintBottom_toBottomOf="@id/ar_tv_rounds"
-        app:layout_constraintLeft_toLeftOf="@+id/ar_et_minutes"
-        app:layout_constraintRight_toRightOf="@id/ar_et_minutes"
-        />
+        app:layout_constraintLeft_toRightOf="@id/ar_et_rounds"
+        app:layout_constraintTop_toBottomOf="@id/ar_tv_activity"
+        app:layout_constraintRight_toLeftOf="@+id/ar_et_weight" />
+
     <EditText
+        android:id="@+id/ar_et_weight"
         android:layout_width="75dp"
         android:layout_height="0dp"
-        android:id="@+id/ar_et_weight"
+        android:enabled="false"
         android:hint="@string/ar_et_weight"
         android:inputType="numberDecimal"
-        android:enabled="false"
-        app:layout_constraintTop_toBottomOf="@id/ar_tv_activity"
         app:layout_constraintBottom_toBottomOf="@id/ar_tv_rounds"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ar_tv_activity" />
+
     <TextView
         android:layout_width="0dp"
         android:layout_height="50dp"
@@ -107,6 +107,7 @@
         app:layout_constraintTop_toBottomOf="@id/ar_et_reps"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="@id/ar_tv_category"/>
+
     <EditText
         android:layout_width="75dp"
         android:layout_height="0dp"
@@ -117,6 +118,7 @@
         app:layout_constraintLeft_toRightOf="@id/ar_tv_time"
         app:layout_constraintTop_toTopOf="@id/ar_tv_time"
         app:layout_constraintBottom_toBottomOf="@id/ar_tv_time"/>
+
     <EditText
         android:layout_width="75dp"
         android:layout_height="0dp"
@@ -128,6 +130,7 @@
         app:layout_constraintBottom_toBottomOf="@id/ar_tv_time"
         app:layout_constraintLeft_toRightOf="@id/ar_et_hours"
         app:layout_constraintRight_toLeftOf="@+id/ar_et_secs"/>
+
     <EditText
         android:layout_width="75dp"
         android:layout_height="0dp"
@@ -147,6 +150,7 @@
         app:layout_constraintTop_toBottomOf="@+id/ar_tv_time"
         app:layout_constraintRight_toRightOf="parent"
         android:enabled="false"/>
+
     <TextView
         android:layout_width="0dp"
         android:layout_height="50dp"
@@ -154,26 +158,19 @@
         android:text="@string/ar_tv_distance"
         android:gravity="center"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ar_check_rx"
+        app:layout_constraintTop_toBottomOf="@id/ar_et_minutes"
         app:layout_constraintRight_toRightOf="@id/ar_tv_activity"/>
+
     <Spinner
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:id="@+id/ar_spin_distance"
+        android:entries="@array/swimming_distance_array"
         app:layout_constraintLeft_toRightOf="@id/ar_tv_distance"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ar_check_rx"
+        app:layout_constraintRight_toLeftOf="@id/ar_check_rx"
+        app:layout_constraintTop_toBottomOf="@id/ar_et_minutes"
         app:layout_constraintBottom_toBottomOf="@id/ar_tv_distance"/>
 
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:id="@+id/ar_tv_notes"
-        android:text="@string/ar_tv_notes"
-        android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/ar_tv_distance"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
     <EditText
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -182,9 +179,19 @@
         android:gravity="top|left"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ar_tv_notes"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ar_spin_distance"
+        app:layout_constraintBottom_toTopOf="@id/ar_butt_save"
         android:hint="@string/ar_tv_notes"/>
+
+    <Button
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:id="@+id/ar_butt_save"
+        android:text="@string/pp_button_save"
+        android:onClick="saveResult"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 
 </android.support.constraint.ConstraintLayout>

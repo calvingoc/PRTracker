@@ -4,6 +4,7 @@
 
     <!--Shared Preferences-->
     <string name="sp_email" translatable="false">default_email</string>
+    <string name="sp_userID" translatable="false">default_id</string>
 
     <!--Main Menu-->
     <string name="mm_profile_settings">Edit Profile</string>
@@ -56,7 +57,7 @@
     <string name="ar_et_minutes">Mins</string>
     <string name="ar_et_seconds">Secs</string>
     <string name="ar_check_rx">Rx</string>
-    <string name="ar_tv_distance">Distance</string>
+    <string name="ar_tv_distance">Swim Distance</string>
     <string name="ar_et_distance">Distance (in meters)</string>
     <string name="ar_tv_notes">Notes</string>
 
@@ -173,7 +174,7 @@
 
     <!-- Heroes -->
     <string name="murph">Murph</string>
-    <string name="nutss">Nutts</string>
+    <string name="nutts">Nutts</string>
     <string name="dt">DT</string>
     <string name="adam_brown">Adam Brown</string>
     <string name="michael">Michael</string>
@@ -330,6 +331,16 @@
         <item>Breast Stroke</item>
         <item>Butteryfly</item>
         <item>Medley</item>
+    </array>
+
+    <array name="swimming_distance_array">
+        <item>25m</item>
+        <item>50m</item>
+        <item>100m</item>
+        <item>200m</item>
+        <item>400m</item>
+        <item>500m</item>
+        <item>1000m</item>
     </array>
 
 
