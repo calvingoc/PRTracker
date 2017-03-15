@@ -86,10 +86,8 @@ public class ProfileActivity extends AppCompatActivity {
                 etBirthDate.setText( cursor.getString(cursor.getColumnIndex(ProfileContract.ProfileValues.BIRTHDATE)));
                 etWeight.setText(Integer.toString(cursor.getInt(cursor.getColumnIndex(ProfileContract.ProfileValues.WEIGHT))));
                 etYearsAct.setText(Integer.toString(cursor.getInt(cursor.getColumnIndex(ProfileContract.ProfileValues.YEARS_ACTIVE))));
-                String[] skillz = getResources().getStringArray(R.array.skill_level_titles);
-                spinSkill.setPrompt(skillz[cursor.getInt(cursor.getColumnIndex(ProfileContract.ProfileValues.SKILL))-1]);
-                String[] gender = getResources().getStringArray(R.array.gender_titles);
-                spinGender.setPrompt(gender[cursor.getInt(cursor.getColumnIndex(ProfileContract.ProfileValues.GENDER))]);
+                spinSkill.setSelection(cursor.getInt(cursor.getColumnIndex(ProfileContract.ProfileValues.SKILL))-1);
+                spinGender.setSelection(cursor.getInt(cursor.getColumnIndex(ProfileContract.ProfileValues.GENDER)));
                 cursor.close();
 
             } else {
@@ -111,12 +109,13 @@ public class ProfileActivity extends AppCompatActivity {
                     etWeight.getText().toString());
             cv.put(ProfileContract.ProfileValues.YEARS_ACTIVE,
                     Integer.valueOf(etYearsAct.getText().toString()));
-            Log.d(TAG, (spinSkill.getSelectedItem().toString()));
-            Log.d(TAG, spinGender.getSelectedItem().toString());
             cv.put(ProfileContract.ProfileValues.SKILL,
-                    String.valueOf(spinSkill.getSelectedItem().toString()));
-            cv.put(ProfileContract.ProfileValues.GENDER,
-                    String.valueOf(spinGender.getSelectedItem().toString()));
+                    String.valueOf(spinSkill.getSelectedItem().toString().charAt(0)));
+            int gender = 1;
+            if (spinGender.getSelectedItem().toString().equals(getString(R.string.male))){
+                gender = 0;
+            }
+            cv.put(ProfileContract.ProfileValues.GENDER, gender);
             if (userID == null) {
                 dbWrite.insert(ProfileContract.ProfileValues.TABLE_NAME, null, cv);
             } else

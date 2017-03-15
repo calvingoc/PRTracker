@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(this, AddResult.class);
+                Intent intent = new Intent(view.getContext(), AddResult.class);
                 startActivity(intent);
             }
         });
@@ -86,15 +86,15 @@ public class MainActivity extends AppCompatActivity {
                 String weight = (Integer.toString(cursor.getInt(cursor.getColumnIndex(ProfileContract.ProfileValues.WEIGHT))));
                 String years = (Integer.toString(cursor.getInt(cursor.getColumnIndex(ProfileContract.ProfileValues.YEARS_ACTIVE))));
                 String[] skillz = getResources().getStringArray(R.array.skill_level_titles);
-                String skillLevel = (skillz[cursor.getInt(cursor.getColumnIndex(ProfileContract.ProfileValues.SKILL))]);
+                String skillLevel = (skillz[cursor.getInt(cursor.getColumnIndex(ProfileContract.ProfileValues.SKILL)) - 1]);
                 String[] gender = getResources().getStringArray(R.array.gender_titles);
                 String sex = (gender[cursor.getInt(cursor.getColumnIndex(ProfileContract.ProfileValues.GENDER))]);
-                cursor.close();
                 test.setText("ID " + ID +
                         " userName " + userName + " bday " + bday + " weight " + weight + " years " + years +
                         " skills "
                         + skillLevel + " " + Integer.toString(cursor.getInt(cursor.getColumnIndex(ProfileContract.ProfileValues.SKILL))) + " sex " + sex +
                 Integer.toString(cursor.getInt(cursor.getColumnIndex(ProfileContract.ProfileValues.GENDER))));
+                cursor.close();
 
             }
         }
