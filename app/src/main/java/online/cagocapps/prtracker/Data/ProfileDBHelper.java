@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class ProfileDBHelper extends SQLiteOpenHelper{
     public static final String DATABASE_NAME = "prTracker.db";
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 4;
 
     public ProfileDBHelper(Context context){ super(context, DATABASE_NAME, null, DATABASE_VERSION);}
 
@@ -36,6 +36,7 @@ public class ProfileDBHelper extends SQLiteOpenHelper{
                         ProfileContract.BarbellLifts.ROUNDS + " INTEGER NOT NULL, " +
                         ProfileContract.BarbellLifts.ADJUSTED_ONE_REP_MAX + " INTEGER NOT NULL, " +
                         ProfileContract.BarbellLifts.DATE + " INTEGER NOT NULL, " +
+                        ProfileContract.BarbellLifts.PR + " INTEGER, " +
                         ProfileContract.BarbellLifts.COMMENTS + " STRING" + ");";
         final String SQL_CREATE_DUMBELL_TABLE =
                 "CREATE TABLE " + ProfileContract.DumbbellLifts.TABLE_NAME + " (" +
@@ -47,6 +48,7 @@ public class ProfileDBHelper extends SQLiteOpenHelper{
                         ProfileContract.DumbbellLifts.ROUNDS + " INTEGER NOT NULL, " +
                         ProfileContract.DumbbellLifts.ADJUSTED_ONE_REP_MAX + " INTEGER NOT NULL, " +
                         ProfileContract.DumbbellLifts.DATE + " INTEGER NOT NULL, " +
+                        ProfileContract.DumbbellLifts.PR  + " INTEGER, " +
                         ProfileContract.DumbbellLifts.COMMENTS + " STRING" + ");";
         final String SQL_CREATE_CROSSFIT_TABLE =
                 "CREATE TABLE " + ProfileContract.CrossFitStandards.TABLE_NAME + " (" +
@@ -57,6 +59,7 @@ public class ProfileDBHelper extends SQLiteOpenHelper{
                         ProfileContract.CrossFitStandards.ROUNDS + " INTEGER, " +
                         ProfileContract.CrossFitStandards.REPS + " INTEGER, " +
                         ProfileContract.CrossFitStandards.TIME + " INTEGER, " +
+                        ProfileContract.CrossFitStandards.PR + " INTEGER, " +
                         ProfileContract.CrossFitStandards.DATE + " INTEGER NOT NULL, " +
                         ProfileContract.CrossFitStandards.COMMENTS + " STRING" + ");";
         final String SQL_CREATE_GYMNASTICS_TABLE =
@@ -66,6 +69,7 @@ public class ProfileDBHelper extends SQLiteOpenHelper{
                         ProfileContract.Gymnastics.LIFT + " STRING NOT NULL, " +
                         ProfileContract.Gymnastics.ROUNDS + " INTEGER NOT NULL, " +
                         ProfileContract.Gymnastics.REPS + " INTEGER NOT NULL, " +
+                        ProfileContract.Gymnastics.PR + " INTEGER, " +
                         ProfileContract.Gymnastics.DATE + " INTEGER NOT NULL, " +
                         ProfileContract.Gymnastics.COMMENTS + " STRING" + ");";
 
@@ -76,6 +80,7 @@ public class ProfileDBHelper extends SQLiteOpenHelper{
                         ProfileContract.Running.DISTANCE + " INTEGER NOT NULL, " +
                         ProfileContract.Running.TIME + " INTEGER NOT NULL, " +
                         ProfileContract.Running.DATE + " INTEGER NOT NULL, " +
+                        ProfileContract.Running.PR + " INTEGER, " +
                         ProfileContract.Running.COMMENTS + " STRING" + ");";
         final String SQL_CREATE_SWIMMING_TABLE =
                 "CREATE TABLE " + ProfileContract.Swimming.TABLE_NAME + " (" +
@@ -84,6 +89,7 @@ public class ProfileDBHelper extends SQLiteOpenHelper{
                         ProfileContract.Swimming.STROKE + " STRING NOT NULL, " +
                         ProfileContract.Swimming.TIME + " INTEGER NOT NULL, " +
                         ProfileContract.Swimming.DATE + " INTEGER NOT NULL, " +
+                        ProfileContract.Swimming.PR + " INTEGER, " +
                         ProfileContract.Swimming.COMMENTS + " STRING" + ");";
         final String SQL_CREATE_RECENT_LIFTS_TABLE =
                 "CREATE TABLE " + ProfileContract.RecentLifts.TABLE_NAME + " (" +

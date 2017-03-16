@@ -1,9 +1,11 @@
 package online.cagocapps.prtracker;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.icu.util.Calendar;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +17,11 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.Date;
 
 import online.cagocapps.prtracker.Data.ProfileContract;
 import online.cagocapps.prtracker.Data.ProfileDBHelper;
@@ -40,9 +47,12 @@ public class AddResult extends AppCompatActivity {
     //for saving result
     private int resultType;
     private String tableName;
+    private boolean plank = false;
+    private FirebaseDatabase database;
+    DatabaseReference reference;
 
     //db vars
-    private ProfileDBHelper dbHelper;
+    public ProfileDBHelper dbHelper;
     private SQLiteDatabase dbWrite;
 
 
@@ -104,6 +114,7 @@ public class AddResult extends AppCompatActivity {
                             @Override
                             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                                 weightBased();
+                                plank = false;
                             }
 
                             @Override
@@ -123,8 +134,15 @@ public class AddResult extends AppCompatActivity {
                         spinActivity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                if (i == 16) timeBased();
-                                else bodyWeightBased();
+                                if (i == 16) {
+                                    timeBased();
+                                    plank = true;
+                                }
+                                else{
+                                    bodyWeightBased();
+                                    plank = false;
+                                }
+
                             }
 
                             @Override
@@ -145,6 +163,7 @@ public class AddResult extends AppCompatActivity {
                             @Override
                             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                                 timeBased();
+                                plank = false;
                             }
 
                             @Override
@@ -165,6 +184,7 @@ public class AddResult extends AppCompatActivity {
                             @Override
                             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                                 swimmingBased();
+                                plank = false;
                             }
 
                             @Override
@@ -188,6 +208,7 @@ public class AddResult extends AppCompatActivity {
                                         || i == 5 || i == 6 || i == 7 || i == 8 || i == 9)
                                     crossFitBased();
                                 else crossFitAMRAP();
+                                plank = false;
                             }
 
                             @Override
@@ -210,6 +231,7 @@ public class AddResult extends AppCompatActivity {
                                 if (i == 0 || i == 1 || i == 2 || i == 3 || i == 4 || i == 6)
                                     crossFitBased();
                                 else crossFitAMRAP();
+                                plank = false;
                             }
 
                             @Override
@@ -232,6 +254,7 @@ public class AddResult extends AppCompatActivity {
                                 if (i == 14 || i == 18 || i == 23 || i == 25)
                                     crossFitBased();
                                 else crossFitAMRAP();
+                                plank = false;
                             }
 
                             @Override
@@ -367,9 +390,15 @@ public class AddResult extends AppCompatActivity {
     }
 
     public void saveResult(View view){
+        //set up database
+        dbHelper = new ProfileDBHelper(this);
+        dbWrite = dbHelper.getWritableDatabase();
+        database = FirebaseDatabase.getInstance();
+        reference = database.getReference();
+
         long workoutID;
         double convertedOneRepMaxDouble;
-        int convertedOneRepMax;
+        int convertedOneRepMax = 0;
         String activity = spinActivity.getSelectedItem().toString();
         int sets = 1;
         if (etSets.getText().length() != 0)
@@ -438,6 +467,7 @@ public class AddResult extends AppCompatActivity {
                 cv.put(ProfileContract.CrossFitStandards.REPS, reps);
 
         }
+        cv = isPR(cv, activity, resultType, convertedOneRepMax, reps,totalTime, rx, sets);
         workoutID = dbWrite.insert(tableName, null, cv);
         cv.clear();
         Cursor cursor = dbWrite.query(
@@ -478,6 +508,142 @@ public class AddResult extends AppCompatActivity {
             dbWrite.insert(ProfileContract.RecentLifts.TABLE_NAME, null, cv);
         }
         cursor.close();
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
+
+    }
+
+    private ContentValues isPR(ContentValues cv, String activity, int resultType, int oneRepMax,
+                               double reps, int totalTime, int rx, int sets){
+        Boolean newPr = false;
+        int prValue = 0;
+        Cursor cursor = dbWrite.query(
+                tableName,
+                null,
+                ProfileContract.BarbellLifts.LIFT + " = ? and " + ProfileContract.BarbellLifts.PR + " =?",
+                new String[]{activity, "1"},
+                null,
+                null,
+                null
+        );
+        if (cursor.moveToFirst()){
+            switch (resultType){
+                case 0:
+                    if(cursor.getInt(cursor.getColumnIndex(ProfileContract.BarbellLifts.ADJUSTED_ONE_REP_MAX)) < oneRepMax){
+                        cv.put(ProfileContract.BarbellLifts.PR, "1");
+                        newPr = true;
+                        prValue=oneRepMax;
+                    }
+                    break;
+                case 1:
+                    if(cursor.getInt(cursor.getColumnIndex(ProfileContract.Gymnastics.REPS)) < reps){
+                        cv.put(ProfileContract.BarbellLifts.PR, "1");
+                        newPr = true;
+                        prValue= (int) reps;
+                    }
+                    break;
+                case 2:
+                    if(plank){
+                        if (cursor.getInt(cursor.getColumnIndex(ProfileContract.Running.TIME)) < totalTime){
+                            cv.put(ProfileContract.BarbellLifts.PR, "1");
+                            newPr = true;
+                            prValue = totalTime;
+                        }
+                    } else {
+                        if (cursor.getInt(cursor.getColumnIndex(ProfileContract.Running.TIME)) > totalTime){
+                            cv.put(ProfileContract.BarbellLifts.PR, "1");
+                            newPr = true;
+                            prValue = totalTime;
+                        }
+                    }
+                    break;
+                case 3:
+                    if (cursor.getInt(cursor.getColumnIndex(ProfileContract.Swimming.TIME)) > totalTime){
+                        cv.put(ProfileContract.BarbellLifts.PR, "1");
+                        newPr = true;
+                        prValue = totalTime;
+                    }
+                    break;
+                case 4:
+                    if(cursor.getInt(cursor.getColumnIndex(ProfileContract.CrossFitStandards.RX)) < rx){
+                        cv.put(ProfileContract.BarbellLifts.PR, "1");
+                        newPr = true;
+                        prValue = totalTime;
+                    } else if(cursor.getInt(cursor.getColumnIndex(ProfileContract.CrossFitStandards.TIME)) > totalTime){
+                        cv.put(ProfileContract.BarbellLifts.PR, "1");
+                        newPr = true;
+                        prValue = totalTime;
+                    } else if (cursor.getInt(cursor.getColumnIndex(ProfileContract.CrossFitStandards.TIME)) == totalTime){
+                        if (cursor.getInt(cursor.getColumnIndex(ProfileContract.CrossFitStandards.ROUNDS)) < sets){
+                            cv.put(ProfileContract.BarbellLifts.PR, "1");
+                            newPr = true;
+                            prValue = totalTime;
+                        } else if (cursor.getInt(cursor.getColumnIndex(ProfileContract.CrossFitStandards.ROUNDS)) == sets) {
+                            if (cursor.getInt(cursor.getColumnIndex(ProfileContract.CrossFitStandards.REPS)) < reps) {
+                                cv.put(ProfileContract.BarbellLifts.PR, "1");
+                                newPr = true;
+                                prValue = totalTime;
+                            }
+                        }
+                    }
+                    break;
+                case 5:
+                    if(cursor.getInt(cursor.getColumnIndex(ProfileContract.CrossFitStandards.RX)) < rx) {
+                        cv.put(ProfileContract.BarbellLifts.PR, "1");
+                        newPr = true;
+                        prValue = sets;
+                    } else if (cursor.getInt(cursor.getColumnIndex(ProfileContract.CrossFitStandards.ROUNDS)) < sets){
+                        cv.put(ProfileContract.BarbellLifts.PR, "1");
+                        newPr = true;
+                        prValue = sets;
+                    } else if (cursor.getInt(cursor.getColumnIndex(ProfileContract.CrossFitStandards.ROUNDS)) == sets) {
+                        if (cursor.getInt(cursor.getColumnIndex(ProfileContract.CrossFitStandards.REPS)) < reps) {
+                            cv.put(ProfileContract.BarbellLifts.PR, "1");
+                            newPr = true;
+                            prValue = sets;
+                        }
+                    }
+                    break;
+            }
+        } else cv.put(ProfileContract.BarbellLifts.PR, "1");
+
+        if (newPr){
+            ContentValues update = new ContentValues();
+            update.put(ProfileContract.BarbellLifts.PR, "0");
+            dbWrite.update(tableName, update, ProfileContract.BarbellLifts._ID + "=?",
+                    new String[]{Integer.toString(cursor.getInt(cursor.getColumnIndex(ProfileContract.BarbellLifts._ID)))});
+
+            //set up shared prefs
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+            String userEmail = sharedPreferences.getString(getString(R.string.sp_email), "error");
+            String where = ProfileContract.ProfileValues.EMAIL + " = ?";
+            Cursor prCursor = dbWrite.query(
+                    ProfileContract.ProfileValues.TABLE_NAME,
+                    null,
+                    where,
+                    new String[] {userEmail},
+                    null,
+                    null,
+                    null
+            );
+            if (prCursor.moveToFirst()) {
+                String birthdate = prCursor.getString(prCursor.getColumnIndex(ProfileContract.ProfileValues.BIRTHDATE));
+                Date now = new Date();
+                int year = now.getYear() + 1900;
+                int age = year - Integer.valueOf(birthdate);
+                String weight = (Integer.toString(prCursor.getInt(prCursor.getColumnIndex(ProfileContract.ProfileValues.WEIGHT))));
+                int scaledWeight = Integer.valueOf(weight) / 10;
+                String yearsAct = (Integer.toString(prCursor.getInt(prCursor.getColumnIndex(ProfileContract.ProfileValues.YEARS_ACTIVE))));
+                int skill = (prCursor.getInt(prCursor.getColumnIndex(ProfileContract.ProfileValues.SKILL)));
+                int gender = (prCursor.getInt(prCursor.getColumnIndex(ProfileContract.ProfileValues.GENDER)));
+                prCursor.close();
+                reference.child(activity).child(Integer.toString(gender)).child(Integer.toString(skill)).child(Integer.toString(scaledWeight))
+                        .child(Integer.toString(age)).child(yearsAct).child(userEmail).setValue(prValue);
+            }
+        }
+        cursor.close();
+        return cv;
 
     }
 

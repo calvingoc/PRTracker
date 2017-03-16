@@ -69,7 +69,6 @@
         android:id="@+id/ar_et_rounds"
         android:layout_width="75dp"
         android:layout_height="0dp"
-        android:enabled="false"
         android:hint="@string/ar_et_rounds"
         android:inputType="number"
         app:layout_constraintBottom_toBottomOf="@id/ar_tv_rounds"
@@ -80,7 +79,8 @@
         android:id="@+id/ar_et_reps"
         android:layout_width="75dp"
         android:layout_height="0dp"
-        android:text="@string/ar_tv_reps"
+        android:hint="@string/ar_tv_reps"
+        android:inputType="number"
         app:layout_constraintBottom_toBottomOf="@id/ar_tv_rounds"
         app:layout_constraintLeft_toRightOf="@id/ar_et_rounds"
         app:layout_constraintTop_toBottomOf="@id/ar_tv_activity"
@@ -179,8 +179,8 @@
         android:gravity="top|left"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/ar_butt_save"
         app:layout_constraintTop_toBottomOf="@+id/ar_spin_distance"
-        app:layout_constraintBottom_toTopOf="@id/ar_butt_save"
         android:hint="@string/ar_tv_notes"/>
 
     <Button
