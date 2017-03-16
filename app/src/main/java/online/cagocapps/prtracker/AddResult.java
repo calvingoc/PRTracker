@@ -379,14 +379,37 @@ public class AddResult extends AppCompatActivity {
 
     //clear disabled editviews
     private void clearDisabled(){
-        if(!etSets.isEnabled()) etSets.setText(null);
-        if(!etReps.isEnabled()) etReps.setText(null);
-        if(!etWeight.isEnabled()) etWeight.setText(null);
-        if(!etHours.isEnabled()) etHours.setText(null);
-        if(!etMinutes.isEnabled()) etMinutes.setText(null);
-        if(!etSeconds.isEnabled()) etSeconds.setText(null);
+        if(!etSets.isEnabled()){
+            etSets.setText(null);
+            etSets.setBackgroundColor(getColor(R.color.colorPrimaryDark));
+        } else  etSets.setBackgroundColor(getColor(R.color.colorAccent));
+        if(!etReps.isEnabled()){
+            etReps.setText(null);
+            etReps.setBackgroundColor(getColor(R.color.colorPrimaryDark));
+        } else etReps.setBackgroundColor(getColor(R.color.colorAccent));
+        if(!etWeight.isEnabled()){
+            etWeight.setText(null);
+            etWeight.setBackgroundColor(getColor(R.color.colorPrimaryDark));
+        } else etWeight.setBackgroundColor(getColor(R.color.colorAccent));
+        if(!etHours.isEnabled()){
+            etHours.setText(null);
+            etHours.setBackgroundColor(getColor(R.color.colorPrimaryDark));
+        } else etHours.setBackgroundColor(getColor(R.color.colorAccent));
+        if(!etMinutes.isEnabled()) {
+            etMinutes.setText(null);
+            etMinutes.setBackgroundColor(getColor(R.color.colorPrimaryDark));
+        } else etMinutes.setBackgroundColor(getColor(R.color.colorAccent));
+        if(!etSeconds.isEnabled()){
+            etSeconds.setText(null);
+            etSeconds.setBackgroundColor(getColor(R.color.colorPrimaryDark));
+        } else etSeconds.setBackgroundColor(getColor(R.color.colorAccent));
         checkRX.setChecked(checkRX.isEnabled());
-        if(!spinDistance.isEnabled()) spinDistance.setPrompt(null);
+        if (checkRX.isEnabled()) checkRX.setBackgroundColor(getColor(R.color.colorAccent));
+        else checkRX.setBackgroundColor(getColor(R.color.colorPrimaryDark));
+        if(!spinDistance.isEnabled()){
+            spinDistance.setPrompt(null);
+            spinDistance.setBackgroundColor(getColor(R.color.colorPrimaryDark));
+        } else spinDistance.setBackgroundColor(getColor(R.color.colorAccent));
     }
 
     public void saveResult(View view){

@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class ProfileDBHelper extends SQLiteOpenHelper{
     public static final String DATABASE_NAME = "prTracker.db";
-    public static final int DATABASE_VERSION = 4;
+    public static final int DATABASE_VERSION = 5;
 
     public ProfileDBHelper(Context context){ super(context, DATABASE_NAME, null, DATABASE_VERSION);}
 
@@ -71,6 +71,7 @@ public class ProfileDBHelper extends SQLiteOpenHelper{
                         ProfileContract.Gymnastics.REPS + " INTEGER NOT NULL, " +
                         ProfileContract.Gymnastics.PR + " INTEGER, " +
                         ProfileContract.Gymnastics.DATE + " INTEGER NOT NULL, " +
+                        ProfileContract.Gymnastics.TIME + " INTEGER, " +
                         ProfileContract.Gymnastics.COMMENTS + " STRING" + ");";
 
         final String SQL_CREATE_RUNNING_TABLE =

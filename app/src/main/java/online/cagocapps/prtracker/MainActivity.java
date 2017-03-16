@@ -31,7 +31,7 @@ import com.google.firebase.auth.FirebaseUser;
 import online.cagocapps.prtracker.Data.ProfileContract;
 import online.cagocapps.prtracker.Data.ProfileDBHelper;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
     private String username;
     private String TAG = "Main Activity";
@@ -96,8 +96,16 @@ public class MainActivity extends AppCompatActivity {
                 Integer.toString(cursor.getInt(cursor.getColumnIndex(ProfileContract.ProfileValues.GENDER))));
                 cursor.close();
 
+
             }
         }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
     }
 
     @Override

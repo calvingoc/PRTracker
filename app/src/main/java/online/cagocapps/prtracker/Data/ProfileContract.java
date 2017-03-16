@@ -108,6 +108,7 @@ public class ProfileContract {
         public static final String DATE = BarbellLifts.DATE;
         public static final String COMMENTS = BarbellLifts.COMMENTS;
         public static final String PR = BarbellLifts.PR;
+        public static final String TIME = Running.TIME;
     }
 
     public static final class Running implements BaseColumns{

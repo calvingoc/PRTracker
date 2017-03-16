@@ -9,6 +9,9 @@
     <!--Main Menu-->
     <string name="mm_profile_settings">Edit Profile</string>
 
+    <!--Main Activity-->
+    <string name="no_results">No Results</string>
+
 
     <!--Log In-->
     <string name="failed_login">Log in failed. Please check your connection and try again.</string>
