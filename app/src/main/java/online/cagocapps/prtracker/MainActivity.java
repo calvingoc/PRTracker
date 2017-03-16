@@ -27,13 +27,14 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 
 import online.cagocapps.prtracker.Data.ProfileContract;
 import online.cagocapps.prtracker.Data.ProfileDBHelper;
 
 public class MainActivity extends AppCompatActivity{
 
-    private String username;
+    private String email;
     private String TAG = "Main Activity";
 
     private ProfileDBHelper dbHelper;
@@ -58,13 +59,14 @@ public class MainActivity extends AppCompatActivity{
                 startActivity(intent);
             }
         });
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        username = PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.sp_email), null);
-        if (username == null) {
+        email = PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.sp_email), null);
+        if (email == null) {
             Intent intent = new Intent(this, Login.class);
             startActivity(intent);
         } else {

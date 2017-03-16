@@ -19,15 +19,23 @@ import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XYGraphWidget;
 import com.androidplot.xy.XYPlot;
 import com.androidplot.xy.XYSeries;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParsePosition;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import online.cagocapps.prtracker.Data.ProfileContract;
 import online.cagocapps.prtracker.Data.ProfileDBHelper;
+import online.cagocapps.prtracker.Data.ResultObject;
 
 /**
  * Created by cgehredo on 3/16/2017.
@@ -50,6 +58,7 @@ public class mainActivityRecycAdapter extends RecyclerView.Adapter<mainActivityR
         public final TextView tvResults;
         public final XYPlot plotResultsGraph;
         public final TextView tvNotes;
+        public final TextView tvPercentile;
 
 
         public mainActivityRecycAdapterViewHolder(View itemView) {
@@ -59,6 +68,7 @@ public class mainActivityRecycAdapter extends RecyclerView.Adapter<mainActivityR
             tvResults = (TextView) itemView.findViewById(R.id.mai_tv_results);
             plotResultsGraph = (XYPlot) itemView.findViewById(R.id.mai_plot_results);
             tvNotes = (TextView) itemView.findViewById(R.id.mai_tv_notes);
+            tvPercentile = (TextView) itemView.findViewById(R.id.mai_tv_percentile_val);
         }
     }
 
@@ -74,7 +84,7 @@ public class mainActivityRecycAdapter extends RecyclerView.Adapter<mainActivityR
     }
 
     @Override
-    public void onBindViewHolder(mainActivityRecycAdapterViewHolder holder, int position) {
+    public void onBindViewHolder(final mainActivityRecycAdapterViewHolder holder, int position) {
         Cursor recentCursor = dbRead.query(
                 ProfileContract.RecentLifts.TABLE_NAME,
                 null,
@@ -122,7 +132,7 @@ public class mainActivityRecycAdapter extends RecyclerView.Adapter<mainActivityR
                         null
                 );
                 thisResult.moveToFirst();
-                String activity = recentCursor.getString(recentCursor.getColumnIndex(ProfileContract.BarbellLifts.LIFT));
+                final String activity = recentCursor.getString(recentCursor.getColumnIndex(ProfileContract.BarbellLifts.LIFT));
                 holder.tvActivity.setText(activity);
                 holder.tvNotes.setText(recentCursor.getString(recentCursor.getColumnIndex(ProfileContract.BarbellLifts.COMMENTS)));
                 if (recentCursor.getInt(recentCursor.getColumnIndex(ProfileContract.BarbellLifts.PR)) == 1){
@@ -236,6 +246,64 @@ public class mainActivityRecycAdapter extends RecyclerView.Adapter<mainActivityR
                                 return null;
                             }
                         });
+                DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+                mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Cursor prCursor = dbRead.query(
+                                ProfileContract.ProfileValues.TABLE_NAME,
+                                null,
+                                ProfileContract.ProfileValues._ID + " = ?",
+                                new String[] {userID},
+                                null,
+                                null,
+                                null
+                        );
+                        if(prCursor.moveToFirst()){
+                            String birthdate = prCursor.getString(prCursor.getColumnIndex(ProfileContract.ProfileValues.BIRTHDATE));
+                            Date now = new Date();
+                            int year = now.getYear() + 1900;
+                            int age = year - Integer.valueOf(birthdate);
+                            String weight = (Integer.toString(prCursor.getInt(prCursor.getColumnIndex(ProfileContract.ProfileValues.WEIGHT))));
+                            int scaledWeight = Integer.valueOf(weight) / 10;
+                            String yearsAct = (Integer.toString(prCursor.getInt(prCursor.getColumnIndex(ProfileContract.ProfileValues.YEARS_ACTIVE))));
+                            int skill = (prCursor.getInt(prCursor.getColumnIndex(ProfileContract.ProfileValues.SKILL)));
+                            int gender = (prCursor.getInt(prCursor.getColumnIndex(ProfileContract.ProfileValues.GENDER)));
+                            String email = prCursor.getString(prCursor.getColumnIndex(ProfileContract.ProfileValues.EMAIL));
+                            prCursor.close();
+                            double pr = 0;
+                            double below = 0;
+                            double total = 0;
+                            double equal = 1;
+                            ArrayList<Integer> results = new ArrayList<Integer>();
+                            for(DataSnapshot comResult : dataSnapshot.child(activity).child(Integer.toString(gender)).child(Integer.toString(skill)).child(Integer.toString(scaledWeight))
+                                    .child(Integer.toString(age)).child(yearsAct).getChildren()){
+                                ResultObject resultObject = comResult.getValue(ResultObject.class);
+                                results.add(resultObject.getResult());
+                                String curEmail = comResult.getKey();
+                                if(curEmail.equals(email)){
+                                    pr = resultObject.getResult();
+                                }
+                            }
+                            for (int i : results){
+                                if (i < pr) {
+                                    below++;
+                                    total++;
+                                }else if(i == pr){
+                                    equal++;
+                                    total++;
+                                } else total++;
+                            }
+                            holder.tvPercentile.setText(Double.toString((below + .5*equal)/total));
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
 
             }
         }

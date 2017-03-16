@@ -25,6 +25,7 @@ import java.util.Date;
 
 import online.cagocapps.prtracker.Data.ProfileContract;
 import online.cagocapps.prtracker.Data.ProfileDBHelper;
+import online.cagocapps.prtracker.Data.ResultObject;
 
 public class AddResult extends AppCompatActivity {
 
@@ -416,6 +417,7 @@ public class AddResult extends AppCompatActivity {
         //set up database
         dbHelper = new ProfileDBHelper(this);
         dbWrite = dbHelper.getWritableDatabase();
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         database = FirebaseDatabase.getInstance();
         reference = database.getReference();
 
@@ -661,8 +663,10 @@ public class AddResult extends AppCompatActivity {
                 int skill = (prCursor.getInt(prCursor.getColumnIndex(ProfileContract.ProfileValues.SKILL)));
                 int gender = (prCursor.getInt(prCursor.getColumnIndex(ProfileContract.ProfileValues.GENDER)));
                 prCursor.close();
+                ResultObject resultObject = new ResultObject();
+                resultObject.setResult(prValue);
                 reference.child(activity).child(Integer.toString(gender)).child(Integer.toString(skill)).child(Integer.toString(scaledWeight))
-                        .child(Integer.toString(age)).child(yearsAct).child(userEmail).setValue(prValue);
+                        .child(Integer.toString(age)).child(yearsAct).child(userEmail).setValue(resultObject);
             }
         }
         cursor.close();
