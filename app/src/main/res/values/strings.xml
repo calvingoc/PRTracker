@@ -10,8 +10,8 @@
     <string name="mm_profile_settings">Edit Profile</string>
 
     <!--Main Activity-->
-    <string name="no_results">No Results</string>
-
+   <string name="ma_no_results">No Results</string>
+    <string name="ma_recent_results">Recent Results</string>
 
     <!--Log In-->
     <string name="failed_login">Log in failed. Please check your connection and try again.</string>

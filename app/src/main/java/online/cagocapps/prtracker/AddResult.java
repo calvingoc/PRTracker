@@ -382,34 +382,34 @@ public class AddResult extends AppCompatActivity {
     private void clearDisabled(){
         if(!etSets.isEnabled()){
             etSets.setText(null);
-            etSets.setBackgroundColor(getColor(R.color.colorPrimaryDark));
+            etSets.setBackgroundColor(getColor(R.color.colorPrimary));
         } else  etSets.setBackgroundColor(getColor(R.color.colorAccent));
         if(!etReps.isEnabled()){
             etReps.setText(null);
-            etReps.setBackgroundColor(getColor(R.color.colorPrimaryDark));
+            etReps.setBackgroundColor(getColor(R.color.colorPrimary));
         } else etReps.setBackgroundColor(getColor(R.color.colorAccent));
         if(!etWeight.isEnabled()){
             etWeight.setText(null);
-            etWeight.setBackgroundColor(getColor(R.color.colorPrimaryDark));
+            etWeight.setBackgroundColor(getColor(R.color.colorPrimary));
         } else etWeight.setBackgroundColor(getColor(R.color.colorAccent));
         if(!etHours.isEnabled()){
             etHours.setText(null);
-            etHours.setBackgroundColor(getColor(R.color.colorPrimaryDark));
+            etHours.setBackgroundColor(getColor(R.color.colorPrimary));
         } else etHours.setBackgroundColor(getColor(R.color.colorAccent));
         if(!etMinutes.isEnabled()) {
             etMinutes.setText(null);
-            etMinutes.setBackgroundColor(getColor(R.color.colorPrimaryDark));
+            etMinutes.setBackgroundColor(getColor(R.color.colorPrimary));
         } else etMinutes.setBackgroundColor(getColor(R.color.colorAccent));
         if(!etSeconds.isEnabled()){
             etSeconds.setText(null);
-            etSeconds.setBackgroundColor(getColor(R.color.colorPrimaryDark));
+            etSeconds.setBackgroundColor(getColor(R.color.colorPrimary));
         } else etSeconds.setBackgroundColor(getColor(R.color.colorAccent));
         checkRX.setChecked(checkRX.isEnabled());
         if (checkRX.isEnabled()) checkRX.setBackgroundColor(getColor(R.color.colorAccent));
-        else checkRX.setBackgroundColor(getColor(R.color.colorPrimaryDark));
+        else checkRX.setBackgroundColor(getColor(R.color.colorPrimary));
         if(!spinDistance.isEnabled()){
             spinDistance.setPrompt(null);
-            spinDistance.setBackgroundColor(getColor(R.color.colorPrimaryDark));
+            spinDistance.setBackgroundColor(getColor(R.color.colorPrimary));
         } else spinDistance.setBackgroundColor(getColor(R.color.colorAccent));
     }
 
@@ -417,7 +417,6 @@ public class AddResult extends AppCompatActivity {
         //set up database
         dbHelper = new ProfileDBHelper(this);
         dbWrite = dbHelper.getWritableDatabase();
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         database = FirebaseDatabase.getInstance();
         reference = database.getReference();
 
@@ -542,6 +541,7 @@ public class AddResult extends AppCompatActivity {
     private ContentValues isPR(ContentValues cv, String activity, int resultType, int oneRepMax,
                                double reps, int totalTime, int rx, int sets){
         Boolean newPr = false;
+        Boolean pr = false;
         int prValue = 0;
         Cursor cursor = dbWrite.query(
                 tableName,
@@ -631,7 +631,40 @@ public class AddResult extends AppCompatActivity {
                     }
                     break;
             }
-        } else cv.put(ProfileContract.BarbellLifts.PR, "1");
+        } else{
+            cv.put(ProfileContract.BarbellLifts.PR, "1");
+            //set up shared prefs
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+            String userEmail = sharedPreferences.getString(getString(R.string.sp_email), "error");
+            String where = ProfileContract.ProfileValues.EMAIL + " = ?";
+            Cursor prCursor = dbWrite.query(
+                    ProfileContract.ProfileValues.TABLE_NAME,
+                    null,
+                    where,
+                    new String[] {userEmail},
+                    null,
+                    null,
+                    null
+            );
+            if (prCursor.moveToFirst()) {
+                String birthdate = prCursor.getString(prCursor.getColumnIndex(ProfileContract.ProfileValues.BIRTHDATE));
+                Date now = new Date();
+                int year = now.getYear() + 1900;
+                int age = year - Integer.valueOf(birthdate);
+                String weight = (Integer.toString(prCursor.getInt(prCursor.getColumnIndex(ProfileContract.ProfileValues.WEIGHT))));
+                int scaledWeight = Integer.valueOf(weight) / 10;
+                String yearsAct = (Integer.toString(prCursor.getInt(prCursor.getColumnIndex(ProfileContract.ProfileValues.YEARS_ACTIVE))));
+                int skill = (prCursor.getInt(prCursor.getColumnIndex(ProfileContract.ProfileValues.SKILL)));
+                int gender = (prCursor.getInt(prCursor.getColumnIndex(ProfileContract.ProfileValues.GENDER)));
+                prCursor.close();
+                userEmail = userEmail.replace(".", "");
+                ResultObject resultObject = new ResultObject();
+                resultObject.setResult(prValue);
+                reference.child(activity).child(Integer.toString(gender)).child(Integer.toString(skill)).child(Integer.toString(scaledWeight))
+                        .child(Integer.toString(age)).child(yearsAct).child(userEmail).setValue(resultObject);
+                reference.setValue(resultObject);
+            }
+        }
 
         if (newPr){
             ContentValues update = new ContentValues();

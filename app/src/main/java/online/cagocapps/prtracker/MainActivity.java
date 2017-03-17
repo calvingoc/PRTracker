@@ -11,6 +11,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -40,6 +42,11 @@ public class MainActivity extends AppCompatActivity{
     private ProfileDBHelper dbHelper;
     private SQLiteDatabase dbWrite;
 
+    private RecyclerView rvMainActivity;
+    private MainActivityRecycAdapter mainAdapter;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +57,13 @@ public class MainActivity extends AppCompatActivity{
         dbHelper = new ProfileDBHelper(this);
         dbWrite = dbHelper.getWritableDatabase();
 
+        rvMainActivity = (RecyclerView) findViewById(R.id.ma_rv_results);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false);
+        rvMainActivity.setLayoutManager(layoutManager);
+        rvMainActivity.setHasFixedSize(true);
+        mainAdapter = new MainActivityRecycAdapter();
+        rvMainActivity.setAdapter(mainAdapter);
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -59,24 +73,28 @@ public class MainActivity extends AppCompatActivity{
                 startActivity(intent);
             }
         });
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mainAdapter.notifyDataSetChanged();
         email = PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.sp_email), null);
         if (email == null) {
             Intent intent = new Intent(this, Login.class);
             startActivity(intent);
         } else {
-            TextView test = (TextView) findViewById(R.id.ma_tv_test);
             String where = ProfileContract.ProfileValues.EMAIL + " = ?";
             Cursor cursor = dbWrite.query(
                     ProfileContract.ProfileValues.TABLE_NAME,
                     null,
                     where,
-                    new String[]{username},
+                    new String[]{email},
                     null,
                     null,
                     null
@@ -84,30 +102,19 @@ public class MainActivity extends AppCompatActivity{
             if (cursor.moveToFirst()) {
                 String ID = cursor.getString(cursor.getColumnIndex(ProfileContract.ProfileValues._ID));
                 String userName = (cursor.getString(cursor.getColumnIndex(ProfileContract.ProfileValues.USER_NAME)));
-                String bday = (cursor.getString(cursor.getColumnIndex(ProfileContract.ProfileValues.BIRTHDATE)));
-                String weight = (Integer.toString(cursor.getInt(cursor.getColumnIndex(ProfileContract.ProfileValues.WEIGHT))));
-                String years = (Integer.toString(cursor.getInt(cursor.getColumnIndex(ProfileContract.ProfileValues.YEARS_ACTIVE))));
-                String[] skillz = getResources().getStringArray(R.array.skill_level_titles);
-                String skillLevel = (skillz[cursor.getInt(cursor.getColumnIndex(ProfileContract.ProfileValues.SKILL)) - 1]);
-                String[] gender = getResources().getStringArray(R.array.gender_titles);
-                String sex = (gender[cursor.getInt(cursor.getColumnIndex(ProfileContract.ProfileValues.GENDER))]);
-                test.setText("ID " + ID +
-                        " userName " + userName + " bday " + bday + " weight " + weight + " years " + years +
-                        " skills "
-                        + skillLevel + " " + Integer.toString(cursor.getInt(cursor.getColumnIndex(ProfileContract.ProfileValues.SKILL))) + " sex " + sex +
-                Integer.toString(cursor.getInt(cursor.getColumnIndex(ProfileContract.ProfileValues.GENDER))));
                 cursor.close();
+                SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+                editor.putInt(getString(R.string.sp_userID), Integer.valueOf(ID));
+                editor.commit();
+
+                mainAdapter.setUserID(ID);
+                TextView textViewUserName = (TextView) findViewById(R.id.ma_tv_username);
+                textViewUserName.setText(userName);
+
 
 
             }
         }
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
     }
 
     @Override
