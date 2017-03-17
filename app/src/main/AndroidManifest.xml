@@ -23,7 +23,8 @@
             android:name=".Login"
             android:parentActivityName=".MainActivity" />
         <activity android:name=".ProfileActivity" />
-        <activity android:name=".AddResult"></activity>
+        <activity android:name=".AddResult" />
+        <activity android:name=".ViewResults"></activity>
     </application>
 
 </manifest>

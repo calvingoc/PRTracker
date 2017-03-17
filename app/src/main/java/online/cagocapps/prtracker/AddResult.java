@@ -17,6 +17,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -44,14 +45,15 @@ public class AddResult extends AppCompatActivity {
     private TextView tvDistance;
     private Spinner spinDistance;
     private EditText etNotes;
+    private ToggleButton togUnits;
 
     //for saving result
     private int resultType;
     private String tableName;
     private boolean plank = false;
     private FirebaseDatabase database;
-    DatabaseReference reference;
-
+    private DatabaseReference reference;
+    private float units;
     //db vars
     public ProfileDBHelper dbHelper;
     private SQLiteDatabase dbWrite;
@@ -62,11 +64,13 @@ public class AddResult extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_result);
 
+        units = PreferenceManager.getDefaultSharedPreferences(this).getFloat(getString(R.string.sp_units),1);
+
         //find views;
         spinActivity = (Spinner) findViewById(R.id.ar_spin_activities);
         spinCategory = (Spinner) findViewById(R.id.ar_spin_categories);
         tvRounds = (TextView) findViewById(R.id.ar_tv_rounds);
-        etSets = (EditText) findViewById(R.id.ar_et_secs);
+        etSets = (EditText) findViewById(R.id.ar_et_rounds);
         etReps = (EditText) findViewById(R.id.ar_et_reps);
         etWeight = (EditText) findViewById(R.id.ar_et_weight);
         tvTime = (TextView) findViewById(R.id.ar_tv_time);
@@ -77,6 +81,9 @@ public class AddResult extends AppCompatActivity {
         tvDistance = (TextView) findViewById(R.id.ar_tv_distance);
         spinDistance = (Spinner) findViewById(R.id.ar_spin_distance);
         etNotes = (EditText) findViewById(R.id.ar_et_notes);
+        togUnits = (ToggleButton) findViewById(R.id.ar_tog_units);
+        if (units == 1) togUnits.setChecked(false);
+        else togUnits.setChecked(true);
 
 
         spinCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -95,6 +102,7 @@ public class AddResult extends AppCompatActivity {
                             @Override
                             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                                 weightBased();
+                                plank = false;
                             }
 
                             @Override
@@ -236,9 +244,7 @@ public class AddResult extends AppCompatActivity {
                             }
 
                             @Override
-                            public void onNothingSelected(AdapterView<?> adapterView) {
-
-                            }
+                            public void onNothingSelected(AdapterView<?> adapterView) {}
                         });
                         tableName = ProfileContract.CrossFitStandards.TABLE_NAME;
                         break;
@@ -382,35 +388,34 @@ public class AddResult extends AppCompatActivity {
     private void clearDisabled(){
         if(!etSets.isEnabled()){
             etSets.setText(null);
-            etSets.setBackgroundColor(getColor(R.color.colorPrimary));
-        } else  etSets.setBackgroundColor(getColor(R.color.colorAccent));
+            etSets.setTextColor(getColor(R.color.colorAccent));
+        } else  etSets.setTextColor(getColor(R.color.colorPrimaryDark));
         if(!etReps.isEnabled()){
             etReps.setText(null);
-            etReps.setBackgroundColor(getColor(R.color.colorPrimary));
-        } else etReps.setBackgroundColor(getColor(R.color.colorAccent));
+            etReps.setTextColor(getColor(R.color.colorAccent));
+        } else etReps.setTextColor(getColor(R.color.colorPrimaryDark));
         if(!etWeight.isEnabled()){
             etWeight.setText(null);
-            etWeight.setBackgroundColor(getColor(R.color.colorPrimary));
-        } else etWeight.setBackgroundColor(getColor(R.color.colorAccent));
+            etWeight.setTextColor(getColor(R.color.colorAccent));
+        } else etWeight.setTextColor(getColor(R.color.colorPrimaryDark));
         if(!etHours.isEnabled()){
             etHours.setText(null);
-            etHours.setBackgroundColor(getColor(R.color.colorPrimary));
-        } else etHours.setBackgroundColor(getColor(R.color.colorAccent));
+            etHours.setTextColor(getColor(R.color.colorAccent));
+        } else etHours.setTextColor(getColor(R.color.colorPrimaryDark));
         if(!etMinutes.isEnabled()) {
             etMinutes.setText(null);
-            etMinutes.setBackgroundColor(getColor(R.color.colorPrimary));
-        } else etMinutes.setBackgroundColor(getColor(R.color.colorAccent));
+            etMinutes.setTextColor(getColor(R.color.colorAccent));
+        } else etMinutes.setTextColor(getColor(R.color.colorPrimaryDark));
         if(!etSeconds.isEnabled()){
             etSeconds.setText(null);
-            etSeconds.setBackgroundColor(getColor(R.color.colorPrimary));
-        } else etSeconds.setBackgroundColor(getColor(R.color.colorAccent));
+            etSeconds.setTextColor(getColor(R.color.colorAccent));
+        } else etSeconds.setTextColor(getColor(R.color.colorPrimaryDark));
         checkRX.setChecked(checkRX.isEnabled());
-        if (checkRX.isEnabled()) checkRX.setBackgroundColor(getColor(R.color.colorAccent));
-        else checkRX.setBackgroundColor(getColor(R.color.colorPrimary));
+        if (checkRX.isEnabled()) checkRX.setTextColor(getColor(R.color.colorPrimaryDark));
+        else checkRX.setTextColor(getColor(R.color.colorAccent));
         if(!spinDistance.isEnabled()){
             spinDistance.setPrompt(null);
-            spinDistance.setBackgroundColor(getColor(R.color.colorPrimary));
-        } else spinDistance.setBackgroundColor(getColor(R.color.colorAccent));
+        }
     }
 
     public void saveResult(View view){
@@ -419,6 +424,9 @@ public class AddResult extends AppCompatActivity {
         dbWrite = dbHelper.getWritableDatabase();
         database = FirebaseDatabase.getInstance();
         reference = database.getReference();
+
+        if(togUnits.isChecked()) units = (float) .453592;
+        else units = 1;
 
         long workoutID;
         double convertedOneRepMaxDouble;
@@ -432,7 +440,7 @@ public class AddResult extends AppCompatActivity {
             reps = Integer.valueOf(etReps.getText().toString());
         double weight = 1;
         if (etWeight.getText().length() != 0)
-            weight = Integer.valueOf(etWeight.getText().toString());
+            weight = Integer.valueOf(etWeight.getText().toString())/units;
         int hours = 0;
         if (etHours.getText().length() != 0)
             hours = Integer.valueOf(etHours.getText().toString());
@@ -541,7 +549,6 @@ public class AddResult extends AppCompatActivity {
     private ContentValues isPR(ContentValues cv, String activity, int resultType, int oneRepMax,
                                double reps, int totalTime, int rx, int sets){
         Boolean newPr = false;
-        Boolean pr = false;
         int prValue = 0;
         Cursor cursor = dbWrite.query(
                 tableName,
@@ -633,7 +640,6 @@ public class AddResult extends AppCompatActivity {
             }
         } else{
             cv.put(ProfileContract.BarbellLifts.PR, "1");
-            //set up shared prefs
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
             String userEmail = sharedPreferences.getString(getString(R.string.sp_email), "error");
             String where = ProfileContract.ProfileValues.EMAIL + " = ?";

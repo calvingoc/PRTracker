@@ -3,13 +3,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="online.cagocapps.prtracker.MainActivity">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/logout"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
+        android:title="@string/logout"
         app:showAsAction="never" />
     <item
         android:id="@+id/edit_profile"
         android:title="@string/mm_profile_settings"
+        android:orderInCategory="3"
         app:showAsAction="never"/>
+    <item
+        android:id="@+id/view_results"
+        android:orderInCategory="1"
+        android:title="@string/ma_item_view_results"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/community_results"
+        android:title="@string/ma_item_com_results"
+        android:orderInCategory="2"
+        app:showAsAction="ifRoom"/>
+
 
 </menu>

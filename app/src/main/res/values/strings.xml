@@ -1,17 +1,21 @@
 <resources>
-    <string name="app_name">PRTracker</string>
-    <string name="action_settings">Settings</string>
+    <string name="app_name">Buff Enough</string>
+    <string name="logout">Log Out</string>
 
     <!--Shared Preferences-->
     <string name="sp_email" translatable="false">default_email</string>
     <string name="sp_userID" translatable="false">default_id</string>
+    <string name="sp_units" translatable="false">default_units</string>
 
     <!--Main Menu-->
     <string name="mm_profile_settings">Edit Profile</string>
 
     <!--Main Activity-->
-   <string name="ma_no_results">No Results</string>
+    <string name="ma_no_results">No Results</string>
     <string name="ma_recent_results">Recent Results</string>
+    <string name="ma_item_view_results">View Results</string>
+    <string name="ma_item_com_results">Community Results</string>
+
 
     <!--Log In-->
     <string name="failed_login">Log in failed. Please check your connection and try again.</string>
@@ -31,6 +35,8 @@
     <string name="pp_button_save">Save</string>
     <string name="pp_gender">Gender</string>
     <string name="pp_age_error">Invalid birth year please enter a value after 1900 ex. 1992</string>
+    <string name="pp_pounds">Pounds</string>
+    <string name="pp_kg">Kilograms</string>
 
     <string-array name="skill_level_titles">
         <item>1 Pro</item>

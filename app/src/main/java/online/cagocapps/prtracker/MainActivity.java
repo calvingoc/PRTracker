@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity{
         super.onResume();
         mainAdapter.notifyDataSetChanged();
         email = PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.sp_email), null);
+        float units = PreferenceManager.getDefaultSharedPreferences(this).getFloat(getString(R.string.sp_units),1);
         if (email == null) {
             Intent intent = new Intent(this, Login.class);
             startActivity(intent);
@@ -107,7 +108,7 @@ public class MainActivity extends AppCompatActivity{
                 editor.putInt(getString(R.string.sp_userID), Integer.valueOf(ID));
                 editor.commit();
 
-                mainAdapter.setUserID(ID);
+                mainAdapter.setUserID(ID, units);
                 TextView textViewUserName = (TextView) findViewById(R.id.ma_tv_username);
                 textViewUserName.setText(userName);
 
@@ -132,8 +133,14 @@ public class MainActivity extends AppCompatActivity{
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.logout) {
+            SharedPreferences.Editor edit = PreferenceManager.getDefaultSharedPreferences(this)
+                    .edit();
+            edit.putString(getString(R.string.sp_email), null);
+            edit.commit();
+            Intent intent = new Intent(this, Login.class);
+            startActivity(intent);
+
         } else if (id == R.id.edit_profile){
             Intent intent = new Intent(this, ProfileActivity.class);
             intent.putExtra(getString(R.string.new_user), false);

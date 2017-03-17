@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import online.cagocapps.prtracker.Data.ProfileContract;
 import online.cagocapps.prtracker.Data.ProfileDBHelper;
@@ -26,6 +27,7 @@ public class ProfileActivity extends AppCompatActivity {
     private EditText etYearsAct;
     private Spinner spinSkill;
     private Spinner spinGender;
+    private ToggleButton togUnits;
 
 
     //db vars
@@ -38,6 +40,7 @@ public class ProfileActivity extends AppCompatActivity {
     private String TAG = "ProfileActivity";
     private String userEmail;
     private int userID = -1;
+    private float units = 1;
 
 
     @Override
@@ -52,6 +55,7 @@ public class ProfileActivity extends AppCompatActivity {
         etYearsAct = (EditText) findViewById(R.id.pp_et_years);
         spinSkill = (Spinner) findViewById(R.id.pp_spin_skill);
         spinGender = (Spinner) findViewById(R.id.pp_spin_gender);
+        togUnits = (ToggleButton) findViewById(R.id.pp_togbutt_units);
 
         //set up database
         dbHelper = new ProfileDBHelper(this);
@@ -60,6 +64,7 @@ public class ProfileActivity extends AppCompatActivity {
         //set up shared prefs
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         userEmail = sharedPreferences.getString(getString(R.string.sp_email), "error");
+        units = sharedPreferences.getFloat(getString(R.string.sp_units), 1);
 
 
         //grab intent extras
@@ -88,6 +93,8 @@ public class ProfileActivity extends AppCompatActivity {
                 etYearsAct.setText(Integer.toString(cursor.getInt(cursor.getColumnIndex(ProfileContract.ProfileValues.YEARS_ACTIVE))));
                 spinSkill.setSelection(cursor.getInt(cursor.getColumnIndex(ProfileContract.ProfileValues.SKILL))-1);
                 spinGender.setSelection(cursor.getInt(cursor.getColumnIndex(ProfileContract.ProfileValues.GENDER)));
+                if (units ==1) togUnits.setChecked(false);
+                else togUnits.setChecked(true);
                 cursor.close();
 
             } else {
@@ -122,6 +129,10 @@ public class ProfileActivity extends AppCompatActivity {
                 dbWrite.update(ProfileContract.ProfileValues.TABLE_NAME, cv, ProfileContract.ProfileValues._ID + " =?", new String[]{Integer.toString(userID)});
             SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
             editor.putInt(getString(R.string.sp_userID), userID);
+            if (togUnits.isChecked()) units = (float) .453592;
+            else units = 1;
+            editor.putFloat(getString(R.string.sp_units), units);
+            editor.commit();
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();

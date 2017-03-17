@@ -164,5 +164,33 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
+    <TextView
+        android:id="@+id/pp_tv_units"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="0dp"
+        android:text="TextView"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/pp_spin_gender"
+        app:layout_constraintTop_toBottomOf="@+id/pp_tv_gender"
+        app:layout_constraintHorizontal_bias="0.0" />
+
+    <ToggleButton
+        android:id="@+id/pp_togbutt_units"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="0dp"
+        android:textOff="@string/pp_pounds"
+        android:textOn="@string/pp_kg"
+        app:layout_constraintBottom_toBottomOf="@+id/pp_tv_units"
+        app:layout_constraintLeft_toRightOf="@+id/pp_tv_units"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/pp_tv_units" />
+
 
 </android.support.constraint.ConstraintLayout>
