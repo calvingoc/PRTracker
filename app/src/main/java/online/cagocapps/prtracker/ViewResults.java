@@ -104,11 +104,11 @@ public class ViewResults extends AppCompatActivity {
                             @Override
                             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                                 if (i == 16) {
-                                    timeBased();
+                                    //timeBased();
                                     plank = true;
                                 }
                                 else{
-                                    bodyWeightBased();
+                                    //bodyWeightBased();
                                     plank = false;
                                 }
 
@@ -131,7 +131,7 @@ public class ViewResults extends AppCompatActivity {
                         spinActivity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                timeBased();
+                                //timeBased();
                                 plank = false;
                             }
 
@@ -152,7 +152,7 @@ public class ViewResults extends AppCompatActivity {
                         spinActivity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                swimmingBased();
+                                //swimmingBased();
                                 plank = false;
                             }
 
@@ -173,10 +173,10 @@ public class ViewResults extends AppCompatActivity {
                         spinActivity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                if (i == 0 || i == 2 || i == 3 || i == 4
-                                        || i == 5 || i == 6 || i == 7 || i == 8 || i == 9)
-                                    crossFitBased();
-                                else crossFitAMRAP();
+                                //if (i == 0 || i == 2 || i == 3 || i == 4
+                                        //|| i == 5 || i == 6 || i == 7 || i == 8 || i == 9)
+                                    //crossFitBased();
+                                //else crossFitAMRAP();
                                 plank = false;
                             }
 
@@ -197,9 +197,9 @@ public class ViewResults extends AppCompatActivity {
                         spinActivity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                if (i == 0 || i == 1 || i == 2 || i == 3 || i == 4 || i == 6)
-                                    crossFitBased();
-                                else crossFitAMRAP();
+                                //if (i == 0 || i == 1 || i == 2 || i == 3 || i == 4 || i == 6)
+                                    //crossFitBased();
+                                //else crossFitAMRAP();
                                 plank = false;
                             }
 
@@ -218,9 +218,9 @@ public class ViewResults extends AppCompatActivity {
                         spinActivity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                if (i == 14 || i == 18 || i == 23 || i == 25)
-                                    crossFitBased();
-                                else crossFitAMRAP();
+                                //if (i == 14 || i == 18 || i == 23 || i == 25)
+                                    //crossFitBased();
+                                //else crossFitAMRAP();
                                 plank = false;
                             }
 

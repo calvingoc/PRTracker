@@ -353,7 +353,7 @@ public class AddResult extends AppCompatActivity {
     //sets up page for CrossFit for Time Based exercises
     private void crossFitBased(){
         tvRounds.setEnabled(true);
-        etSets.setEnabled(true);
+        etSets.setEnabled(false);
         etReps.setEnabled(true);
         etWeight.setEnabled(false);
         tvTime.setEnabled(true);
@@ -370,7 +370,7 @@ public class AddResult extends AppCompatActivity {
     //sets up page for CrossFit AMRAP Based exercises
     private void crossFitAMRAP(){
         tvRounds.setEnabled(true);
-        etSets.setEnabled(true);
+        etSets.setEnabled(false);
         etReps.setEnabled(true);
         etWeight.setEnabled(false);
         tvTime.setEnabled(false);
@@ -389,27 +389,51 @@ public class AddResult extends AppCompatActivity {
         if(!etSets.isEnabled()){
             etSets.setText(null);
             etSets.setTextColor(getColor(R.color.colorAccent));
-        } else  etSets.setTextColor(getColor(R.color.colorPrimaryDark));
+            etSets.setHintTextColor(getColor(R.color.colorAccent));
+        } else  {
+            etSets.setTextColor(getColor(R.color.colorPrimaryDark));
+            etSets.setHintTextColor(getColor(R.color.colorPrimaryDark));
+        }
         if(!etReps.isEnabled()){
             etReps.setText(null);
             etReps.setTextColor(getColor(R.color.colorAccent));
-        } else etReps.setTextColor(getColor(R.color.colorPrimaryDark));
+            etReps.setHintTextColor(getColor(R.color.colorAccent));
+        } else {
+            etReps.setTextColor(getColor(R.color.colorPrimaryDark));
+            etReps.setHintTextColor(getColor(R.color.colorPrimaryDark));
+        }
         if(!etWeight.isEnabled()){
             etWeight.setText(null);
             etWeight.setTextColor(getColor(R.color.colorAccent));
-        } else etWeight.setTextColor(getColor(R.color.colorPrimaryDark));
+            etWeight.setHintTextColor(getColor(R.color.colorAccent));
+        } else{
+            etWeight.setTextColor(getColor(R.color.colorPrimaryDark));
+            etWeight.setHintTextColor(getColor(R.color.colorPrimaryDark));
+        }
         if(!etHours.isEnabled()){
             etHours.setText(null);
             etHours.setTextColor(getColor(R.color.colorAccent));
-        } else etHours.setTextColor(getColor(R.color.colorPrimaryDark));
+            etHours.setHintTextColor(getColor(R.color.colorAccent));
+        } else {
+            etHours.setTextColor(getColor(R.color.colorPrimaryDark));
+            etHours.setHintTextColor(getColor(R.color.colorPrimaryDark));
+        }
         if(!etMinutes.isEnabled()) {
             etMinutes.setText(null);
+            etMinutes.setHintTextColor(getColor(R.color.colorAccent));
             etMinutes.setTextColor(getColor(R.color.colorAccent));
-        } else etMinutes.setTextColor(getColor(R.color.colorPrimaryDark));
+        } else{
+            etMinutes.setTextColor(getColor(R.color.colorPrimaryDark));
+            etMinutes.setHintTextColor(getColor(R.color.colorPrimaryDark));
+        }
         if(!etSeconds.isEnabled()){
             etSeconds.setText(null);
             etSeconds.setTextColor(getColor(R.color.colorAccent));
-        } else etSeconds.setTextColor(getColor(R.color.colorPrimaryDark));
+            etSeconds.setHintTextColor(getColor(R.color.colorAccent));
+        } else{
+            etSeconds.setHintTextColor(getColor(R.color.colorPrimaryDark));
+            etSeconds.setTextColor(getColor(R.color.colorPrimaryDark));
+        }
         checkRX.setChecked(checkRX.isEnabled());
         if (checkRX.isEnabled()) checkRX.setTextColor(getColor(R.color.colorPrimaryDark));
         else checkRX.setTextColor(getColor(R.color.colorAccent));

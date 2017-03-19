@@ -9,7 +9,7 @@
 
     <TextView
         android:layout_width="0dp"
-        android:layout_height="30dp"
+        android:layout_height="35dp"
         android:id="@+id/ar_tv_header"
         android:text="@string/ar_tv_header"
         android:textSize="30sp"
@@ -44,7 +44,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:entries="@array/enter_results_category"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/colorAccent"
         android:background="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="@id/ar_tv_category"
         app:layout_constraintLeft_toRightOf="@+id/ar_tv_category"
@@ -56,7 +56,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:enabled="false"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/colorAccent"
         android:background="@color/colorPrimary"
         app:layout_constraintLeft_toRightOf="@id/ar_tv_activity"
         app:layout_constraintRight_toRightOf="parent"

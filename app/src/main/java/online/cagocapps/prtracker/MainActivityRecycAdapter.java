@@ -159,7 +159,7 @@ public class MainActivityRecycAdapter extends RecyclerView.Adapter<MainActivityR
                             String hours = Integer.toString(totalTime / 3600) + ":";
                             String minutes = Integer.toString((totalTime % 3600) / 60) + ":";
                             String seconds = Integer.toString(((totalTime % 3600) % 60));
-                            holder.tvResults.setText(sets + " Rounds " + reps + " Reps in " + hours + minutes + seconds + rx);
+                            holder.tvResults.setText(reps + " Reps in " + hours + minutes + seconds + rx);
                         }
                     } else if (tableName.equals(ProfileContract.Gymnastics.TABLE_NAME)) {
                         if (thisResult.getString(thisResult.getColumnIndex(ProfileContract.Gymnastics.TIME)) == null) {
@@ -191,49 +191,47 @@ public class MainActivityRecycAdapter extends RecyclerView.Adapter<MainActivityR
                             null
                     );
                     Number[] results = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-                    for (int i = 0; i > 10; i++) {
-                        if (i == 1){
+                    for (int i = 0; i < 10; i++) {
+                        if (i == 0){
                             if(graphCursor.moveToLast()) {
                                 if (tableName.equals(ProfileContract.BarbellLifts.TABLE_NAME) || tableName.equals(ProfileContract.DumbbellLifts.TABLE_NAME)) {
-                                    results[10 - i] = graphCursor.getInt(graphCursor.getColumnIndex(ProfileContract.BarbellLifts.ADJUSTED_ONE_REP_MAX));
+                                    results[9 - i] = graphCursor.getInt(graphCursor.getColumnIndex(ProfileContract.BarbellLifts.ADJUSTED_ONE_REP_MAX));
                                 } else if (tableName.equals(ProfileContract.CrossFitStandards.TABLE_NAME)) {
                                     if (graphCursor.getString(graphCursor.getColumnIndex(ProfileContract.CrossFitStandards.TIME)) == null) {
                                         double reps = graphCursor.getDouble(graphCursor.getColumnIndex(ProfileContract.CrossFitStandards.REPS));
-                                        double rounds = graphCursor.getDouble(graphCursor.getColumnIndex(ProfileContract.CrossFitStandards.ROUNDS));
-                                        while (reps > 1) reps = reps / 10;
-                                        results[10 - i] = reps + rounds;
+                                        results[9 - i] = reps;
                                     } else {
-                                        results[10 - i] = graphCursor.getInt(graphCursor.getColumnIndex(ProfileContract.CrossFitStandards.TIME));
+                                        results[9 - i] = graphCursor.getInt(graphCursor.getColumnIndex(ProfileContract.CrossFitStandards.TIME));
                                     }
                                 } else if (tableName.equals(ProfileContract.Gymnastics.TABLE_NAME)) {
                                     if (graphCursor.getString(graphCursor.getColumnIndex(ProfileContract.Gymnastics.TIME)) == null) {
-                                        results[10 - i] = graphCursor.getInt(graphCursor.getColumnIndex(ProfileContract.Gymnastics.REPS));
+                                        results[9 - i] = graphCursor.getInt(graphCursor.getColumnIndex(ProfileContract.Gymnastics.REPS));
                                     } else
-                                        results[10 - i] = graphCursor.getInt(graphCursor.getColumnIndex(ProfileContract.Gymnastics.TIME));
+                                        results[9 - i] = graphCursor.getInt(graphCursor.getColumnIndex(ProfileContract.Gymnastics.TIME));
                                 } else {
-                                    results[10 - i] = graphCursor.getInt(graphCursor.getColumnIndex(ProfileContract.Gymnastics.TIME));
+                                    results[9 - i] = graphCursor.getInt(graphCursor.getColumnIndex(ProfileContract.Gymnastics.TIME));
                                 }
                             }
                         }
                         else {if (graphCursor.moveToPrevious()) {
                                 if (tableName.equals(ProfileContract.BarbellLifts.TABLE_NAME) || tableName.equals(ProfileContract.DumbbellLifts.TABLE_NAME)) {
-                                    results[10 - i] = graphCursor.getInt(graphCursor.getColumnIndex(ProfileContract.BarbellLifts.ADJUSTED_ONE_REP_MAX));
+                                    results[9 - i] = graphCursor.getInt(graphCursor.getColumnIndex(ProfileContract.BarbellLifts.ADJUSTED_ONE_REP_MAX));
                                 } else if (tableName.equals(ProfileContract.CrossFitStandards.TABLE_NAME)) {
                                     if (graphCursor.getString(graphCursor.getColumnIndex(ProfileContract.CrossFitStandards.TIME)) == null) {
                                         double reps = graphCursor.getDouble(graphCursor.getColumnIndex(ProfileContract.CrossFitStandards.REPS));
                                         double rounds = graphCursor.getDouble(graphCursor.getColumnIndex(ProfileContract.CrossFitStandards.ROUNDS));
                                         while (reps > 1) reps = reps / 10;
-                                        results[10 - i] = reps + rounds;
+                                        results[9 - i] = reps + rounds;
                                     } else {
-                                        results[10 - i] = graphCursor.getInt(graphCursor.getColumnIndex(ProfileContract.CrossFitStandards.TIME));
+                                        results[9 - i] = graphCursor.getInt(graphCursor.getColumnIndex(ProfileContract.CrossFitStandards.TIME));
                                     }
                                 } else if (tableName.equals(ProfileContract.Gymnastics.TABLE_NAME)) {
                                     if (graphCursor.getString(graphCursor.getColumnIndex(ProfileContract.Gymnastics.TIME)) == null) {
-                                        results[10 - i] = graphCursor.getInt(graphCursor.getColumnIndex(ProfileContract.Gymnastics.REPS));
+                                        results[9 - i] = graphCursor.getInt(graphCursor.getColumnIndex(ProfileContract.Gymnastics.REPS));
                                     } else
-                                        results[10 - i] = graphCursor.getInt(graphCursor.getColumnIndex(ProfileContract.Gymnastics.TIME));
+                                        results[9 - i] = graphCursor.getInt(graphCursor.getColumnIndex(ProfileContract.Gymnastics.TIME));
                                 } else {
-                                    results[10 - i] = graphCursor.getInt(graphCursor.getColumnIndex(ProfileContract.Gymnastics.TIME));
+                                    results[9 - i] = graphCursor.getInt(graphCursor.getColumnIndex(ProfileContract.Gymnastics.TIME));
                                 }
                             }
                         }
