@@ -7,6 +7,8 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -33,6 +35,9 @@ public class ViewResults extends AppCompatActivity {
     private Spinner spinActivity;
     private Spinner spinCategory;
     private XYPlot plotResultsGraph;
+    private RecyclerView recyclerViewResults;
+
+    private ViewResultsRecycAdapter mainAdapter;
 
     private ProfileDBHelper dbHelper;
     private SQLiteDatabase dbRead;
@@ -52,7 +57,12 @@ public class ViewResults extends AppCompatActivity {
         spinActivity = (Spinner) findViewById(R.id.vr_spin_activity);
         spinCategory = (Spinner) findViewById(R.id.vr_spin_category);
         plotResultsGraph = (XYPlot) findViewById(R.id.vr_graph);
-
+        recyclerViewResults = (RecyclerView) findViewById(R.id.vr_rv_results);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false);
+        recyclerViewResults.setLayoutManager(layoutManager);
+        recyclerViewResults.setHasFixedSize(true);
+        mainAdapter = new ViewResultsRecycAdapter();
+        recyclerViewResults.setAdapter(mainAdapter);
         dbHelper = new ProfileDBHelper(this);
         dbRead = dbHelper.getReadableDatabase();
 
@@ -264,20 +274,47 @@ public class ViewResults extends AppCompatActivity {
                 null,
                 null
         );
-        Number[] results = new Number[cursor.getCount()];
+        Number[] graphResults = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        Number[] allResults = new Number[cursor.getCount()];
+        Long[] dates = new Long[cursor.getCount()];
+        int[] pr = new int[cursor.getCount()];
+        int[] resultID = new int[cursor.getCount()];
+        int[] sets = new int[cursor.getCount()];
+        int[] reps = new int[cursor.getCount()];
         int i = 0;
         Number min = 10000000;
         Number max = 0;
-        while (cursor.moveToNext()){
-            results[i] = cursor.getInt(cursor.getColumnIndex(compareColumn));
+        if(cursor.moveToLast()){
+            graphResults[9-i] = cursor.getInt(cursor.getColumnIndex(compareColumn));
+            allResults[i] = cursor.getInt(cursor.getColumnIndex(compareColumn));
+            dates[i] = cursor.getLong(cursor.getColumnIndex(ProfileContract.BarbellLifts.DATE));
+            pr[i] = cursor.getInt(cursor.getColumnIndex(ProfileContract.BarbellLifts.PR));
+            resultID[i] = cursor.getInt(cursor.getColumnIndex(ProfileContract.BarbellLifts._ID));
             if (compareColumn.equals(ProfileContract.BarbellLifts.ADJUSTED_ONE_REP_MAX)){
-                results[i] = results[i].floatValue() * units;
+                graphResults[9 - i] = graphResults[9 - i].floatValue() * units;
+                allResults[i] = cursor.getInt(cursor.getColumnIndex(ProfileContract.BarbellLifts.WEIGHT)) * units;
+                sets[i] = cursor.getInt(cursor.getColumnIndex(ProfileContract.BarbellLifts.ROUNDS));
+                reps[i] = cursor.getInt(cursor.getColumnIndex(ProfileContract.BarbellLifts.REPS));
             }
-            if (results[i].doubleValue() > max.doubleValue()) max = results[i];
-            if (results[i].doubleValue() < min.doubleValue()) min = results[i];
+            if (allResults[i].doubleValue() > max.doubleValue()) max = allResults[i];
+            if (allResults[i].doubleValue() < min.doubleValue()) min = allResults[i];
             i++;
         }
-        setUpGraph(min, max, results);
+        while (cursor.moveToPrevious()){
+            if (i < 10) graphResults[9-i] = cursor.getInt(cursor.getColumnIndex(compareColumn));
+            allResults[i] = cursor.getInt(cursor.getColumnIndex(compareColumn));
+            if (compareColumn.equals(ProfileContract.BarbellLifts.ADJUSTED_ONE_REP_MAX)){
+                if (i < 10) graphResults[9 - i] = graphResults[9 - i].floatValue() * units;
+                allResults[i] = allResults[i].floatValue() * units;
+            }
+            if (allResults[i].doubleValue() > max.doubleValue()) max = allResults[i];
+            if (allResults[i].doubleValue() < min.doubleValue()) min = allResults[i];
+            i++;
+        }
+        setUpGraph(min, max, graphResults);
+        mainAdapter.setVariables(allResults, dates, pr, resultID, reps, sets, compareColumn);
+        mainAdapter.notifyDataSetChanged();
+
     }
 
 
