@@ -2,7 +2,9 @@ package online.cagocapps.prtracker;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.DashPathEffect;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,9 +12,19 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import com.androidplot.util.PixelUtils;
+import com.androidplot.xy.BoundaryMode;
+import com.androidplot.xy.LineAndPointFormatter;
+import com.androidplot.xy.SimpleXYSeries;
+import com.androidplot.xy.XYGraphWidget;
 import com.androidplot.xy.XYPlot;
+import com.androidplot.xy.XYSeries;
 
+import java.text.FieldPosition;
+import java.text.Format;
+import java.text.ParsePosition;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import online.cagocapps.prtracker.Data.ProfileContract;
 import online.cagocapps.prtracker.Data.ProfileDBHelper;
@@ -53,6 +65,7 @@ public class ViewResults extends AppCompatActivity {
                 ArrayAdapter<String> arrayAdapter;
                 switch (position) {
                     case 0:
+                        tableName = ProfileContract.BarbellLifts.TABLE_NAME;
                         arrayAdapter =
                                 new ArrayAdapter<String>(view.getContext(),
                                         android.R.layout.simple_spinner_item,
@@ -62,7 +75,7 @@ public class ViewResults extends AppCompatActivity {
                         spinActivity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                weightBased();
+                                weightBased(ProfileContract.BarbellLifts.ADJUSTED_ONE_REP_MAX);
                             }
 
                             @Override
@@ -70,9 +83,9 @@ public class ViewResults extends AppCompatActivity {
 
                             }
                         });
-                        tableName = ProfileContract.BarbellLifts.TABLE_NAME;
                         break;
                     case 1:
+                        tableName = ProfileContract.DumbbellLifts.TABLE_NAME;
                         arrayAdapter =
                                 new ArrayAdapter<String>(view.getContext(),
                                         android.R.layout.simple_spinner_item,
@@ -82,7 +95,7 @@ public class ViewResults extends AppCompatActivity {
                         spinActivity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                weightBased();
+                                weightBased(ProfileContract.BarbellLifts.ADJUSTED_ONE_REP_MAX);
                                 plank = false;
                             }
 
@@ -91,9 +104,9 @@ public class ViewResults extends AppCompatActivity {
 
                             }
                         });
-                        tableName = ProfileContract.DumbbellLifts.TABLE_NAME;
                         break;
                     case 2:
+                        tableName = ProfileContract.Gymnastics.TABLE_NAME;
                         arrayAdapter =
                                 new ArrayAdapter<String>(view.getContext(),
                                         android.R.layout.simple_spinner_item,
@@ -104,11 +117,11 @@ public class ViewResults extends AppCompatActivity {
                             @Override
                             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                                 if (i == 16) {
-                                    //timeBased();
+                                    weightBased(ProfileContract.Running.TIME);
                                     plank = true;
                                 }
                                 else{
-                                    //bodyWeightBased();
+                                    weightBased(ProfileContract.BarbellLifts.REPS);
                                     plank = false;
                                 }
 
@@ -119,9 +132,9 @@ public class ViewResults extends AppCompatActivity {
 
                             }
                         });
-                        tableName = ProfileContract.Gymnastics.TABLE_NAME;
                         break;
                     case 3:
+                        tableName = ProfileContract.Running.TABLE_NAME;
                         arrayAdapter =
                                 new ArrayAdapter<String>(view.getContext(),
                                         android.R.layout.simple_spinner_item,
@@ -131,7 +144,7 @@ public class ViewResults extends AppCompatActivity {
                         spinActivity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                //timeBased();
+                                weightBased(ProfileContract.Running.TIME);
                                 plank = false;
                             }
 
@@ -140,9 +153,9 @@ public class ViewResults extends AppCompatActivity {
 
                             }
                         });
-                        tableName = ProfileContract.Running.TABLE_NAME;
                         break;
                     case 4:
+                        tableName = ProfileContract.Swimming.TABLE_NAME;
                         arrayAdapter =
                                 new ArrayAdapter<String>(view.getContext(),
                                         android.R.layout.simple_spinner_item,
@@ -152,7 +165,7 @@ public class ViewResults extends AppCompatActivity {
                         spinActivity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                //swimmingBased();
+                                weightBased(ProfileContract.Running.TIME);
                                 plank = false;
                             }
 
@@ -161,9 +174,9 @@ public class ViewResults extends AppCompatActivity {
 
                             }
                         });
-                        tableName = ProfileContract.Swimming.TABLE_NAME;
                         break;
                     case 5:
+                        tableName = ProfileContract.CrossFitStandards.TABLE_NAME;
                         arrayAdapter =
                                 new ArrayAdapter<String>(view.getContext(),
                                         android.R.layout.simple_spinner_item,
@@ -173,10 +186,10 @@ public class ViewResults extends AppCompatActivity {
                         spinActivity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                //if (i == 0 || i == 2 || i == 3 || i == 4
-                                        //|| i == 5 || i == 6 || i == 7 || i == 8 || i == 9)
-                                    //crossFitBased();
-                                //else crossFitAMRAP();
+                                if (i == 0 || i == 2 || i == 3 || i == 4
+                                        || i == 5 || i == 6 || i == 7 || i == 8 || i == 9)
+                                    weightBased(ProfileContract.Running.TIME);
+                                else weightBased(ProfileContract.BarbellLifts.REPS);
                                 plank = false;
                             }
 
@@ -185,7 +198,6 @@ public class ViewResults extends AppCompatActivity {
 
                             }
                         });
-                        tableName = ProfileContract.CrossFitStandards.TABLE_NAME;
                         break;
                     case 6:
                         arrayAdapter =
@@ -197,9 +209,9 @@ public class ViewResults extends AppCompatActivity {
                         spinActivity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                //if (i == 0 || i == 1 || i == 2 || i == 3 || i == 4 || i == 6)
-                                    //crossFitBased();
-                                //else crossFitAMRAP();
+                                if (i == 0 || i == 1 || i == 2 || i == 3 || i == 4 || i == 6)
+                                    weightBased(ProfileContract.Running.TIME);
+                                else weightBased(ProfileContract.BarbellLifts.REPS);
                                 plank = false;
                             }
 
@@ -209,6 +221,7 @@ public class ViewResults extends AppCompatActivity {
                         tableName = ProfileContract.CrossFitStandards.TABLE_NAME;
                         break;
                     case 7:
+                        tableName = ProfileContract.CrossFitStandards.TABLE_NAME;
                         arrayAdapter =
                                 new ArrayAdapter<String>(view.getContext(),
                                         android.R.layout.simple_spinner_item,
@@ -218,9 +231,9 @@ public class ViewResults extends AppCompatActivity {
                         spinActivity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                //if (i == 14 || i == 18 || i == 23 || i == 25)
-                                    //crossFitBased();
-                                //else crossFitAMRAP();
+                                if (i == 14 || i == 18 || i == 23 || i == 25)
+                                    weightBased(ProfileContract.Running.TIME);
+                                else weightBased(ProfileContract.BarbellLifts.REPS);
                                 plank = false;
                             }
 
@@ -229,7 +242,6 @@ public class ViewResults extends AppCompatActivity {
 
                             }
                         });
-                        tableName = ProfileContract.CrossFitStandards.TABLE_NAME;
                         break;
                 }
                 spinActivity.setEnabled(true);
@@ -242,7 +254,7 @@ public class ViewResults extends AppCompatActivity {
         });
     }
 
-    private void weightBased(){
+    private void weightBased(String compareColumn){
         Cursor cursor = dbRead.query(
                 tableName,
                 null,
@@ -252,12 +264,47 @@ public class ViewResults extends AppCompatActivity {
                 null,
                 null
         );
-        int[] results = new int[cursor.getCount()];
+        Number[] results = new Number[cursor.getCount()];
         int i = 0;
+        Number min = 10000000;
+        Number max = 0;
         while (cursor.moveToNext()){
-            results[i] = cursor.getInt(cursor.getColumnIndex(ProfileContract.BarbellLifts.ADJUSTED_ONE_REP_MAX));
+            results[i] = cursor.getInt(cursor.getColumnIndex(compareColumn));
+            if (compareColumn.equals(ProfileContract.BarbellLifts.ADJUSTED_ONE_REP_MAX)){
+                results[i] = results[i].floatValue() * units;
+            }
+            if (results[i].doubleValue() > max.doubleValue()) max = results[i];
+            if (results[i].doubleValue() < min.doubleValue()) min = results[i];
             i++;
         }
+        setUpGraph(min, max, results);
+    }
 
+
+    private void setUpGraph(Number min, Number max, Number[] results){
+        max = max.doubleValue() + (max.doubleValue()/10.0);
+        min = min.doubleValue() - (min.doubleValue()/10);
+        XYSeries resultSeries = new SimpleXYSeries(Arrays.asList(results), SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "All Results");
+        LineAndPointFormatter resultsFormat = new LineAndPointFormatter(this, R.xml.line_poit_formatter_with_labels);
+        resultsFormat.getLinePaint().setPathEffect(new DashPathEffect(new float[]{
+                PixelUtils.dpToPix(10),
+                PixelUtils.dpToPix(5)}, 0
+        ));
+        final Number[] domainLabels = {1, 2, 3, 6, 7, 8, 9, 10, 13, 14};
+        plotResultsGraph.addSeries(resultSeries, resultsFormat);
+        plotResultsGraph.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM)
+                .setFormat(new Format() {
+                    @Override
+                    public StringBuffer format(Object o, @NonNull StringBuffer stringBuffer, @NonNull FieldPosition fieldPosition) {
+                        int i = Math.round(((Number) o).floatValue());
+                        return stringBuffer.append(domainLabels[i]);
+                    }
+
+                    @Override
+                    public Object parseObject(String s, @NonNull ParsePosition parsePosition) {
+                        return null;
+                    }
+                });
+        plotResultsGraph.setRangeBoundaries(min, max, BoundaryMode.FIXED);
     }
 }

@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.androidplot.util.PixelUtils;
+import com.androidplot.xy.BoundaryMode;
 import com.androidplot.xy.LineAndPointFormatter;
 import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XYGraphWidget;
@@ -236,6 +237,15 @@ public class MainActivityRecycAdapter extends RecyclerView.Adapter<MainActivityR
                             }
                         }
                     }
+                    Number max = 0;
+                    Number min = 1000000;
+                    for (Number value : results) {
+                        if (max.doubleValue() < value.doubleValue()) max = value;
+                        if (min.doubleValue() > value.doubleValue()) min = value;
+                    }
+                    min = min.doubleValue() - (min.doubleValue()/10);
+                    if (min.doubleValue() < 0) min = 0;
+                    max = max.doubleValue() + (max.doubleValue()/10.0);
                     graphCursor.close();
                     final Number[] domainLabels = {1, 2, 3, 6, 7, 8, 9, 10, 13, 14};
                     XYSeries resultsSeries = new SimpleXYSeries(
@@ -244,8 +254,8 @@ public class MainActivityRecycAdapter extends RecyclerView.Adapter<MainActivityR
                             context, R.xml.line_poit_formatter_with_labels
                     );
                     resultsFormat.getLinePaint().setPathEffect(new DashPathEffect(new float[]{
-                            PixelUtils.dpToPix(20),
-                            PixelUtils.dpToPix(15)}, 0
+                            PixelUtils.dpToPix(10),
+                            PixelUtils.dpToPix(5)}, 0
                     ));
                     holder.plotResultsGraph.addSeries(resultsSeries, resultsFormat);
                     holder.plotResultsGraph.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM)
@@ -261,6 +271,8 @@ public class MainActivityRecycAdapter extends RecyclerView.Adapter<MainActivityR
                                     return null;
                                 }
                             });
+                    holder.plotResultsGraph.setRangeBoundaries(min, max, BoundaryMode.FIXED);
+
                     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
                     mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -287,9 +299,9 @@ public class MainActivityRecycAdapter extends RecyclerView.Adapter<MainActivityR
                                 String email = prCursor.getString(prCursor.getColumnIndex(ProfileContract.ProfileValues.EMAIL));
                                 prCursor.close();
                                 double pr = 0;
-                                double below = 0;
-                                double total = 0;
-                                double equal = 1;
+                                double below = 0.0;
+                                double total = 0.0;
+                                double equal = 1.0;
                                 ArrayList<Integer> results = new ArrayList<Integer>();
                                 for (DataSnapshot comResult : dataSnapshot.child(activity).child(Integer.toString(gender)).child(Integer.toString(skill)).child(Integer.toString(scaledWeight))
                                         .child(Integer.toString(age)).child(yearsAct).getChildren()) {

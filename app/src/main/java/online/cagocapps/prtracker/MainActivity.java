@@ -145,6 +145,9 @@ public class MainActivity extends AppCompatActivity{
             Intent intent = new Intent(this, ProfileActivity.class);
             intent.putExtra(getString(R.string.new_user), false);
             startActivity(intent);
+        } else if (id == R.id.view_results){
+            Intent intent = new Intent(this, ViewResults.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);

@@ -69,6 +69,7 @@
     <string name="ar_tv_distance">Swim Distance</string>
     <string name="ar_et_distance">Distance (in meters)</string>
     <string name="ar_tv_notes">Notes</string>
+    <string name="ar_toast_notime">Please Enter A Valid Time</string>
 
     <array name="enter_results_category">
         <item>Barbell Lifts</item>

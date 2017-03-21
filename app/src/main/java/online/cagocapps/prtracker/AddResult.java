@@ -17,6 +17,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.google.firebase.database.DatabaseReference;
@@ -728,8 +729,9 @@ public class AddResult extends AppCompatActivity {
                 prCursor.close();
                 ResultObject resultObject = new ResultObject();
                 resultObject.setResult(prValue);
+                String email = userEmail.replace(".","");
                 reference.child(activity).child(Integer.toString(gender)).child(Integer.toString(skill)).child(Integer.toString(scaledWeight))
-                        .child(Integer.toString(age)).child(yearsAct).child(userEmail).setValue(resultObject);
+                        .child(Integer.toString(age)).child(yearsAct).child(email).setValue(resultObject);
             }
         }
         cursor.close();
