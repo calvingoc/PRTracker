@@ -15,14 +15,6 @@
       },
       "oauth_client": [
         {
-          "client_id": "49825863480-vv6uh91uiqrnpgdso7njkl5issbshqul.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "online.cagocapps.prtracker",
-            "certificate_hash": "77f859f758adef8108e036ea8a7b703e241e2367"
-          }
-        },
-        {
           "client_id": "49825863480-r50jbk3pjp35a9g577j4l2umcd3l44ob.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
