@@ -45,4 +45,12 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="#dadada"
+        app:layout_constraintLeft_toLeftOf="@id/vr_tv_date"
+        app:layout_constraintRight_toRightOf="@id/vr_tv_results"
+        app:layout_constraintTop_toBottomOf="@id/vr_tv_results" />
 </android.support.constraint.ConstraintLayout>
