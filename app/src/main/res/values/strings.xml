@@ -36,7 +36,8 @@
     <string name="pp_gender">Gender</string>
     <string name="pp_age_error">Invalid birth year please enter a value after 1900 ex. 1992</string>
     <string name="pp_pounds">Pounds</string>
-    <string name="pp_kg">Kilograms</string>
+    <string name="pp_kg">Kg</string>
+    <string name="pp_units">Units</string>
 
     <string-array name="skill_level_titles">
         <item>1 Pro</item>

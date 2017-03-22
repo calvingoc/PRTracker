@@ -1,6 +1,7 @@
 package online.cagocapps.prtracker;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,12 +48,14 @@ public class ViewResultsRecycAdapter extends RecyclerView.Adapter<ViewResultsRec
 
     @Override
     public void onBindViewHolder(final viewResultsRecycAdapterViewHolder holder, int position) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(dates[position]);
-        String formattedDate = Integer.toString(calendar.get(Calendar.MONTH)) + "/"
-                + Integer.toString(calendar.get(Calendar.DAY_OF_MONTH)) + "/" +
-                Integer.toString(calendar.get(Calendar.YEAR));
-        holder.tvDate.setText(formattedDate);
+        if (dates[position] != null){
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(dates[position]);
+            String formattedDate = Integer.toString(calendar.get(Calendar.MONTH)) + "/"
+                    + Integer.toString(calendar.get(Calendar.DAY_OF_MONTH)) + "/" +
+                    Integer.toString(calendar.get(Calendar.YEAR));
+            holder.tvDate.setText(formattedDate);
+        }
         if(pr[position] == 1){
             holder.imPR.setVisibility(View.VISIBLE);
         } else holder.imPR.setVisibility(View.INVISIBLE);
@@ -70,7 +73,13 @@ public class ViewResultsRecycAdapter extends RecyclerView.Adapter<ViewResultsRec
 
     @Override
     public int getItemCount() {
-        return results.length;
+        try {
+            return results.length;
+        }
+        catch (NullPointerException e){
+            Log.d("results recyc", "null results array");
+            return 0;
+        }
     }
 
     public void setVariables(Number[] resultsArray, Long[] datesArray, int[] prArray, int[] resultIDArray,

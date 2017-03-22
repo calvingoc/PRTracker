@@ -1,7 +1,9 @@
 package online.cagocapps.prtracker;
 
+import android.app.Application;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -296,19 +298,24 @@ public class ViewResults extends AppCompatActivity {
                 sets[i] = cursor.getInt(cursor.getColumnIndex(ProfileContract.BarbellLifts.ROUNDS));
                 reps[i] = cursor.getInt(cursor.getColumnIndex(ProfileContract.BarbellLifts.REPS));
             }
-            if (allResults[i].doubleValue() > max.doubleValue()) max = allResults[i];
-            if (allResults[i].doubleValue() < min.doubleValue()) min = allResults[i];
+            if (graphResults[i].doubleValue() > max.doubleValue()) max = allResults[i];
+            if (graphResults[i].doubleValue() < min.doubleValue()) min = allResults[i];
             i++;
         }
         while (cursor.moveToPrevious()){
             if (i < 10) graphResults[9-i] = cursor.getInt(cursor.getColumnIndex(compareColumn));
             allResults[i] = cursor.getInt(cursor.getColumnIndex(compareColumn));
+            dates[i] = cursor.getLong(cursor.getColumnIndex(ProfileContract.BarbellLifts.DATE));
+            pr[i] = cursor.getInt(cursor.getColumnIndex(ProfileContract.BarbellLifts.PR));
+            resultID[i] = cursor.getInt(cursor.getColumnIndex(ProfileContract.BarbellLifts._ID));
             if (compareColumn.equals(ProfileContract.BarbellLifts.ADJUSTED_ONE_REP_MAX)){
                 if (i < 10) graphResults[9 - i] = graphResults[9 - i].floatValue() * units;
                 allResults[i] = allResults[i].floatValue() * units;
+                sets[i] = cursor.getInt(cursor.getColumnIndex(ProfileContract.BarbellLifts.ROUNDS));
+                reps[i] = cursor.getInt(cursor.getColumnIndex(ProfileContract.BarbellLifts.REPS));
             }
-            if (allResults[i].doubleValue() > max.doubleValue()) max = allResults[i];
-            if (allResults[i].doubleValue() < min.doubleValue()) min = allResults[i];
+            if (graphResults[i].doubleValue() > max.doubleValue()) max = allResults[i];
+            if (graphResults[i].doubleValue() < min.doubleValue()) min = allResults[i];
             i++;
         }
         setUpGraph(min, max, graphResults);
@@ -318,17 +325,18 @@ public class ViewResults extends AppCompatActivity {
     }
 
 
-    private void setUpGraph(Number min, Number max, Number[] results){
+    private void setUpGraph(Number min, Number max, final Number[] results){
         max = max.doubleValue() + (max.doubleValue()/10.0);
         min = min.doubleValue() - (min.doubleValue()/10);
-        XYSeries resultSeries = new SimpleXYSeries(Arrays.asList(results), SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "All Results");
+        final Number[] domainLabels = {1, 2, 3, 6, 7, 8, 9, 10, 13, 14};
+        XYSeries resultsSeries = new SimpleXYSeries(
+                Arrays.asList(results), SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "Last Ten Results");
         LineAndPointFormatter resultsFormat = new LineAndPointFormatter(this, R.xml.line_poit_formatter_with_labels);
         resultsFormat.getLinePaint().setPathEffect(new DashPathEffect(new float[]{
                 PixelUtils.dpToPix(10),
                 PixelUtils.dpToPix(5)}, 0
         ));
-        final Number[] domainLabels = {1, 2, 3, 6, 7, 8, 9, 10, 13, 14};
-        plotResultsGraph.addSeries(resultSeries, resultsFormat);
+        plotResultsGraph.addSeries(resultsSeries, resultsFormat);
         plotResultsGraph.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM)
                 .setFormat(new Format() {
                     @Override

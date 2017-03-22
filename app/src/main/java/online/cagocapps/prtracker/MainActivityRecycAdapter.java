@@ -135,7 +135,9 @@ public class MainActivityRecycAdapter extends RecyclerView.Adapter<MainActivityR
                     thisResult.moveToFirst();
                     final String activity = thisResult.getString(thisResult.getColumnIndex(ProfileContract.BarbellLifts.LIFT));
                     holder.tvActivity.setText(activity);
-                    holder.tvNotes.setText(thisResult.getString(thisResult.getColumnIndex(ProfileContract.BarbellLifts.COMMENTS)));
+                    if(thisResult.getString(thisResult.getColumnIndex(ProfileContract.BarbellLifts.COMMENTS)).length() != 0){
+                        holder.tvNotes.setText(thisResult.getString(thisResult.getColumnIndex(ProfileContract.BarbellLifts.COMMENTS)));
+                    } else holder.tvNotes.setGravity(View.TEXT_ALIGNMENT_CENTER);
                     if (thisResult.getInt(thisResult.getColumnIndex(ProfileContract.BarbellLifts.PR)) == 1) {
                         holder.ivPR.setVisibility(View.VISIBLE);
                     } else holder.ivPR.setVisibility(View.INVISIBLE);
@@ -143,7 +145,7 @@ public class MainActivityRecycAdapter extends RecyclerView.Adapter<MainActivityR
                         String sets = thisResult.getString(thisResult.getColumnIndex(ProfileContract.BarbellLifts.ROUNDS));
                         String reps = thisResult.getString(thisResult.getColumnIndex(ProfileContract.BarbellLifts.REPS));
                         float weight = thisResult.getFloat(thisResult.getColumnIndex(ProfileContract.BarbellLifts.WEIGHT));
-                        holder.tvResults.setText(sets + " sets of " + reps + " X " + Float.toString(weight * units));
+                        holder.tvResults.setText(sets + " X " + reps + " X " + Float.toString(weight * units));
                     } else if (tableName.equals(ProfileContract.CrossFitStandards.TABLE_NAME)) {
                         String rx = "";
                         if (thisResult.getInt(thisResult.getColumnIndex(ProfileContract.CrossFitStandards.RX)) == 1) {
@@ -166,7 +168,7 @@ public class MainActivityRecycAdapter extends RecyclerView.Adapter<MainActivityR
                         if (thisResult.getString(thisResult.getColumnIndex(ProfileContract.Gymnastics.TIME)) == null) {
                             String sets = thisResult.getString(thisResult.getColumnIndex(ProfileContract.Gymnastics.ROUNDS));
                             String reps = thisResult.getString(thisResult.getColumnIndex(ProfileContract.Gymnastics.REPS));
-                            holder.tvResults.setText(sets + " sets of " + reps);
+                            holder.tvResults.setText(sets + " X " + reps);
                         } else {
                             int totalTime = thisResult.getInt(thisResult.getColumnIndex(ProfileContract.CrossFitStandards.TIME));
                             String hours = Integer.toString(totalTime / 3600) + ":";
@@ -250,9 +252,7 @@ public class MainActivityRecycAdapter extends RecyclerView.Adapter<MainActivityR
                     final Number[] domainLabels = {1, 2, 3, 6, 7, 8, 9, 10, 13, 14};
                     XYSeries resultsSeries = new SimpleXYSeries(
                             Arrays.asList(results), SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "Last Ten Results");
-                    LineAndPointFormatter resultsFormat = new LineAndPointFormatter(
-                            context, R.xml.line_poit_formatter_with_labels
-                    );
+                    LineAndPointFormatter resultsFormat = new LineAndPointFormatter(context, R.xml.line_poit_formatter_with_labels);
                     resultsFormat.getLinePaint().setPathEffect(new DashPathEffect(new float[]{
                             PixelUtils.dpToPix(10),
                             PixelUtils.dpToPix(5)}, 0

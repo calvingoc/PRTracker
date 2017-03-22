@@ -11,6 +11,7 @@
         android:layout_width="100dp"
         android:layout_height="50dp"
         android:text="@string/ar_tv_category"
+        android:gravity="center"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />
 
@@ -32,6 +33,7 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:text="@string/ar_tv_activity"
+        android:gravity="center"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/vr_spin_category"
         app:layout_constraintTop_toBottomOf="@+id/vr_tv_category" />

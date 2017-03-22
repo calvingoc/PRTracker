@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity{
 
                 mainAdapter.setUserID(ID, units);
                 TextView textViewUserName = (TextView) findViewById(R.id.ma_tv_username);
-                textViewUserName.setText(userName);
+                textViewUserName.setText(userName+"?");
 
 
 
