@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.Calendar;
 import java.util.List;
 
@@ -26,16 +28,33 @@ public class ViewResultsRecycAdapter extends RecyclerView.Adapter<ViewResultsRec
     private int[] sets;
     private String resultType;
 
-    public class viewResultsRecycAdapterViewHolder extends RecyclerView.ViewHolder{
+    private final vrRecycAdapOnClickHandler mClickHandler;
+
+    public interface  vrRecycAdapOnClickHandler{
+        void onClick(String ID);
+    }
+
+    public ViewResultsRecycAdapter(vrRecycAdapOnClickHandler clickHandler){
+        mClickHandler = clickHandler;
+    }
+
+    public class viewResultsRecycAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public final TextView tvDate;
         public final ImageView imPR;
         public final TextView tvResult;
+        public final TextView tvID;
 
         public viewResultsRecycAdapterViewHolder(View view){
             super(view);
             tvDate = (TextView) view.findViewById(R.id.vr_tv_date);
             imPR = (ImageView) view.findViewById(R.id.vr_iv_pr);
             tvResult = (TextView) view.findViewById(R.id.vr_tv_results);
+            tvID = (TextView) view.findViewById(R.id.vr_tv_id);
+        }
+
+        @Override
+        public void onClick(View view) {
+            mClickHandler.onClick(tvID.getText().toString());
         }
     }
 
@@ -68,6 +87,7 @@ public class ViewResultsRecycAdapter extends RecyclerView.Adapter<ViewResultsRec
             String seconds = Integer.toString(((results[position].intValue() % 3600) % 60));
             holder.tvResult.setText(hours + minutes + seconds);
         } else holder.tvResult.setText(results[position].toString());
+        holder.tvID.setText(resultID[position]);
 
     }
 

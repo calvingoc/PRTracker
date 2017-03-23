@@ -47,10 +47,16 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <View
+        android:id="@+id/vr_v_id"
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:background="#dadada"
         app:layout_constraintLeft_toLeftOf="@id/vr_tv_date"
         app:layout_constraintRight_toRightOf="@id/vr_tv_results"
         app:layout_constraintTop_toBottomOf="@id/vr_tv_results" />
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/vr_tv_id"
+        app:layout_constraintStart_toStartOf="parent"/>
 </android.support.constraint.ConstraintLayout>

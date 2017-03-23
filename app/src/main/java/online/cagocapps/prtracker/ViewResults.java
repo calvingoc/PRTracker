@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Switch;
 
 import com.androidplot.util.PixelUtils;
 import com.androidplot.xy.BoundaryMode;
@@ -33,7 +34,7 @@ import java.util.Arrays;
 import online.cagocapps.prtracker.Data.ProfileContract;
 import online.cagocapps.prtracker.Data.ProfileDBHelper;
 
-public class ViewResults extends AppCompatActivity {
+public class ViewResults extends AppCompatActivity implements ViewResultsRecycAdapter.vrRecycAdapOnClickHandler{
     private Spinner spinActivity;
     private Spinner spinCategory;
     private XYPlot plotResultsGraph;
@@ -49,6 +50,8 @@ public class ViewResults extends AppCompatActivity {
     private int userID;
     private float units;
     private boolean plank;
+    public boolean firstTime = false;
+    public int positionAct;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +66,7 @@ public class ViewResults extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false);
         recyclerViewResults.setLayoutManager(layoutManager);
         recyclerViewResults.setHasFixedSize(true);
-        mainAdapter = new ViewResultsRecycAdapter();
+        mainAdapter = new ViewResultsRecycAdapter(this);
         recyclerViewResults.setAdapter(mainAdapter);
         dbHelper = new ProfileDBHelper(this);
         dbRead = dbHelper.getReadableDatabase();
@@ -95,6 +98,10 @@ public class ViewResults extends AppCompatActivity {
 
                             }
                         });
+                        if (firstTime){
+                            spinActivity.setSelection(positionAct);
+                            firstTime = false;
+                        }
                         break;
                     case 1:
                         tableName = ProfileContract.DumbbellLifts.TABLE_NAME;
@@ -116,6 +123,10 @@ public class ViewResults extends AppCompatActivity {
 
                             }
                         });
+                        if (firstTime){
+                            spinActivity.setSelection(positionAct);
+                            firstTime = false;
+                        }
                         break;
                     case 2:
                         tableName = ProfileContract.Gymnastics.TABLE_NAME;
@@ -144,6 +155,10 @@ public class ViewResults extends AppCompatActivity {
 
                             }
                         });
+                        if (firstTime){
+                            spinActivity.setSelection(positionAct);
+                            firstTime = false;
+                        }
                         break;
                     case 3:
                         tableName = ProfileContract.Running.TABLE_NAME;
@@ -165,6 +180,10 @@ public class ViewResults extends AppCompatActivity {
 
                             }
                         });
+                        if (firstTime){
+                            spinActivity.setSelection(positionAct);
+                            firstTime = false;
+                        }
                         break;
                     case 4:
                         tableName = ProfileContract.Swimming.TABLE_NAME;
@@ -186,6 +205,10 @@ public class ViewResults extends AppCompatActivity {
 
                             }
                         });
+                        if (firstTime){
+                            spinActivity.setSelection(positionAct);
+                            firstTime = false;
+                        }
                         break;
                     case 5:
                         tableName = ProfileContract.CrossFitStandards.TABLE_NAME;
@@ -210,6 +233,10 @@ public class ViewResults extends AppCompatActivity {
 
                             }
                         });
+                        if (firstTime){
+                            spinActivity.setSelection(positionAct);
+                            firstTime = false;
+                        }
                         break;
                     case 6:
                         arrayAdapter =
@@ -230,6 +257,10 @@ public class ViewResults extends AppCompatActivity {
                             @Override
                             public void onNothingSelected(AdapterView<?> adapterView) {}
                         });
+                        if (firstTime){
+                            spinActivity.setSelection(positionAct);
+                            firstTime = false;
+                        }
                         tableName = ProfileContract.CrossFitStandards.TABLE_NAME;
                         break;
                     case 7:
@@ -254,6 +285,10 @@ public class ViewResults extends AppCompatActivity {
 
                             }
                         });
+                        if (firstTime){
+                            spinActivity.setSelection(positionAct);
+                            firstTime = false;
+                        }
                         break;
                 }
                 spinActivity.setEnabled(true);
@@ -264,6 +299,96 @@ public class ViewResults extends AppCompatActivity {
 
             }
         });
+        String activity = getIntent().getStringExtra(getString(R.string.ar_tv_activity));
+        String tableName = getIntent().getStringExtra(getString(R.string.ar_tv_category));
+        if (tableName != null && activity != null) {
+            ArrayAdapter<String> arrayAdapter;
+            switch (tableName){
+                case ProfileContract.BarbellLifts.TABLE_NAME:
+                    spinCategory.setSelection(0);
+                    arrayAdapter =
+                            new ArrayAdapter<String>(this,
+                                    android.R.layout.simple_spinner_item,
+                                    getResources().getStringArray(R.array.barbell_lifts_array));
+                    arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinActivity.setAdapter(arrayAdapter);
+                    break;
+                case ProfileContract.DumbbellLifts.TABLE_NAME:
+                    spinCategory.setSelection(1);
+                    arrayAdapter =
+                            new ArrayAdapter<String>(this,
+                                    android.R.layout.simple_spinner_item,
+                                    getResources().getStringArray(R.array.dumbbell_lifts_array));
+                    arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinActivity.setAdapter(arrayAdapter);
+                    break;
+                case ProfileContract.Gymnastics.TABLE_NAME:
+                    spinCategory.setSelection(2);
+                    arrayAdapter =
+                            new ArrayAdapter<String>(this,
+                                    android.R.layout.simple_spinner_item,
+                                    getResources().getStringArray(R.array.bodyweight_array));
+                    arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinActivity.setAdapter(arrayAdapter);
+                    break;
+                case ProfileContract.Running.TABLE_NAME:
+                    spinCategory.setSelection(3);
+                    arrayAdapter =
+                            new ArrayAdapter<String>(this,
+                                    android.R.layout.simple_spinner_item,
+                                    getResources().getStringArray(R.array.running_array));
+                    arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinActivity.setAdapter(arrayAdapter);
+                    break;
+                case ProfileContract.Swimming.TABLE_NAME:
+                    spinCategory.setSelection(4);
+                    arrayAdapter =
+                            new ArrayAdapter<String>(this,
+                                    android.R.layout.simple_spinner_item,
+                                    getResources().getStringArray(R.array.swimming_array));
+                    arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinActivity.setAdapter(arrayAdapter);
+                    break;
+                case ProfileContract.CrossFitStandards.TABLE_NAME:
+                    spinCategory.setSelection(7);
+                    arrayAdapter =
+                            new ArrayAdapter<String>(this,
+                                    android.R.layout.simple_spinner_item,
+                                    getResources().getStringArray(R.array.crossfit_open_array));
+                    arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinActivity.setAdapter(arrayAdapter);
+                    String[] selections = getResources().getStringArray(R.array.crossfit_girls_array);
+                    for (int i = 0; i > selections.length; i++){
+                        if (selections[i].equals(activity)){
+                            spinCategory.setSelection(5);
+                            arrayAdapter =
+                                    new ArrayAdapter<String>(this,
+                                            android.R.layout.simple_spinner_item,
+                                            getResources().getStringArray(R.array.crossfit_girls_array));
+                            arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            spinActivity.setAdapter(arrayAdapter);
+                        }
+                    }
+                    selections = getResources().getStringArray(R.array.crossfit_heroes_array);
+
+                    for (int i = 0; i > selections.length; i++){
+                        if (selections[i].equals(activity)){
+                            spinCategory.setSelection(6);
+                            arrayAdapter =
+                                    new ArrayAdapter<String>(this,
+                                            android.R.layout.simple_spinner_item,
+                                            getResources().getStringArray(R.array.crossfit_heroes_array));
+                            arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            spinActivity.setAdapter(arrayAdapter);
+                        }
+                    }
+                    break;
+            }
+
+            ArrayAdapter myAdap = (ArrayAdapter) spinActivity.getAdapter();
+            positionAct = myAdap.getPosition(activity);
+            firstTime = true;
+        }
     }
 
     private void weightBased(String compareColumn){
@@ -351,5 +476,16 @@ public class ViewResults extends AppCompatActivity {
                     }
                 });
         plotResultsGraph.setRangeBoundaries(min, max, BoundaryMode.FIXED);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        dbRead.close();
+    }
+
+    @Override
+    public void onClick(String ID) {
+
     }
 }
