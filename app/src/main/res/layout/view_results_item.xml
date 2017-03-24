@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:id="@+id/view_results_view">
 
 
     <TextView
@@ -49,11 +50,13 @@
     <View
         android:id="@+id/vr_v_id"
         android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:background="#dadada"
-        app:layout_constraintLeft_toLeftOf="@id/vr_tv_date"
-        app:layout_constraintRight_toRightOf="@id/vr_tv_results"
+        android:layout_height="2dp"
+        android:background="@color/colorPrimaryDark"
+        android:visibility="visible"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/vr_tv_results" />
+
     <TextView
         android:layout_width="0dp"
         android:layout_height="0dp"

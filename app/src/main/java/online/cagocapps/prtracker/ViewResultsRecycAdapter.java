@@ -31,7 +31,7 @@ public class ViewResultsRecycAdapter extends RecyclerView.Adapter<ViewResultsRec
     private final vrRecycAdapOnClickHandler mClickHandler;
 
     public interface  vrRecycAdapOnClickHandler{
-        void onClick(String ID);
+        void onClick(String ID, String date);
     }
 
     public ViewResultsRecycAdapter(vrRecycAdapOnClickHandler clickHandler){
@@ -50,11 +50,12 @@ public class ViewResultsRecycAdapter extends RecyclerView.Adapter<ViewResultsRec
             imPR = (ImageView) view.findViewById(R.id.vr_iv_pr);
             tvResult = (TextView) view.findViewById(R.id.vr_tv_results);
             tvID = (TextView) view.findViewById(R.id.vr_tv_id);
+            view.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            mClickHandler.onClick(tvID.getText().toString());
+            mClickHandler.onClick(tvID.getText().toString(), tvDate.getText().toString());
         }
     }
 
@@ -87,7 +88,7 @@ public class ViewResultsRecycAdapter extends RecyclerView.Adapter<ViewResultsRec
             String seconds = Integer.toString(((results[position].intValue() % 3600) % 60));
             holder.tvResult.setText(hours + minutes + seconds);
         } else holder.tvResult.setText(results[position].toString());
-        holder.tvID.setText(resultID[position]);
+        holder.tvID.setText(Integer.toString(resultID[position]));
 
     }
 

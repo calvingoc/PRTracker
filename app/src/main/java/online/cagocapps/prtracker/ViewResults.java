@@ -1,21 +1,29 @@
 package online.cagocapps.prtracker;
 
 import android.app.Application;
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import com.androidplot.util.PixelUtils;
 import com.androidplot.xy.BoundaryMode;
@@ -43,7 +51,7 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
     private ViewResultsRecycAdapter mainAdapter;
 
     private ProfileDBHelper dbHelper;
-    private SQLiteDatabase dbRead;
+    private SQLiteDatabase dbWrite;
 
 
     private String tableName;
@@ -69,7 +77,7 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
         mainAdapter = new ViewResultsRecycAdapter(this);
         recyclerViewResults.setAdapter(mainAdapter);
         dbHelper = new ProfileDBHelper(this);
-        dbRead = dbHelper.getReadableDatabase();
+        dbWrite = dbHelper.getWritableDatabase();
 
         userID = PreferenceManager.getDefaultSharedPreferences(this).getInt(getString(R.string.sp_userID), 1);
         units = PreferenceManager.getDefaultSharedPreferences(this).getFloat(getString(R.string.sp_units), 1);
@@ -392,11 +400,11 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
     }
 
     private void weightBased(String compareColumn){
-        Cursor cursor = dbRead.query(
+        Cursor cursor = dbWrite.query(
                 tableName,
                 null,
-                ProfileContract.BarbellLifts.LIFT + " = ? AND " + ProfileContract.BarbellLifts.USER_ID + " = ?",
-                new String[]{spinActivity.getSelectedItem().toString(), Integer.toString(userID)},
+                ProfileContract.BarbellLifts.LIFT + " LIKE ? AND " + ProfileContract.BarbellLifts.USER_ID + " = ?",
+                new String[]{ "%" + spinActivity.getSelectedItem().toString(), Integer.toString(userID)},
                 null,
                 null,
                 null
@@ -443,6 +451,7 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
             if (graphResults[i].doubleValue() < min.doubleValue()) min = allResults[i];
             i++;
         }
+        cursor.close();
         setUpGraph(min, max, graphResults);
         mainAdapter.setVariables(allResults, dates, pr, resultID, reps, sets, compareColumn);
         mainAdapter.notifyDataSetChanged();
@@ -481,11 +490,113 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        dbRead.close();
+        dbWrite.close();
     }
 
     @Override
-    public void onClick(String ID) {
+    public void onClick(final String deleteID, String date) {
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
 
+        View customView = inflater.inflate(R.layout.delete_result_popup, null);
+        final PopupWindow mPopupWindow = new PopupWindow(customView, RecyclerView.LayoutParams.WRAP_CONTENT, RecyclerView.LayoutParams.WRAP_CONTENT);
+        if(Build.VERSION.SDK_INT >= 21){
+            mPopupWindow.setElevation(5.0f);
+        }
+        Button yesButton = (Button) customView.findViewById(R.id.popup_button_yes);
+        Button noButton = (Button) customView.findViewById(R.id.popup_button_no);
+        TextView deleMes = (TextView) customView.findViewById(R.id.popup_tv_message);
+        deleMes.setText("Do you want to delete the result from " + date +"?");
+        noButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPopupWindow.dismiss();
+            }
+        });
+        yesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Cursor cursor = dbWrite.query(
+                        ProfileContract.RecentLifts.TABLE_NAME,
+                        null,
+                        ProfileContract.RecentLifts._ID + " = ?",
+                        new String[] {Integer.toString(userID)},
+                        null,
+                        null,
+                        null
+                );
+                dbWrite.delete(tableName, ProfileContract.BarbellLifts._ID + "=" + deleteID, null);
+                cursor.moveToFirst();
+                if (tableName.equals(cursor.getString(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_ONE_TABLE)))){
+                    if (deleteID.equals(Integer.toString(cursor.getInt(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_ONE_ID))))){
+                        replaceResult(ProfileContract.RecentLifts.RESULT_ONE_ID, tableName, 1, cursor);
+                    }
+                } else if ((tableName.equals(cursor.getString(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_TWO_TABLE))))){
+                    if (deleteID.equals(Integer.toString(cursor.getInt(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_TWO_ID))))){
+                        replaceResult(ProfileContract.RecentLifts.RESULT_TWO_ID, tableName,2, cursor);
+                    }
+                } else if ((tableName.equals(cursor.getString(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_THREE_TABLE))))){
+                    if (deleteID.equals(Integer.toString(cursor.getInt(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_THREE_ID))))){
+                        replaceResult(ProfileContract.RecentLifts.RESULT_THREE_ID, tableName,3, cursor);
+                    }
+                }else if ((tableName.equals(cursor.getString(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_FOUR_TABLE))))){
+                    if (deleteID.equals(Integer.toString(cursor.getInt(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_FOUR_ID))))){
+                        replaceResult(ProfileContract.RecentLifts.RESULT_FOUR_ID, tableName,4, cursor);
+                    }
+                }else if ((tableName.equals(cursor.getString(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_FIVE_TABLE))))){
+                    if (deleteID.equals(Integer.toString(cursor.getInt(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_FIVE_ID))))){
+                        replaceResult(ProfileContract.RecentLifts.RESULT_FIVE_ID, tableName,5, cursor);
+                    }
+                }
+                mPopupWindow.dismiss();
+                mainAdapter.notifyDataSetChanged();
+            }
+        });
+        mPopupWindow.showAtLocation(findViewById(R.id.view_results_view), Gravity.CENTER,0,0);
+    }
+
+    private void replaceResult(String resultID, String tableName, int order, Cursor cursor){
+        ContentValues cv = new ContentValues();
+        if (order < 2){
+            cv.put(ProfileContract.RecentLifts.RESULT_ONE_TABLE, cursor.getString(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_TWO_TABLE)));
+            cv.put(ProfileContract.RecentLifts.RESULT_ONE_ID, cursor.getInt(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_TWO_ID)));
+        }
+        if (order < 3){
+            cv.put(ProfileContract.RecentLifts.RESULT_TWO_TABLE,
+                    cursor.getString(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_THREE_TABLE)));
+            cv.put(ProfileContract.RecentLifts.RESULT_TWO_ID,
+                    cursor.getInt(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_THREE_ID)));
+        }
+        if (order < 4){
+            cv.put(ProfileContract.RecentLifts.RESULT_THREE_TABLE,
+                    cursor.getString(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_FOUR_TABLE)));
+            cv.put(ProfileContract.RecentLifts.RESULT_THREE_ID,
+                    cursor.getInt(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_FOUR_ID)));
+        }
+        if (order < 5){
+            cv.put(ProfileContract.RecentLifts.RESULT_FOUR_TABLE,
+                    cursor.getString(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_FIVE_TABLE)));
+            cv.put(ProfileContract.RecentLifts.RESULT_FOUR_ID,
+                    cursor.getInt(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_FIVE_ID)));
+        }
+        cursor.close();
+        cursor = dbWrite.query(
+                tableName,
+                null,
+                ProfileContract.BarbellLifts.LIFT + " = ? AND " + ProfileContract.BarbellLifts.USER_ID + " = ?",
+                new String[]{spinActivity.getSelectedItem().toString(), Integer.toString(userID)},
+                null,
+                null,
+                null
+        );
+        int tempResultID = 0;
+        String tempTableName = tableName;
+        if (cursor.moveToLast()){
+            tempResultID = cursor.getInt(cursor.getColumnIndex(ProfileContract.BarbellLifts._ID));
+        } else tempTableName = null;
+        cv.put(ProfileContract.RecentLifts.RESULT_FIVE_TABLE,tempTableName);
+        cv.put(ProfileContract.RecentLifts.RESULT_FIVE_ID, tempResultID);
+        dbWrite.update(ProfileContract.RecentLifts.TABLE_NAME, cv, ProfileContract.RecentLifts._ID + " = ?",
+                new String[] {Integer.toString(userID)});
+        cursor.close();
     }
 }
