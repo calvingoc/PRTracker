@@ -23,6 +23,10 @@
     <string name="login_prompt">Please log in with your Gmail account.</string>
     <string name="new_user" translatable="false">newUser</string>
 
+    <!-- View Results -->
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
 
     <!--profile page-->
     <string name="pp_username">Username</string>

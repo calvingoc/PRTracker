@@ -1,20 +1,29 @@
 package online.cagocapps.prtracker;
 
 import android.app.Application;
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.PopupWindow;
 import android.widget.Spinner;
+import android.widget.Switch;
+import android.widget.TextView;
 
 import com.androidplot.util.PixelUtils;
 import com.androidplot.xy.BoundaryMode;
@@ -33,7 +42,7 @@ import java.util.Arrays;
 import online.cagocapps.prtracker.Data.ProfileContract;
 import online.cagocapps.prtracker.Data.ProfileDBHelper;
 
-public class ViewResults extends AppCompatActivity {
+public class ViewResults extends AppCompatActivity implements ViewResultsRecycAdapter.vrRecycAdapOnClickHandler{
     private Spinner spinActivity;
     private Spinner spinCategory;
     private XYPlot plotResultsGraph;
@@ -42,13 +51,15 @@ public class ViewResults extends AppCompatActivity {
     private ViewResultsRecycAdapter mainAdapter;
 
     private ProfileDBHelper dbHelper;
-    private SQLiteDatabase dbRead;
+    private SQLiteDatabase dbWrite;
 
 
     private String tableName;
     private int userID;
     private float units;
     private boolean plank;
+    public boolean firstTime = false;
+    public int positionAct;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,10 +74,10 @@ public class ViewResults extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false);
         recyclerViewResults.setLayoutManager(layoutManager);
         recyclerViewResults.setHasFixedSize(true);
-        mainAdapter = new ViewResultsRecycAdapter();
+        mainAdapter = new ViewResultsRecycAdapter(this);
         recyclerViewResults.setAdapter(mainAdapter);
         dbHelper = new ProfileDBHelper(this);
-        dbRead = dbHelper.getReadableDatabase();
+        dbWrite = dbHelper.getWritableDatabase();
 
         userID = PreferenceManager.getDefaultSharedPreferences(this).getInt(getString(R.string.sp_userID), 1);
         units = PreferenceManager.getDefaultSharedPreferences(this).getFloat(getString(R.string.sp_units), 1);
@@ -95,6 +106,10 @@ public class ViewResults extends AppCompatActivity {
 
                             }
                         });
+                        if (firstTime){
+                            spinActivity.setSelection(positionAct);
+                            firstTime = false;
+                        }
                         break;
                     case 1:
                         tableName = ProfileContract.DumbbellLifts.TABLE_NAME;
@@ -116,6 +131,10 @@ public class ViewResults extends AppCompatActivity {
 
                             }
                         });
+                        if (firstTime){
+                            spinActivity.setSelection(positionAct);
+                            firstTime = false;
+                        }
                         break;
                     case 2:
                         tableName = ProfileContract.Gymnastics.TABLE_NAME;
@@ -144,6 +163,10 @@ public class ViewResults extends AppCompatActivity {
 
                             }
                         });
+                        if (firstTime){
+                            spinActivity.setSelection(positionAct);
+                            firstTime = false;
+                        }
                         break;
                     case 3:
                         tableName = ProfileContract.Running.TABLE_NAME;
@@ -165,6 +188,10 @@ public class ViewResults extends AppCompatActivity {
 
                             }
                         });
+                        if (firstTime){
+                            spinActivity.setSelection(positionAct);
+                            firstTime = false;
+                        }
                         break;
                     case 4:
                         tableName = ProfileContract.Swimming.TABLE_NAME;
@@ -186,6 +213,10 @@ public class ViewResults extends AppCompatActivity {
 
                             }
                         });
+                        if (firstTime){
+                            spinActivity.setSelection(positionAct);
+                            firstTime = false;
+                        }
                         break;
                     case 5:
                         tableName = ProfileContract.CrossFitStandards.TABLE_NAME;
@@ -210,6 +241,10 @@ public class ViewResults extends AppCompatActivity {
 
                             }
                         });
+                        if (firstTime){
+                            spinActivity.setSelection(positionAct);
+                            firstTime = false;
+                        }
                         break;
                     case 6:
                         arrayAdapter =
@@ -230,6 +265,10 @@ public class ViewResults extends AppCompatActivity {
                             @Override
                             public void onNothingSelected(AdapterView<?> adapterView) {}
                         });
+                        if (firstTime){
+                            spinActivity.setSelection(positionAct);
+                            firstTime = false;
+                        }
                         tableName = ProfileContract.CrossFitStandards.TABLE_NAME;
                         break;
                     case 7:
@@ -254,6 +293,10 @@ public class ViewResults extends AppCompatActivity {
 
                             }
                         });
+                        if (firstTime){
+                            spinActivity.setSelection(positionAct);
+                            firstTime = false;
+                        }
                         break;
                 }
                 spinActivity.setEnabled(true);
@@ -264,14 +307,104 @@ public class ViewResults extends AppCompatActivity {
 
             }
         });
+        String activity = getIntent().getStringExtra(getString(R.string.ar_tv_activity));
+        String tableName = getIntent().getStringExtra(getString(R.string.ar_tv_category));
+        if (tableName != null && activity != null) {
+            ArrayAdapter<String> arrayAdapter;
+            switch (tableName){
+                case ProfileContract.BarbellLifts.TABLE_NAME:
+                    spinCategory.setSelection(0);
+                    arrayAdapter =
+                            new ArrayAdapter<String>(this,
+                                    android.R.layout.simple_spinner_item,
+                                    getResources().getStringArray(R.array.barbell_lifts_array));
+                    arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinActivity.setAdapter(arrayAdapter);
+                    break;
+                case ProfileContract.DumbbellLifts.TABLE_NAME:
+                    spinCategory.setSelection(1);
+                    arrayAdapter =
+                            new ArrayAdapter<String>(this,
+                                    android.R.layout.simple_spinner_item,
+                                    getResources().getStringArray(R.array.dumbbell_lifts_array));
+                    arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinActivity.setAdapter(arrayAdapter);
+                    break;
+                case ProfileContract.Gymnastics.TABLE_NAME:
+                    spinCategory.setSelection(2);
+                    arrayAdapter =
+                            new ArrayAdapter<String>(this,
+                                    android.R.layout.simple_spinner_item,
+                                    getResources().getStringArray(R.array.bodyweight_array));
+                    arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinActivity.setAdapter(arrayAdapter);
+                    break;
+                case ProfileContract.Running.TABLE_NAME:
+                    spinCategory.setSelection(3);
+                    arrayAdapter =
+                            new ArrayAdapter<String>(this,
+                                    android.R.layout.simple_spinner_item,
+                                    getResources().getStringArray(R.array.running_array));
+                    arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinActivity.setAdapter(arrayAdapter);
+                    break;
+                case ProfileContract.Swimming.TABLE_NAME:
+                    spinCategory.setSelection(4);
+                    arrayAdapter =
+                            new ArrayAdapter<String>(this,
+                                    android.R.layout.simple_spinner_item,
+                                    getResources().getStringArray(R.array.swimming_array));
+                    arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinActivity.setAdapter(arrayAdapter);
+                    break;
+                case ProfileContract.CrossFitStandards.TABLE_NAME:
+                    spinCategory.setSelection(7);
+                    arrayAdapter =
+                            new ArrayAdapter<String>(this,
+                                    android.R.layout.simple_spinner_item,
+                                    getResources().getStringArray(R.array.crossfit_open_array));
+                    arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinActivity.setAdapter(arrayAdapter);
+                    String[] selections = getResources().getStringArray(R.array.crossfit_girls_array);
+                    for (int i = 0; i > selections.length; i++){
+                        if (selections[i].equals(activity)){
+                            spinCategory.setSelection(5);
+                            arrayAdapter =
+                                    new ArrayAdapter<String>(this,
+                                            android.R.layout.simple_spinner_item,
+                                            getResources().getStringArray(R.array.crossfit_girls_array));
+                            arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            spinActivity.setAdapter(arrayAdapter);
+                        }
+                    }
+                    selections = getResources().getStringArray(R.array.crossfit_heroes_array);
+
+                    for (int i = 0; i > selections.length; i++){
+                        if (selections[i].equals(activity)){
+                            spinCategory.setSelection(6);
+                            arrayAdapter =
+                                    new ArrayAdapter<String>(this,
+                                            android.R.layout.simple_spinner_item,
+                                            getResources().getStringArray(R.array.crossfit_heroes_array));
+                            arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            spinActivity.setAdapter(arrayAdapter);
+                        }
+                    }
+                    break;
+            }
+
+            ArrayAdapter myAdap = (ArrayAdapter) spinActivity.getAdapter();
+            positionAct = myAdap.getPosition(activity);
+            firstTime = true;
+        }
     }
 
     private void weightBased(String compareColumn){
-        Cursor cursor = dbRead.query(
+        Cursor cursor = dbWrite.query(
                 tableName,
                 null,
-                ProfileContract.BarbellLifts.LIFT + " = ? AND " + ProfileContract.BarbellLifts.USER_ID + " = ?",
-                new String[]{spinActivity.getSelectedItem().toString(), Integer.toString(userID)},
+                ProfileContract.BarbellLifts.LIFT + " LIKE ? AND " + ProfileContract.BarbellLifts.USER_ID + " = ?",
+                new String[]{ "%" + spinActivity.getSelectedItem().toString(), Integer.toString(userID)},
                 null,
                 null,
                 null
@@ -318,6 +451,7 @@ public class ViewResults extends AppCompatActivity {
             if (graphResults[i].doubleValue() < min.doubleValue()) min = allResults[i];
             i++;
         }
+        cursor.close();
         setUpGraph(min, max, graphResults);
         mainAdapter.setVariables(allResults, dates, pr, resultID, reps, sets, compareColumn);
         mainAdapter.notifyDataSetChanged();
@@ -351,5 +485,118 @@ public class ViewResults extends AppCompatActivity {
                     }
                 });
         plotResultsGraph.setRangeBoundaries(min, max, BoundaryMode.FIXED);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        dbWrite.close();
+    }
+
+    @Override
+    public void onClick(final String deleteID, String date) {
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
+
+        View customView = inflater.inflate(R.layout.delete_result_popup, null);
+        final PopupWindow mPopupWindow = new PopupWindow(customView, RecyclerView.LayoutParams.WRAP_CONTENT, RecyclerView.LayoutParams.WRAP_CONTENT);
+        if(Build.VERSION.SDK_INT >= 21){
+            mPopupWindow.setElevation(5.0f);
+        }
+        Button yesButton = (Button) customView.findViewById(R.id.popup_button_yes);
+        Button noButton = (Button) customView.findViewById(R.id.popup_button_no);
+        TextView deleMes = (TextView) customView.findViewById(R.id.popup_tv_message);
+        deleMes.setText("Do you want to delete the result from " + date +"?");
+        noButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPopupWindow.dismiss();
+            }
+        });
+        yesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Cursor cursor = dbWrite.query(
+                        ProfileContract.RecentLifts.TABLE_NAME,
+                        null,
+                        ProfileContract.RecentLifts._ID + " = ?",
+                        new String[] {Integer.toString(userID)},
+                        null,
+                        null,
+                        null
+                );
+                dbWrite.delete(tableName, ProfileContract.BarbellLifts._ID + "=" + deleteID, null);
+                cursor.moveToFirst();
+                if (tableName.equals(cursor.getString(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_ONE_TABLE)))){
+                    if (deleteID.equals(Integer.toString(cursor.getInt(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_ONE_ID))))){
+                        replaceResult(ProfileContract.RecentLifts.RESULT_ONE_ID, tableName, 1, cursor);
+                    }
+                } else if ((tableName.equals(cursor.getString(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_TWO_TABLE))))){
+                    if (deleteID.equals(Integer.toString(cursor.getInt(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_TWO_ID))))){
+                        replaceResult(ProfileContract.RecentLifts.RESULT_TWO_ID, tableName,2, cursor);
+                    }
+                } else if ((tableName.equals(cursor.getString(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_THREE_TABLE))))){
+                    if (deleteID.equals(Integer.toString(cursor.getInt(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_THREE_ID))))){
+                        replaceResult(ProfileContract.RecentLifts.RESULT_THREE_ID, tableName,3, cursor);
+                    }
+                }else if ((tableName.equals(cursor.getString(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_FOUR_TABLE))))){
+                    if (deleteID.equals(Integer.toString(cursor.getInt(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_FOUR_ID))))){
+                        replaceResult(ProfileContract.RecentLifts.RESULT_FOUR_ID, tableName,4, cursor);
+                    }
+                }else if ((tableName.equals(cursor.getString(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_FIVE_TABLE))))){
+                    if (deleteID.equals(Integer.toString(cursor.getInt(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_FIVE_ID))))){
+                        replaceResult(ProfileContract.RecentLifts.RESULT_FIVE_ID, tableName,5, cursor);
+                    }
+                }
+                mPopupWindow.dismiss();
+                mainAdapter.notifyDataSetChanged();
+            }
+        });
+        mPopupWindow.showAtLocation(findViewById(R.id.view_results_view), Gravity.CENTER,0,0);
+    }
+
+    private void replaceResult(String resultID, String tableName, int order, Cursor cursor){
+        ContentValues cv = new ContentValues();
+        if (order < 2){
+            cv.put(ProfileContract.RecentLifts.RESULT_ONE_TABLE, cursor.getString(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_TWO_TABLE)));
+            cv.put(ProfileContract.RecentLifts.RESULT_ONE_ID, cursor.getInt(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_TWO_ID)));
+        }
+        if (order < 3){
+            cv.put(ProfileContract.RecentLifts.RESULT_TWO_TABLE,
+                    cursor.getString(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_THREE_TABLE)));
+            cv.put(ProfileContract.RecentLifts.RESULT_TWO_ID,
+                    cursor.getInt(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_THREE_ID)));
+        }
+        if (order < 4){
+            cv.put(ProfileContract.RecentLifts.RESULT_THREE_TABLE,
+                    cursor.getString(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_FOUR_TABLE)));
+            cv.put(ProfileContract.RecentLifts.RESULT_THREE_ID,
+                    cursor.getInt(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_FOUR_ID)));
+        }
+        if (order < 5){
+            cv.put(ProfileContract.RecentLifts.RESULT_FOUR_TABLE,
+                    cursor.getString(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_FIVE_TABLE)));
+            cv.put(ProfileContract.RecentLifts.RESULT_FOUR_ID,
+                    cursor.getInt(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_FIVE_ID)));
+        }
+        cursor.close();
+        cursor = dbWrite.query(
+                tableName,
+                null,
+                ProfileContract.BarbellLifts.LIFT + " = ? AND " + ProfileContract.BarbellLifts.USER_ID + " = ?",
+                new String[]{spinActivity.getSelectedItem().toString(), Integer.toString(userID)},
+                null,
+                null,
+                null
+        );
+        int tempResultID = 0;
+        String tempTableName = tableName;
+        if (cursor.moveToLast()){
+            tempResultID = cursor.getInt(cursor.getColumnIndex(ProfileContract.BarbellLifts._ID));
+        } else tempTableName = null;
+        cv.put(ProfileContract.RecentLifts.RESULT_FIVE_TABLE,tempTableName);
+        cv.put(ProfileContract.RecentLifts.RESULT_FIVE_ID, tempResultID);
+        dbWrite.update(ProfileContract.RecentLifts.TABLE_NAME, cv, ProfileContract.RecentLifts._ID + " = ?",
+                new String[] {Integer.toString(userID)});
+        cursor.close();
     }
 }

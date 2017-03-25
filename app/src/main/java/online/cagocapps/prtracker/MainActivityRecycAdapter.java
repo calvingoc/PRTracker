@@ -51,15 +51,32 @@ public class MainActivityRecycAdapter extends RecyclerView.Adapter<MainActivityR
     private Context context;
     private float units;
 
+    private final MainActivityRecycAdapterOnClickHandler mClickHandler;
 
-    public class mainActivityRecycAdapterViewHolder extends RecyclerView.ViewHolder{
+    public  interface MainActivityRecycAdapterOnClickHandler{
+        void onClick(String tableName, String activity);
+    }
+
+    public MainActivityRecycAdapter(MainActivityRecycAdapterOnClickHandler clickHandler){
+        mClickHandler = clickHandler;
+    }
+
+
+    public class mainActivityRecycAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public final TextView tvActivity;
         public final ImageView ivPR;
         public final TextView tvResults;
         public final XYPlot plotResultsGraph;
         public final TextView tvNotes;
         public final TextView tvPercentile;
+        public final TextView tvTableName;
 
+
+        @Override
+        public void onClick(View view) {
+
+            mClickHandler.onClick(tvTableName.getText().toString(), tvActivity.getText().toString());
+        }
 
         public mainActivityRecycAdapterViewHolder(View itemView) {
             super(itemView);
@@ -69,6 +86,10 @@ public class MainActivityRecycAdapter extends RecyclerView.Adapter<MainActivityR
             plotResultsGraph = (XYPlot) itemView.findViewById(R.id.mai_plot_results);
             tvNotes = (TextView) itemView.findViewById(R.id.mai_tv_notes);
             tvPercentile = (TextView) itemView.findViewById(R.id.mai_tv_percentile_val);
+            tvTableName = (TextView) itemView.findViewById(R.id.mai_tv_tablename);
+            itemView.setOnClickListener(this);
+
+
         }
     }
 
@@ -121,6 +142,7 @@ public class MainActivityRecycAdapter extends RecyclerView.Adapter<MainActivityR
 
                 tableName = recentCursor.getString(recentCursor.getColumnIndex(tableName));
                 resultID = recentCursor.getString(recentCursor.getColumnIndex(resultID));
+                holder.tvTableName.setText(tableName);
                 recentCursor.close();
                 if (tableName != null) {
                     Cursor thisResult = dbRead.query(

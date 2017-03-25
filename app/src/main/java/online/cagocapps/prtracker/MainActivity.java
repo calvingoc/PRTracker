@@ -34,7 +34,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import online.cagocapps.prtracker.Data.ProfileContract;
 import online.cagocapps.prtracker.Data.ProfileDBHelper;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity implements MainActivityRecycAdapter.MainActivityRecycAdapterOnClickHandler{
 
     private String email;
     private String TAG = "Main Activity";
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity{
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false);
         rvMainActivity.setLayoutManager(layoutManager);
         rvMainActivity.setHasFixedSize(true);
-        mainAdapter = new MainActivityRecycAdapter();
+        mainAdapter = new MainActivityRecycAdapter(this);
         rvMainActivity.setAdapter(mainAdapter);
 
 
@@ -159,4 +159,17 @@ public class MainActivity extends AppCompatActivity{
 
     }
 
+    @Override
+    public void onClick(String tableName, String activity) {
+        Intent intent = new Intent(this, ViewResults.class);
+        intent.putExtra(getString(R.string.ar_tv_category), tableName);
+        intent.putExtra(getString(R.string.ar_tv_activity), activity);
+        startActivity(intent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        dbWrite.close();
+    }
 }

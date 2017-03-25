@@ -19,8 +19,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 import online.cagocapps.prtracker.Data.ProfileContract;
 import online.cagocapps.prtracker.Data.ProfileDBHelper;
@@ -51,8 +56,11 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
 
         //set up log in
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                //.requestIdToken("49825863480-eapqlgp1bqh3pg6crtu2j05p944ae7qc.apps.googleusercontent.com")
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
+
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this,this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
@@ -98,6 +106,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
     private void signIn(){
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
+        mGoogleApiClient.connect();
     }
 
     @Override
@@ -111,8 +120,11 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
 
     private void handleSignInResult(GoogleSignInResult result){
         Log.d(TAG, "handleSignInResult:" + result.isSuccess());
+        Log.d(TAG, "handleSignInstats:" + result.getStatus());
+        Log.d(TAG, "status message " + result.getStatus().getStatusMessage());
         if (result.isSuccess()){
             account = result.getSignInAccount();
+            firebaseAuthWithGoogle(account);
             SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
             editor.putString(getString(R.string.sp_email), account.getEmail());
             String where = ProfileContract.ProfileValues.EMAIL + " = ?";
@@ -144,6 +156,18 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         } else {
             Toast.makeText(this, getString(R.string.failed_login),Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void firebaseAuthWithGoogle(GoogleSignInAccount account){
+        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+        mAuth.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+
+                        }
+                    }
+
+        );
     }
 
 
