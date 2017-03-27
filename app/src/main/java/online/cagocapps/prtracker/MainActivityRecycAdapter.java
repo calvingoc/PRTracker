@@ -144,7 +144,7 @@ public class MainActivityRecycAdapter extends RecyclerView.Adapter<MainActivityR
                 resultID = recentCursor.getString(recentCursor.getColumnIndex(resultID));
                 holder.tvTableName.setText(tableName);
                 recentCursor.close();
-                if (tableName != null) {
+                if (tableName != null && tableName.length()!= 0 && !tableName.equals("")) {
                     Cursor thisResult = dbRead.query(
                             tableName,
                             null,

@@ -53,7 +53,7 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
     private ProfileDBHelper dbHelper;
     private SQLiteDatabase dbWrite;
 
-
+    private String compareColumn;
     private String tableName;
     private int userID;
     private float units;
@@ -98,7 +98,8 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
                         spinActivity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                weightBased(ProfileContract.BarbellLifts.ADJUSTED_ONE_REP_MAX);
+                                compareColumn = ProfileContract.BarbellLifts.ADJUSTED_ONE_REP_MAX;
+                                weightBased();
                             }
 
                             @Override
@@ -122,7 +123,8 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
                         spinActivity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                weightBased(ProfileContract.BarbellLifts.ADJUSTED_ONE_REP_MAX);
+                                compareColumn = ProfileContract.BarbellLifts.ADJUSTED_ONE_REP_MAX;
+                                weightBased();
                                 plank = false;
                             }
 
@@ -148,11 +150,14 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
                             @Override
                             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                                 if (i == 16) {
-                                    weightBased(ProfileContract.Running.TIME);
+                                    compareColumn =ProfileContract.Running.TIME;
+                                    weightBased();
+
                                     plank = true;
                                 }
                                 else{
-                                    weightBased(ProfileContract.BarbellLifts.REPS);
+                                    compareColumn = ProfileContract.BarbellLifts.REPS;
+                                    weightBased();
                                     plank = false;
                                 }
 
@@ -179,7 +184,8 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
                         spinActivity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                weightBased(ProfileContract.Running.TIME);
+                                compareColumn = ProfileContract.Running.TIME;
+                                weightBased();
                                 plank = false;
                             }
 
@@ -204,7 +210,8 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
                         spinActivity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                weightBased(ProfileContract.Running.TIME);
+                                compareColumn = ProfileContract.Running.TIME;
+                                weightBased();
                                 plank = false;
                             }
 
@@ -230,9 +237,13 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
                             @Override
                             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                                 if (i == 0 || i == 2 || i == 3 || i == 4
-                                        || i == 5 || i == 6 || i == 7 || i == 8 || i == 9)
-                                    weightBased(ProfileContract.Running.TIME);
-                                else weightBased(ProfileContract.BarbellLifts.REPS);
+                                        || i == 5 || i == 6 || i == 7 || i == 8 || i == 9){
+                                    compareColumn = ProfileContract.Running.TIME;
+                                    weightBased();
+                                }else {
+                                    compareColumn = ProfileContract.BarbellLifts.REPS;
+                                    weightBased();
+                                }
                                 plank = false;
                             }
 
@@ -256,9 +267,13 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
                         spinActivity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                if (i == 0 || i == 1 || i == 2 || i == 3 || i == 4 || i == 6)
-                                    weightBased(ProfileContract.Running.TIME);
-                                else weightBased(ProfileContract.BarbellLifts.REPS);
+                                if (i == 0 || i == 1 || i == 2 || i == 3 || i == 4 || i == 6) {
+                                    compareColumn = ProfileContract.Running.TIME;
+                                    weightBased();
+                                }else {
+                                    compareColumn = ProfileContract.BarbellLifts.REPS;
+                                    weightBased();
+                                }
                                 plank = false;
                             }
 
@@ -282,9 +297,13 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
                         spinActivity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                if (i == 14 || i == 18 || i == 23 || i == 25)
-                                    weightBased(ProfileContract.Running.TIME);
-                                else weightBased(ProfileContract.BarbellLifts.REPS);
+                                if (i == 14 || i == 18 || i == 23 || i == 25) {
+                                    compareColumn = ProfileContract.Running.TIME;
+                                    weightBased();
+                                }else {
+                                    compareColumn = ProfileContract.BarbellLifts.REPS;
+                                    weightBased();
+                                }
                                 plank = false;
                             }
 
@@ -399,7 +418,7 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
         }
     }
 
-    private void weightBased(String compareColumn){
+    private void weightBased(){
         Cursor cursor = dbWrite.query(
                 tableName,
                 null,
@@ -530,25 +549,29 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
                     if (deleteID.equals(Integer.toString(cursor.getInt(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_ONE_ID))))){
                         replaceResult(ProfileContract.RecentLifts.RESULT_ONE_ID, tableName, 1, cursor);
                     }
-                } else if ((tableName.equals(cursor.getString(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_TWO_TABLE))))){
+                }
+                if ((tableName.equals(cursor.getString(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_TWO_TABLE))))){
                     if (deleteID.equals(Integer.toString(cursor.getInt(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_TWO_ID))))){
                         replaceResult(ProfileContract.RecentLifts.RESULT_TWO_ID, tableName,2, cursor);
                     }
-                } else if ((tableName.equals(cursor.getString(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_THREE_TABLE))))){
+                }
+                if ((tableName.equals(cursor.getString(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_THREE_TABLE))))){
                     if (deleteID.equals(Integer.toString(cursor.getInt(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_THREE_ID))))){
                         replaceResult(ProfileContract.RecentLifts.RESULT_THREE_ID, tableName,3, cursor);
                     }
-                }else if ((tableName.equals(cursor.getString(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_FOUR_TABLE))))){
+                }
+                if ((tableName.equals(cursor.getString(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_FOUR_TABLE))))){
                     if (deleteID.equals(Integer.toString(cursor.getInt(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_FOUR_ID))))){
                         replaceResult(ProfileContract.RecentLifts.RESULT_FOUR_ID, tableName,4, cursor);
                     }
-                }else if ((tableName.equals(cursor.getString(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_FIVE_TABLE))))){
+                }
+                if ((tableName.equals(cursor.getString(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_FIVE_TABLE))))){
                     if (deleteID.equals(Integer.toString(cursor.getInt(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_FIVE_ID))))){
                         replaceResult(ProfileContract.RecentLifts.RESULT_FIVE_ID, tableName,5, cursor);
                     }
                 }
                 mPopupWindow.dismiss();
-                mainAdapter.notifyDataSetChanged();
+                cursor.close();
             }
         });
         mPopupWindow.showAtLocation(findViewById(R.id.view_results_view), Gravity.CENTER,0,0);
@@ -578,8 +601,7 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
             cv.put(ProfileContract.RecentLifts.RESULT_FOUR_ID,
                     cursor.getInt(cursor.getColumnIndex(ProfileContract.RecentLifts.RESULT_FIVE_ID)));
         }
-        cursor.close();
-        cursor = dbWrite.query(
+        Cursor newCursor = dbWrite.query(
                 tableName,
                 null,
                 ProfileContract.BarbellLifts.LIFT + " = ? AND " + ProfileContract.BarbellLifts.USER_ID + " = ?",
@@ -590,13 +612,15 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
         );
         int tempResultID = 0;
         String tempTableName = tableName;
-        if (cursor.moveToLast()){
-            tempResultID = cursor.getInt(cursor.getColumnIndex(ProfileContract.BarbellLifts._ID));
+        if (newCursor.moveToLast()){
+            tempResultID = newCursor.getInt(cursor.getColumnIndex(ProfileContract.BarbellLifts._ID));
         } else tempTableName = null;
         cv.put(ProfileContract.RecentLifts.RESULT_FIVE_TABLE,tempTableName);
         cv.put(ProfileContract.RecentLifts.RESULT_FIVE_ID, tempResultID);
         dbWrite.update(ProfileContract.RecentLifts.TABLE_NAME, cv, ProfileContract.RecentLifts._ID + " = ?",
                 new String[] {Integer.toString(userID)});
-        cursor.close();
+        newCursor.close();
+        weightBased();
+        mainAdapter.notifyDataSetChanged();
     }
 }
