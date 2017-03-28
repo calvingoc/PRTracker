@@ -130,7 +130,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
             String where = ProfileContract.ProfileValues.EMAIL + " = ?";
             Cursor cursor = dbWrite.query(
                     ProfileContract.ProfileValues.TABLE_NAME,
-                    new String[] {ProfileContract.ProfileValues.EMAIL},
+                    null,
                     where,
                     new String[] {account.getEmail()},
                     null,
