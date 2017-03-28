@@ -744,6 +744,5 @@ public class AddResult extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         dbWrite.close();
-        database.notify();
     }
 }
