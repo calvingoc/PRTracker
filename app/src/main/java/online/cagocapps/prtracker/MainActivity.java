@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityRecyc
         dbHelper = new ProfileDBHelper(this);
         dbWrite = dbHelper.getWritableDatabase();
 
+
         rvMainActivity = (RecyclerView) findViewById(R.id.ma_rv_results);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false);
         rvMainActivity.setLayoutManager(layoutManager);

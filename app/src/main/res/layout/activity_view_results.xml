@@ -47,10 +47,46 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/vr_spin_category" />
 
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:id="@+id/vr_tv_pr"
+        android:gravity="center"
+        android:text="PR"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/vr_spin_activity"/>
+
+    <TextView
+        android:layout_width="75dp"
+        android:layout_height="0dp"
+        android:id="@+id/vr_tv_prvalue"
+        android:gravity="center"
+        app:layout_constraintLeft_toRightOf="@id/vr_tv_pr"
+        app:layout_constraintTop_toTopOf="@id/vr_tv_pr"
+        app:layout_constraintBottom_toBottomOf="@id/vr_tv_pr"/>
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="0dp"
+        android:id="@+id/vr_tv_percentile"
+        android:text="Percentile"
+        android:gravity="center"
+        app:layout_constraintLeft_toRightOf="@id/vr_tv_prvalue"
+        app:layout_constraintTop_toTopOf="@id/vr_tv_pr"
+        app:layout_constraintBottom_toBottomOf="@id/vr_tv_pr"/>
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/vr_tv_percentilevalue"
+        android:gravity="center"
+        app:layout_constraintLeft_toRightOf="@id/vr_tv_percentile"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/vr_tv_pr"
+        app:layout_constraintBottom_toBottomOf="@id/vr_tv_pr"/>
+
     <com.androidplot.xy.XYPlot
         android:layout_width="0dp"
         android:layout_height="200dp"
-        app:layout_constraintTop_toBottomOf="@+id/vr_tv_activity"
+        app:layout_constraintTop_toBottomOf="@+id/vr_tv_pr"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:id="@+id/vr_graph" />

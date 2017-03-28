@@ -319,11 +319,12 @@ public class MainActivityRecycAdapter extends RecyclerView.Adapter<MainActivityR
                                 int skill = (prCursor.getInt(prCursor.getColumnIndex(ProfileContract.ProfileValues.SKILL)));
                                 int gender = (prCursor.getInt(prCursor.getColumnIndex(ProfileContract.ProfileValues.GENDER)));
                                 String email = prCursor.getString(prCursor.getColumnIndex(ProfileContract.ProfileValues.EMAIL));
+                                email = email.replace(".","");
                                 prCursor.close();
                                 double pr = 0;
                                 double below = 0.0;
                                 double total = 0.0;
-                                double equal = 1.0;
+                                double equal = 0.0;
                                 ArrayList<Integer> results = new ArrayList<Integer>();
                                 for (DataSnapshot comResult : dataSnapshot.child(activity).child(Integer.toString(gender)).child(Integer.toString(skill)).child(Integer.toString(scaledWeight))
                                         .child(Integer.toString(age)).child(yearsAct).getChildren()) {
@@ -343,7 +344,7 @@ public class MainActivityRecycAdapter extends RecyclerView.Adapter<MainActivityR
                                         total++;
                                     } else total++;
                                 }
-                                holder.tvPercentile.setText(Double.toString((below + .5 * equal) / total));
+                                holder.tvPercentile.setText(Double.toString((below + .5 * equal * 100) / total));
                             }
 
                         }

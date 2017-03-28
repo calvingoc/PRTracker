@@ -27,6 +27,7 @@ public class ViewResultsRecycAdapter extends RecyclerView.Adapter<ViewResultsRec
     private int[] reps;
     private int[] sets;
     private String resultType;
+    private String[] notes;
 
     private final vrRecycAdapOnClickHandler mClickHandler;
 
@@ -43,6 +44,7 @@ public class ViewResultsRecycAdapter extends RecyclerView.Adapter<ViewResultsRec
         public final ImageView imPR;
         public final TextView tvResult;
         public final TextView tvID;
+        public final TextView tvNotes;
 
         public viewResultsRecycAdapterViewHolder(View view){
             super(view);
@@ -50,6 +52,7 @@ public class ViewResultsRecycAdapter extends RecyclerView.Adapter<ViewResultsRec
             imPR = (ImageView) view.findViewById(R.id.vr_iv_pr);
             tvResult = (TextView) view.findViewById(R.id.vr_tv_results);
             tvID = (TextView) view.findViewById(R.id.vr_tv_id);
+            tvNotes = (TextView) view.findViewById(R.id.vr_tv_notes);
             view.setOnClickListener(this);
         }
 
@@ -89,6 +92,7 @@ public class ViewResultsRecycAdapter extends RecyclerView.Adapter<ViewResultsRec
             holder.tvResult.setText(hours + minutes + seconds);
         } else holder.tvResult.setText(results[position].toString());
         holder.tvID.setText(Integer.toString(resultID[position]));
+        holder.tvNotes.setText(notes[position]);
 
     }
 
@@ -104,7 +108,7 @@ public class ViewResultsRecycAdapter extends RecyclerView.Adapter<ViewResultsRec
     }
 
     public void setVariables(Number[] resultsArray, Long[] datesArray, int[] prArray, int[] resultIDArray,
-                             int[] repsArray, int[] setsArray, String type){
+                             int[] repsArray, int[] setsArray, String type, String[] notes){
         results = resultsArray;
         dates = datesArray;
         pr = prArray;
@@ -112,5 +116,6 @@ public class ViewResultsRecycAdapter extends RecyclerView.Adapter<ViewResultsRec
         reps = repsArray;
         sets = setsArray;
         resultType = type;
+        this.notes = notes;
     }
 }

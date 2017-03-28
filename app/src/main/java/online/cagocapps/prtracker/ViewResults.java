@@ -32,21 +32,30 @@ import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XYGraphWidget;
 import com.androidplot.xy.XYPlot;
 import com.androidplot.xy.XYSeries;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 import online.cagocapps.prtracker.Data.ProfileContract;
 import online.cagocapps.prtracker.Data.ProfileDBHelper;
+import online.cagocapps.prtracker.Data.ResultObject;
 
 public class ViewResults extends AppCompatActivity implements ViewResultsRecycAdapter.vrRecycAdapOnClickHandler{
     private Spinner spinActivity;
     private Spinner spinCategory;
     private XYPlot plotResultsGraph;
     private RecyclerView recyclerViewResults;
+    private TextView prValue;
+    private TextView percentileValue;
 
     private ViewResultsRecycAdapter mainAdapter;
 
@@ -78,6 +87,8 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
         recyclerViewResults.setAdapter(mainAdapter);
         dbHelper = new ProfileDBHelper(this);
         dbWrite = dbHelper.getWritableDatabase();
+        prValue = (TextView) findViewById(R.id.vr_tv_prvalue);
+        percentileValue = (TextView) findViewById(R.id.vr_tv_percentilevalue);
 
         userID = PreferenceManager.getDefaultSharedPreferences(this).getInt(getString(R.string.sp_userID), 1);
         units = PreferenceManager.getDefaultSharedPreferences(this).getFloat(getString(R.string.sp_units), 1);
@@ -99,6 +110,8 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
                             @Override
                             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                                 compareColumn = ProfileContract.BarbellLifts.ADJUSTED_ONE_REP_MAX;
+                                percentileValue.setText("");
+                                prValue.setText("");
                                 weightBased();
                             }
 
@@ -124,6 +137,8 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
                             @Override
                             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                                 compareColumn = ProfileContract.BarbellLifts.ADJUSTED_ONE_REP_MAX;
+                                percentileValue.setText("");
+                                prValue.setText("");
                                 weightBased();
                                 plank = false;
                             }
@@ -151,6 +166,8 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
                             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                                 if (i == 16) {
                                     compareColumn =ProfileContract.Running.TIME;
+                                    percentileValue.setText("");
+                                    prValue.setText("");
                                     weightBased();
 
                                     plank = true;
@@ -185,6 +202,8 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
                             @Override
                             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                                 compareColumn = ProfileContract.Running.TIME;
+                                percentileValue.setText("");
+                                prValue.setText("");
                                 weightBased();
                                 plank = false;
                             }
@@ -211,6 +230,8 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
                             @Override
                             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                                 compareColumn = ProfileContract.Running.TIME;
+                                percentileValue.setText("");
+                                prValue.setText("");
                                 weightBased();
                                 plank = false;
                             }
@@ -239,9 +260,13 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
                                 if (i == 0 || i == 2 || i == 3 || i == 4
                                         || i == 5 || i == 6 || i == 7 || i == 8 || i == 9){
                                     compareColumn = ProfileContract.Running.TIME;
+                                    percentileValue.setText("");
+                                    prValue.setText("");
                                     weightBased();
                                 }else {
                                     compareColumn = ProfileContract.BarbellLifts.REPS;
+                                    percentileValue.setText("");
+                                    prValue.setText("");
                                     weightBased();
                                 }
                                 plank = false;
@@ -269,9 +294,13 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
                             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                                 if (i == 0 || i == 1 || i == 2 || i == 3 || i == 4 || i == 6) {
                                     compareColumn = ProfileContract.Running.TIME;
+                                    percentileValue.setText("");
+                                    prValue.setText("");
                                     weightBased();
                                 }else {
                                     compareColumn = ProfileContract.BarbellLifts.REPS;
+                                    percentileValue.setText("");
+                                    prValue.setText("");
                                     weightBased();
                                 }
                                 plank = false;
@@ -299,9 +328,13 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
                             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                                 if (i == 14 || i == 18 || i == 23 || i == 25) {
                                     compareColumn = ProfileContract.Running.TIME;
+                                    percentileValue.setText("");
+                                    prValue.setText("");
                                     weightBased();
                                 }else {
                                     compareColumn = ProfileContract.BarbellLifts.REPS;
+                                    percentileValue.setText("");
+                                    prValue.setText("");
                                     weightBased();
                                 }
                                 plank = false;
@@ -435,6 +468,7 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
         int[] resultID = new int[cursor.getCount()];
         int[] sets = new int[cursor.getCount()];
         int[] reps = new int[cursor.getCount()];
+        String[] notes = new String[cursor.getCount()];
         int i = 0;
         Number min = 10000000;
         Number max = 0;
@@ -444,6 +478,7 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
             dates[i] = cursor.getLong(cursor.getColumnIndex(ProfileContract.BarbellLifts.DATE));
             pr[i] = cursor.getInt(cursor.getColumnIndex(ProfileContract.BarbellLifts.PR));
             resultID[i] = cursor.getInt(cursor.getColumnIndex(ProfileContract.BarbellLifts._ID));
+            notes[i] = cursor.getString(cursor.getColumnIndex(ProfileContract.BarbellLifts.COMMENTS));
             if (compareColumn.equals(ProfileContract.BarbellLifts.ADJUSTED_ONE_REP_MAX)){
                 graphResults[9 - i] = graphResults[9 - i].floatValue() * units;
                 allResults[i] = cursor.getInt(cursor.getColumnIndex(ProfileContract.BarbellLifts.WEIGHT)) * units;
@@ -452,6 +487,17 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
             }
             if (graphResults[i].doubleValue() > max.doubleValue()) max = allResults[i];
             if (graphResults[i].doubleValue() < min.doubleValue()) min = allResults[i];
+            if (pr[i] == 1){
+                if(compareColumn.equals(ProfileContract.BarbellLifts.ADJUSTED_ONE_REP_MAX)){
+                    String formattedResults = Integer.toString(sets[i]) + " X " + Integer.toString(reps[i]) + " X " + Integer.toString(allResults[i].intValue());
+                    prValue.setText(formattedResults);
+                } else if (compareColumn.equals(ProfileContract.Running.TIME)){
+                    String hours = Integer.toString(allResults[i].intValue() / 3600) + ":";
+                    String minutes = Integer.toString((allResults[i].intValue() % 3600) / 60) + ":";
+                    String seconds = Integer.toString(((allResults[i].intValue() % 3600) % 60));
+                    prValue.setText(hours + minutes + seconds);
+                } else prValue.setText(allResults[i].toString());
+            }
             i++;
         }
         while (cursor.moveToPrevious()){
@@ -460,21 +506,92 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
             dates[i] = cursor.getLong(cursor.getColumnIndex(ProfileContract.BarbellLifts.DATE));
             pr[i] = cursor.getInt(cursor.getColumnIndex(ProfileContract.BarbellLifts.PR));
             resultID[i] = cursor.getInt(cursor.getColumnIndex(ProfileContract.BarbellLifts._ID));
+            notes[i] = cursor.getString(cursor.getColumnIndex(ProfileContract.BarbellLifts.COMMENTS));
             if (compareColumn.equals(ProfileContract.BarbellLifts.ADJUSTED_ONE_REP_MAX)){
                 if (i < 10) graphResults[9 - i] = graphResults[9 - i].floatValue() * units;
-                allResults[i] = allResults[i].floatValue() * units;
+                allResults[i] = cursor.getInt(cursor.getColumnIndex(ProfileContract.BarbellLifts.WEIGHT)) * units;
                 sets[i] = cursor.getInt(cursor.getColumnIndex(ProfileContract.BarbellLifts.ROUNDS));
                 reps[i] = cursor.getInt(cursor.getColumnIndex(ProfileContract.BarbellLifts.REPS));
             }
             if (graphResults[i].doubleValue() > max.doubleValue()) max = allResults[i];
             if (graphResults[i].doubleValue() < min.doubleValue()) min = allResults[i];
+            if (pr[i] == 1) {
+                if (compareColumn.equals(ProfileContract.BarbellLifts.ADJUSTED_ONE_REP_MAX)) {
+                    String formattedResults = Integer.toString(sets[i]) + " X " + Integer.toString(reps[i]) + " X " + Integer.toString(allResults[i].intValue());
+                    prValue.setText(formattedResults);
+                } else if (compareColumn.equals(ProfileContract.Running.TIME)) {
+                    String hours = Integer.toString(allResults[i].intValue() / 3600) + ":";
+                    String minutes = Integer.toString((allResults[i].intValue() % 3600) / 60) + ":";
+                    String seconds = Integer.toString(((allResults[i].intValue() % 3600) % 60));
+                    prValue.setText(hours + minutes + seconds);
+                } else prValue.setText(allResults[i].toString());
+            }
             i++;
         }
         cursor.close();
         setUpGraph(min, max, graphResults);
-        mainAdapter.setVariables(allResults, dates, pr, resultID, reps, sets, compareColumn);
+        mainAdapter.setVariables(allResults, dates, pr, resultID, reps, sets, compareColumn,notes);
         mainAdapter.notifyDataSetChanged();
 
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Cursor prCursor = dbWrite.query(
+                        ProfileContract.ProfileValues.TABLE_NAME,
+                        null,
+                        ProfileContract.ProfileValues._ID + " = ?",
+                        new String[]{Integer.toString(userID)},
+                        null,
+                        null,
+                        null
+                );
+                if (prCursor.moveToFirst()) {
+                    String birthdate = prCursor.getString(prCursor.getColumnIndex(ProfileContract.ProfileValues.BIRTHDATE));
+                    Date now = new Date();
+                    int year = now.getYear() + 1900;
+                    int age = year - Integer.valueOf(birthdate);
+                    String weight = (Integer.toString(prCursor.getInt(prCursor.getColumnIndex(ProfileContract.ProfileValues.WEIGHT))));
+                    int scaledWeight = Integer.valueOf(weight) / 10;
+                    String yearsAct = (Integer.toString(prCursor.getInt(prCursor.getColumnIndex(ProfileContract.ProfileValues.YEARS_ACTIVE))));
+                    int skill = (prCursor.getInt(prCursor.getColumnIndex(ProfileContract.ProfileValues.SKILL)));
+                    int gender = (prCursor.getInt(prCursor.getColumnIndex(ProfileContract.ProfileValues.GENDER)));
+                    String email = prCursor.getString(prCursor.getColumnIndex(ProfileContract.ProfileValues.EMAIL));
+                    email = email.replace(".", "");
+                    prCursor.close();
+                    double pr = 0;
+                    double below = 0.0;
+                    double total = 0.0;
+                    double equal = 0.0;
+                    ArrayList<Integer> results = new ArrayList<Integer>();
+                    for (DataSnapshot comResult : dataSnapshot.child(spinActivity.getSelectedItem().toString()).child(Integer.toString(gender)).child(Integer.toString(skill)).child(Integer.toString(scaledWeight))
+                            .child(Integer.toString(age)).child(yearsAct).getChildren()) {
+                        ResultObject resultObject = comResult.getValue(ResultObject.class);
+                        results.add(resultObject.getResult());
+                        String curEmail = comResult.getKey();
+                        if (curEmail.equals(email)) {
+                            pr = resultObject.getResult();
+                        }
+                    }
+                    for (int i : results) {
+                        if (i < pr) {
+                            below++;
+                            total++;
+                        } else if (i == pr) {
+                            equal++;
+                            total++;
+                        } else total++;
+                    }
+                    percentileValue.setText(Double.toString((below + .5 * equal * 100) / total));
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
 
@@ -503,7 +620,7 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
                         return null;
                     }
                 });
-        plotResultsGraph.setRangeBoundaries(min, max, BoundaryMode.FIXED);
+        //plotResultsGraph.setRangeBoundaries(min, max, BoundaryMode.FIXED);
     }
 
     @Override

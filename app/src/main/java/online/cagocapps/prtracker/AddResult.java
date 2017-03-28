@@ -67,6 +67,9 @@ public class AddResult extends AppCompatActivity {
 
         units = PreferenceManager.getDefaultSharedPreferences(this).getFloat(getString(R.string.sp_units),1);
 
+        database = FirebaseDatabase.getInstance();
+        reference = database.getReference();
+
         //find views;
         spinActivity = (Spinner) findViewById(R.id.ar_spin_activities);
         spinCategory = (Spinner) findViewById(R.id.ar_spin_categories);
@@ -447,8 +450,6 @@ public class AddResult extends AppCompatActivity {
         //set up database
         dbHelper = new ProfileDBHelper(this);
         dbWrite = dbHelper.getWritableDatabase();
-        database = FirebaseDatabase.getInstance();
-        reference = database.getReference();
 
         if(togUnits.isChecked()) units = (float) .453592;
         else units = 1;
@@ -460,7 +461,7 @@ public class AddResult extends AppCompatActivity {
         int sets = 1;
         if (etSets.getText().length() != 0)
             sets = Integer.valueOf(etSets.getText().toString());
-        double reps = 1;
+        double reps = 1.0;
         if (etReps.getText().length()!= 0)
             reps = Integer.valueOf(etReps.getText().toString());
         double weight = 1;
@@ -743,5 +744,6 @@ public class AddResult extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         dbWrite.close();
+        database.notify();
     }
 }
