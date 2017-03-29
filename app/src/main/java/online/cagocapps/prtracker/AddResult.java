@@ -694,7 +694,6 @@ public class AddResult extends AppCompatActivity {
                 resultObject.setResult(prValue);
                 reference.child(activity).child(Integer.toString(gender)).child(Integer.toString(skill)).child(Integer.toString(scaledWeight))
                         .child(Integer.toString(age)).child(yearsAct).child(userEmail).setValue(resultObject);
-                reference.setValue(resultObject);
             }
         }
 
