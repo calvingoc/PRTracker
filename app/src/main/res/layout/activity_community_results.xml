@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="online.cagocapps.prtracker.CommunityResults">
+
+    <TextView
+        android:id="@+id/cr_tv_category"
+        android:layout_width="75dp"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:text="@string/ar_tv_category"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Spinner
+        android:id="@+id/cr_spin_category"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:entries="@array/enter_results_category"
+        android:minWidth="50dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/cr_tv_category"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/cr_tv_category"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/cr_tv_activity"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:text="@string/ar_tv_activity"
+        android:gravity="center"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/cr_spin_category"
+        app:layout_constraintTop_toBottomOf="@+id/cr_tv_category" />
+
+    <Spinner
+        android:id="@+id/cr_spin_activity"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/cr_tv_activity"
+        app:layout_constraintLeft_toRightOf="@+id/cr_tv_activity"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cr_spin_category" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:id="@+id/cr_tv_gender"
+        android:text="@string/pp_gender"
+        android:gravity="center"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="@id/cr_tv_activity"
+        app:layout_constraintTop_toBottomOf="@id/cr_tv_activity"/>
+
+    <Spinner
+        android:id="@+id/cr_spin_gender"
+        android:layout_width="100dp"
+        android:layout_height="0dp"
+        android:entries="@array/cr_genders"
+        app:layout_constraintBottom_toBottomOf="@id/cr_tv_gender"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintLeft_toRightOf="@id/cr_tv_gender"
+        app:layout_constraintTop_toBottomOf="@id/cr_spin_activity"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/cr_tv_skill"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        android:gravity="center"
+        android:text="@string/pp_tv_skill"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toRightOf="@+id/cr_spin_gender"
+        app:layout_constraintRight_toRightOf="@id/cr_tv_activity"
+        app:layout_constraintTop_toTopOf="@+id/cr_spin_gender" />
+
+    <Spinner
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/cr_spin_skill"
+        app:layout_constraintLeft_toRightOf="@+id/cr_tv_skill"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/cr_tv_skill"
+        android:entries="@array/cr_skill_level_titles"
+        app:layout_constraintTop_toTopOf="@+id/cr_tv_skill"
+        android:layout_marginTop="0dp"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintVertical_bias="0.0"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:id="@+id/cr_tv_weight"
+        android:text="@string/ar_et_weight"
+        android:gravity="center"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cr_tv_skill"
+        app:layout_constraintRight_toLeftOf="@+id/cr_spin_gender"
+        android:layout_marginTop="0dp"
+        app:layout_constraintHorizontal_bias="0.0"
+        android:layout_marginRight="0dp" />
+
+    <Spinner
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/cr_spin_weight"
+        android:entries="@array/cr_weights"
+        app:layout_constraintLeft_toRightOf="@id/cr_tv_weight"
+        app:layout_constraintRight_toLeftOf="@id/cr_tv_age"
+        app:layout_constraintTop_toTopOf="@id/cr_tv_weight"
+        app:layout_constraintBottom_toBottomOf="@id/cr_tv_weight"
+        android:layout_marginBottom="0dp" />
+
+    <TextView
+        android:id="@+id/cr_tv_age"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:text="@string/cr_age"
+        app:layout_constraintRight_toRightOf="@id/cr_tv_skill"
+        app:layout_constraintTop_toBottomOf="@+id/cr_tv_skill"
+        android:layout_marginTop="0dp"
+        app:layout_constraintHorizontal_bias="0.0"
+        android:layout_marginLeft="0dp"
+        app:layout_constraintLeft_toLeftOf="@+id/cr_tv_skill" />
+
+    <Spinner
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/cr_spin_age"
+        android:entries="@array/cr_ages"
+        app:layout_constraintLeft_toRightOf="@id/cr_tv_age"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/cr_tv_age"
+        app:layout_constraintTop_toBottomOf="@id/cr_tv_age"
+        android:layout_marginBottom="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/cr_tv_active" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:id="@+id/cr_tv_active"
+        android:text="@string/pp_tv_years"
+        android:gravity="center"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cr_tv_age"
+        app:layout_constraintRight_toRightOf="@+id/cr_tv_weight"
+        android:layout_marginTop="0dp"
+        app:layout_constraintHorizontal_bias="0.0"
+        android:layout_marginRight="0dp" />
+
+    <Spinner
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/cr_spin_active"
+        android:entries="@array/cr_active"
+        app:layout_constraintLeft_toRightOf="@id/cr_tv_active"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/cr_tv_active"
+        app:layout_constraintTop_toBottomOf="@id/cr_tv_active"
+        app:layout_constraintBottom_toBottomOf="@+id/cr_tv_active"
+        android:layout_marginBottom="0dp" />
+
+    <TextView
+        android:id="@+id/cr_tv_pr"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="0dp"
+        android:gravity="center"
+        android:text="@string/cr_personal_best"
+        app:layout_constraintLeft_toLeftOf="@+id/cr_tv_active"
+        app:layout_constraintRight_toLeftOf="@+id/cr_spin_active"
+        app:layout_constraintTop_toBottomOf="@+id/cr_tv_active" />
+
+    <TextView
+        android:id="@+id/cr_tv_pr_value"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="0dp"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="@+id/cr_tv_pr"
+        app:layout_constraintLeft_toRightOf="@+id/cr_tv_pr"
+        app:layout_constraintRight_toLeftOf="@+id/cr_tv_age"
+        app:layout_constraintTop_toBottomOf="@+id/cr_spin_active" />
+
+    <TextView
+        android:id="@+id/cr_tv_percentile"
+        android:layout_width="75dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        android:text="@string/cr_percentile"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="@+id/cr_tv_pr_value"
+        app:layout_constraintLeft_toRightOf="@+id/cr_tv_pr_value"
+        app:layout_constraintTop_toBottomOf="@+id/cr_spin_active" />
+
+    <TextView
+        android:id="@+id/cr_tv_percentile_value"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="0dp"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="@+id/cr_tv_percentile"
+        app:layout_constraintLeft_toRightOf="@+id/cr_tv_percentile"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/cr_tv_percentile" />
+
+
+</android.support.constraint.ConstraintLayout>
