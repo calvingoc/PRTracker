@@ -120,6 +120,9 @@
 
     <string name="cr_personal_best">Your PR</string>
     <string name="cr_percentile">Percentile</string>
+    <string name="cr_com_ave">Community Average</string>
+    <string name="cr_com_best">Community Best</string>
+    <string name="cr_stand_dev">Standard Deviation</string>
 
 
     <!--Add Results-->

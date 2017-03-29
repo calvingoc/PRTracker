@@ -176,12 +176,13 @@
         android:layout_height="50dp"
         android:layout_marginLeft="0dp"
         android:layout_marginRight="0dp"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="16dp"
         android:gravity="center"
         android:text="@string/cr_personal_best"
         app:layout_constraintLeft_toLeftOf="@+id/cr_tv_active"
         app:layout_constraintRight_toLeftOf="@+id/cr_spin_active"
-        app:layout_constraintTop_toBottomOf="@+id/cr_tv_active" />
+        app:layout_constraintTop_toBottomOf="@+id/cr_tv_active"
+        app:layout_constraintHorizontal_bias="0.0" />
 
     <TextView
         android:id="@+id/cr_tv_pr_value"
@@ -190,12 +191,14 @@
         android:layout_marginBottom="0dp"
         android:layout_marginLeft="0dp"
         android:layout_marginRight="0dp"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="16dp"
         android:gravity="center"
         app:layout_constraintBottom_toBottomOf="@+id/cr_tv_pr"
         app:layout_constraintLeft_toRightOf="@+id/cr_tv_pr"
         app:layout_constraintRight_toLeftOf="@+id/cr_tv_age"
-        app:layout_constraintTop_toBottomOf="@+id/cr_spin_active" />
+        app:layout_constraintTop_toBottomOf="@+id/cr_spin_active"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/cr_tv_percentile"
@@ -203,12 +206,13 @@
         android:layout_height="0dp"
         android:layout_marginBottom="0dp"
         android:layout_marginLeft="0dp"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="16dp"
         android:text="@string/cr_percentile"
         android:gravity="center"
         app:layout_constraintBottom_toBottomOf="@+id/cr_tv_pr_value"
         app:layout_constraintLeft_toRightOf="@+id/cr_tv_pr_value"
-        app:layout_constraintTop_toBottomOf="@+id/cr_spin_active" />
+        app:layout_constraintTop_toBottomOf="@+id/cr_spin_active"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/cr_tv_percentile_value"
@@ -223,6 +227,66 @@
         app:layout_constraintLeft_toRightOf="@+id/cr_tv_percentile"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@+id/cr_tv_percentile" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:id="@+id/cr_tv_comm_average"
+        android:text="@string/cr_com_ave"
+        android:gravity="center"
+        app:layout_constraintLeft_toLeftOf="@+id/cr_tv_percentile"
+        app:layout_constraintRight_toRightOf="@+id/cr_tv_percentile"
+        app:layout_constraintTop_toBottomOf="@+id/cr_tv_percentile"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:id="@+id/cr_tv_comm_average_value"
+        app:layout_constraintLeft_toRightOf="@id/cr_tv_comm_average"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/cr_tv_comm_average"
+        app:layout_constraintBottom_toBottomOf="@id/cr_tv_comm_average"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/cr_tv_comm_best"
+        android:gravity="center"
+        android:text="@string/cr_com_best"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="@+id/cr_tv_pr"
+        app:layout_constraintTop_toTopOf="@id/cr_tv_comm_average"
+        app:layout_constraintBottom_toBottomOf="@id/cr_tv_comm_average"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/cr_tv_comm_best_value"
+        android:gravity="center"
+        app:layout_constraintLeft_toRightOf="@id/cr_tv_comm_best"
+        app:layout_constraintRight_toLeftOf="@id/cr_tv_comm_average"
+        app:layout_constraintTop_toTopOf="@id/cr_tv_comm_best"
+        app:layout_constraintBottom_toBottomOf="@id/cr_tv_comm_best"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:id="@+id/cr_tv_stand_dev"
+        android:gravity="center"
+        android:text="@string/cr_stand_dev"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="@id/cr_tv_pr"
+        app:layout_constraintTop_toBottomOf="@id/cr_tv_comm_best"/>
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/cr_tv_stand_dev_value"
+        android:gravity="center"
+        app:layout_constraintLeft_toRightOf="@id/cr_tv_stand_dev"
+        app:layout_constraintTop_toTopOf="@id/cr_tv_stand_dev"
+        app:layout_constraintBottom_toBottomOf="@id/cr_tv_stand_dev"
+        app:layout_constraintRight_toRightOf="@id/cr_tv_pr_value"/>
 
 
 </android.support.constraint.ConstraintLayout>
