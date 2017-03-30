@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityRecyc
             SharedPreferences.Editor edit = PreferenceManager.getDefaultSharedPreferences(this)
                     .edit();
             edit.putString(getString(R.string.sp_email), null);
-            edit.commit();
+            edit.apply();
             Intent intent = new Intent(this, Login.class);
             startActivity(intent);
 

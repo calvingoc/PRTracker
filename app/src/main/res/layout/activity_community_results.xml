@@ -117,7 +117,7 @@
         app:layout_constraintLeft_toRightOf="@id/cr_tv_weight"
         app:layout_constraintTop_toTopOf="@id/cr_tv_weight"
         app:layout_constraintBottom_toBottomOf="@id/cr_tv_weight"
-        app:layout_constraintRight_toLeftOf="@id/cr_tv_weight"
+        app:layout_constraintRight_toRightOf="@id/cr_spin_gender"
         android:layout_marginBottom="0dp" />
 
     <TextView
@@ -130,7 +130,6 @@
         app:layout_constraintTop_toBottomOf="@+id/cr_tv_skill"
         android:layout_marginTop="0dp"
         app:layout_constraintHorizontal_bias="0.0"
-        android:layout_marginLeft="0dp"
         app:layout_constraintLeft_toLeftOf="@+id/cr_tv_skill" />
 
     <Spinner

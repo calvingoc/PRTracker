@@ -2,6 +2,8 @@ package online.cagocapps.prtracker;
 
 import android.app.Application;
 import android.content.ContentValues;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
@@ -16,6 +18,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -740,4 +744,44 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
         weightBased();
         mainAdapter.notifyDataSetChanged();
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.view_results_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.logout) {
+            SharedPreferences.Editor edit = PreferenceManager.getDefaultSharedPreferences(this)
+                    .edit();
+            edit.putString(getString(R.string.sp_email), null);
+            edit.apply();
+            Intent intent = new Intent(this, Login.class);
+            startActivity(intent);
+
+        } else if (id == R.id.edit_profile){
+            Intent intent = new Intent(this, ProfileActivity.class);
+            intent.putExtra(getString(R.string.new_user), false);
+            startActivity(intent);
+        } else if (id == R.id.view_results){
+            Intent intent = new Intent(this, ViewResults.class);
+            startActivity(intent);
+        } else if (id == R.id.community_results){
+            Intent intent = new Intent(this, CommunityResults.class);
+            startActivity(intent);
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
 }
