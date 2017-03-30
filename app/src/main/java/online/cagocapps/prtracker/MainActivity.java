@@ -149,6 +149,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityRecyc
         } else if (id == R.id.view_results){
             Intent intent = new Intent(this, ViewResults.class);
             startActivity(intent);
+        } else if (id == R.id.community_results){
+            Intent intent = new Intent(this, CommunityResults.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);

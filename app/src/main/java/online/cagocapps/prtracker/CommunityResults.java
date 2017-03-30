@@ -18,7 +18,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import online.cagocapps.prtracker.Data.ProfileContract;
 import online.cagocapps.prtracker.Data.ProfileDBHelper;
@@ -326,90 +325,199 @@ public class CommunityResults extends AppCompatActivity {
     }
 
     private void updatePage(){
-        final String userID = PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.sp_userID), null);
+        int userIDInt = PreferenceManager.getDefaultSharedPreferences(this).getInt(getString(R.string.sp_userID), -1);
+        final String userID = String.valueOf(userIDInt);
+        final float units = PreferenceManager.getDefaultSharedPreferences(this).getFloat(getString(R.string.sp_units), 1);
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Cursor prCursor = dbWrite.query(
-                        ProfileContract.ProfileValues.TABLE_NAME,
+                double pr = 0;
+                Cursor cursor = dbWrite.query(
+                        tableName,
                         null,
-                        ProfileContract.ProfileValues._ID + " = ?",
-                        new String[]{userID},
+                        ProfileContract.BarbellLifts.LIFT + " = ? and " + ProfileContract.BarbellLifts.PR + " =? and "+ ProfileContract.BarbellLifts.USER_ID +" = ?",
+                        new String[]{spinActivity.getSelectedItem().toString(), "1",userID},
                         null,
                         null,
                         null
                 );
-                if (prCursor.moveToFirst()) {
-                    String birthdate = prCursor.getString(prCursor.getColumnIndex(ProfileContract.ProfileValues.BIRTHDATE));
-                    Date now = new Date();
-                    int year = now.getYear() + 1900;
-                    int age = year - Integer.valueOf(birthdate);
-                    int topWeight = 99999;
-                    int botWeight = 0;
-                    if (spinWeight.getSelectedItem().toString().contains("-") ){
-                        String[] weights = spinWeight.getSelectedItem().toString().split("-");
-                        botWeight = Integer.valueOf(weights[0])/10;
-                        topWeight = Integer.valueOf(weights[1])/10;
-                    } else if (spinWeight.getSelectedItem().toString().contains("+")){
-                        botWeight = 23;
+                if (cursor.moveToFirst()) {
+                    if (tableName.equals(ProfileContract.BarbellLifts.TABLE_NAME) || tableName.equals(ProfileContract.DumbbellLifts.TABLE_NAME)) {
+                        String sets = cursor.getString(cursor.getColumnIndex(ProfileContract.BarbellLifts.ROUNDS));
+                        String reps = cursor.getString(cursor.getColumnIndex(ProfileContract.BarbellLifts.REPS));
+                        float weight = cursor.getFloat(cursor.getColumnIndex(ProfileContract.BarbellLifts.WEIGHT));
+                        tvPR.setText(sets + " X " + reps + " X " + Float.toString(weight * units));
+                    } else if (tableName.equals(ProfileContract.CrossFitStandards.TABLE_NAME)) {
+                        String rx = "";
+                        if (cursor.getInt(cursor.getColumnIndex(ProfileContract.CrossFitStandards.RX)) == 1) {
+                            rx = " Rx";
+                        }
+                        if (cursor.getString(cursor.getColumnIndex(ProfileContract.CrossFitStandards.TIME)) == null) {
+                            String sets = cursor.getString(cursor.getColumnIndex(ProfileContract.BarbellLifts.ROUNDS));
+                            String reps = cursor.getString(cursor.getColumnIndex(ProfileContract.BarbellLifts.REPS));
+                            tvPR.setText(sets + " Rounds " + reps + " Reps" + rx);
+                        } else {
+                            String sets = cursor.getString(cursor.getColumnIndex(ProfileContract.BarbellLifts.ROUNDS));
+                            String reps = cursor.getString(cursor.getColumnIndex(ProfileContract.BarbellLifts.REPS));
+                            int totalTime = cursor.getInt(cursor.getColumnIndex(ProfileContract.CrossFitStandards.TIME));
+                            String hours = Integer.toString(totalTime / 3600) + ":";
+                            String minutes = Integer.toString((totalTime % 3600) / 60) + ":";
+                            String seconds = Integer.toString(((totalTime % 3600) % 60));
+                            tvPR.setText(reps + " Reps in " + hours + minutes + seconds + rx);
+                        }
+                    } else if (tableName.equals(ProfileContract.Gymnastics.TABLE_NAME)) {
+                        if (cursor.getString(cursor.getColumnIndex(ProfileContract.Gymnastics.TIME)) == null) {
+                            String sets = cursor.getString(cursor.getColumnIndex(ProfileContract.Gymnastics.ROUNDS));
+                            String reps = cursor.getString(cursor.getColumnIndex(ProfileContract.Gymnastics.REPS));
+                            tvPR.setText(sets + " X " + reps);
+                        } else {
+                            int totalTime = cursor.getInt(cursor.getColumnIndex(ProfileContract.CrossFitStandards.TIME));
+                            String hours = Integer.toString(totalTime / 3600) + ":";
+                            String minutes = Integer.toString((totalTime % 3600) / 60) + ":";
+                            String seconds = Integer.toString(((totalTime % 3600) % 60));
+                            tvPR.setText(hours + minutes + seconds);
+                        }
+                    } else {
+                        int totalTime = cursor.getInt(cursor.getColumnIndex(ProfileContract.CrossFitStandards.TIME));
+                        String hours = Integer.toString(totalTime / 3600) + ":";
+                        String minutes = Integer.toString((totalTime % 3600) / 60) + ":";
+                        String seconds = Integer.toString(((totalTime % 3600) % 60));
+                        tvPR.setText(hours + minutes + seconds);
                     }
-                    String yearsAct = (Integer.toString(prCursor.getInt(prCursor.getColumnIndex(ProfileContract.ProfileValues.YEARS_ACTIVE))));
-                    String skill = String.valueOf(spinSkill.getSelectedItem().toString().charAt(0));
-                    int gender = -1;
-                    if (spinGender.getSelectedItem().toString().equals(getString(R.string.male))){
-                        gender = 0;
-                    } else if (spinGender.getSelectedItem().toString().equals("Female")){
-                        gender = 1;
-                    }
-                    String email = prCursor.getString(prCursor.getColumnIndex(ProfileContract.ProfileValues.EMAIL));
-                    email = email.replace(".","");
-                    prCursor.close();
-                    double pr = 0;
-                    double below = 0.0;
-                    double total = 0.0;
-                    double equal = 0.0;
-                    ArrayList<Integer> results = new ArrayList<Integer>();
-                    for (DataSnapshot genderData : dataSnapshot.child(spinActivity.getSelectedItem().toString()).getChildren()) {
-                        if(Integer.valueOf(genderData.getKey()) == gender ||
-                                gender == -1) {
-                            for(DataSnapshot skillData : genderData.getChildren()){
-                                if (skillData.getKey().equals(skill) || skill.equals("A")){
-                                    for(DataSnapshot weightData : skillData.getChildren() ){
-                                        if (Integer.valueOf(weightData.getKey()) >= botWeight && Integer.valueOf(weightData.getKey()) <= topWeight){
-
+                    pr = cursor.getDouble(cursor.getColumnIndex(compareColumn));
+                } else {
+                    tvPR.setText("");
+                    pr = 0;
+                }
+                cursor.close();
+                int topWeight = 99999;
+                int botWeight = 0;
+                if (spinWeight.getSelectedItem().toString().contains("-")) {
+                    String[] weights = spinWeight.getSelectedItem().toString().split("-");
+                    botWeight = Integer.valueOf(weights[0]) / 10;
+                    topWeight = Integer.valueOf(weights[1]) / 10;
+                } else if (spinWeight.getSelectedItem().toString().contains("+")) {
+                    botWeight = 23;
+                }
+                int topAge = 99999;
+                int botAge = 0;
+                if (spinAge.getSelectedItem().toString().contains("-")) {
+                    String[] ages = spinAge.getSelectedItem().toString().split("-");
+                    botAge = Integer.valueOf(ages[0]);
+                    topAge = Integer.valueOf(ages[1]);
+                } else if (spinWeight.getSelectedItem().toString().contains("+")) {
+                    botAge = 61;
+                }
+                int topAct = 99999;
+                int botAct = 0;
+                if (spinYears.getSelectedItem().toString().contains("-")) {
+                    String[] years = spinYears.getSelectedItem().toString().split("-");
+                    botAct = Integer.valueOf(years[0]);
+                    topAct = Integer.valueOf(years[1]);
+                } else if (spinWeight.getSelectedItem().toString().contains("+")) {
+                    botAge = 21;
+                }
+                String skill = String.valueOf(spinSkill.getSelectedItem().toString().charAt(0));
+                int gender = -1;
+                if (spinGender.getSelectedItem().toString().equals(getString(R.string.male))) {
+                    gender = 0;
+                } else if (spinGender.getSelectedItem().toString().equals("Female")) {
+                    gender = 1;
+                }
+                double below = 0.0;
+                double total = 0.0;
+                double equal = 0.0;
+                ArrayList<Integer> results = new ArrayList<>();
+                for (DataSnapshot genderData : dataSnapshot.child(spinActivity.getSelectedItem().toString()).getChildren()) {
+                    if (Integer.valueOf(genderData.getKey()) == gender ||
+                            gender == -1) {
+                        for (DataSnapshot skillData : genderData.getChildren()) {
+                            if (skillData.getKey().equals(skill) || skill.equals("A")) {
+                                for (DataSnapshot weightData : skillData.getChildren()) {
+                                    if (Integer.valueOf(weightData.getKey()) >= botWeight && Integer.valueOf(weightData.getKey()) <= topWeight) {
+                                        for (DataSnapshot ageData : weightData.getChildren()) {
+                                            if (Integer.valueOf(ageData.getKey()) >= botAge && Integer.valueOf(ageData.getKey()) <= topAge) {
+                                                for (DataSnapshot activeData : ageData.getChildren()) {
+                                                    if (Integer.valueOf(activeData.getKey()) >= botAct && Integer.valueOf(activeData.getKey()) <= topAct) {
+                                                        for (DataSnapshot resultsData : activeData.getChildren()) {
+                                                            ResultObject resultObject = resultsData.getValue(ResultObject.class);
+                                                            results.add(resultObject.getResult());
+                                                        }
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 }
-                        }
-                        ResultObject resultObject = comResult.getValue(ResultObject.class);
-                        results.add(resultObject.getResult());
-                        String curEmail = comResult.getKey();
-                        if (curEmail.equals(email)) {
-                            pr = resultObject.getResult();
+                            }
                         }
                     }
-                    for (int i : results) {
-                        if (i < pr) {
-                            below++;
-                            total++;
-                        } else if (i == pr) {
-                            equal++;
-                            total++;
-                        } else total++;
-                    }
-                    tvPercentile.setText(Double.toString((below + .5 * equal * 100) / total));
-
                 }
-
+                double totalResults = 0;
+                double minValue = 999999999;
+                double maxValue = 0;
+                for (int i : results) {
+                    totalResults = totalResults + i;
+                    if (compareColumn.equals(ProfileContract.Running.TIME)) {
+                        minValue = Math.min(minValue, i);
+                    } else maxValue = Math.max(maxValue, i);
+                    if (i < pr) {
+                        below++;
+                        total++;
+                    } else if (i == pr) {
+                        equal++;
+                        total++;
+                    } else total++;
+                }
+                double average = totalResults/total;
+                if (compareColumn.equals(ProfileContract.Running.TIME)) {
+                    String hours = Double.toString(average / 3600) + ":";
+                    String minutes = Double.toString((average % 3600) / 60) + ":";
+                    String seconds = Double.toString(((average % 3600) % 60));
+                    tvCommAverage.setText(hours + minutes + seconds);
+                } else if (compareColumn.equals(ProfileContract.BarbellLifts.ADJUSTED_ONE_REP_MAX)) {
+                    tvCommAverage.setText(Double.toString(average * units));
+                } else tvCommAverage.setText(Double.toString(average));
+                tvPercentile.setText(Double.toString((below + .5 * equal * 100) / total));
+                if (compareColumn.equals(ProfileContract.Running.TIME)) {
+                    String hours = Double.toString(minValue / 3600) + ":";
+                    String minutes = Double.toString((minValue % 3600) / 60) + ":";
+                    String seconds = Double.toString(((minValue % 3600) % 60));
+                    tvCommBest.setText(hours + minutes + seconds);
+                } else if (compareColumn.equals(ProfileContract.BarbellLifts.ADJUSTED_ONE_REP_MAX)) {
+                    tvCommBest.setText(Double.toString(maxValue * units));
+                } else tvCommBest.setText(Double.toString(maxValue));
+                double sdTotal = 0;
+                for (int i : results) {
+                    double sdTemp = average - i;
+                    sdTemp = sdTemp * sdTemp;
+                    sdTotal = sdTotal + sdTemp;
+                }
+                sdTotal = sdTotal/total;
+                sdTotal = Math.sqrt(sdTotal);
+                if (compareColumn.equals(ProfileContract.Running.TIME)) {
+                    String hours = Double.toString(sdTotal / 3600) + ":";
+                    String minutes = Double.toString((sdTotal % 3600) / 60) + ":";
+                    String seconds = Double.toString(((sdTotal % 3600) % 60));
+                    tvStandDev.setText(hours + minutes + seconds);
+                } else if (compareColumn.equals(ProfileContract.BarbellLifts.ADJUSTED_ONE_REP_MAX)) {
+                    tvStandDev.setText(Double.toString(sdTotal * units));
+                } else tvStandDev.setText(Double.toString(sdTotal));
             }
+
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
         });
-        }
-
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        dbWrite.close();
+    }
 }
+
+

@@ -576,11 +576,12 @@ public class AddResult extends AppCompatActivity {
                                double reps, int totalTime, int rx, int sets){
         Boolean newPr = false;
         int prValue = 0;
+        int userID = PreferenceManager.getDefaultSharedPreferences(this).getInt(getString(R.string.sp_userID), -1);
         Cursor cursor = dbWrite.query(
                 tableName,
                 null,
-                ProfileContract.BarbellLifts.LIFT + " = ? and " + ProfileContract.BarbellLifts.PR + " =?",
-                new String[]{activity, "1"},
+                ProfileContract.BarbellLifts.LIFT + " = ? and " + ProfileContract.BarbellLifts.PR + " =? and "+ ProfileContract.BarbellLifts.USER_ID +" = ?",
+                new String[]{activity, "1", Integer.toString(userID)},
                 null,
                 null,
                 null

@@ -115,7 +115,7 @@
         <item>4-6</item>
         <item>6-9</item>
         <item>10-20</item>
-        <item>20+</item>
+        <item>21+</item>
     </string-array>
 
     <string name="cr_personal_best">Your PR</string>
@@ -211,22 +211,22 @@
     <string name="fly">Fly</string>
 
     <array name="dumbbell_lifts_array">
-        <item>Squat Snatch</item>
-        <item>Power Snatch</item>
-        <item>Squat Clean</item>
-        <item>Power Clean</item>
-        <item>Clean and Jerk</item>
+        <item>DB Squat Snatch</item>
+        <item>DB Power Snatch</item>
+        <item>DB Squat Clean</item>
+        <item>DB Power Clean</item>
+        <item>DB Clean and Jerk</item>
         <item>Goblet Squat</item>
-        <item>Bench</item>
-        <item>Incline Bench</item>
-        <item>Decline Bench</item>
-        <item>Fly</item>
-        <item>Skull Crusher</item>
-        <item>Triceps Extension</item>
-        <item>Shoulder Press</item>
-        <item>Jerk Shoulder Press</item>
-        <item>Curl</item>
-        <item>Bent Over Row</item>
+        <item>DB Bench</item>
+        <item>DB Incline Bench</item>
+        <item>DB Decline Bench</item>
+        <item>DB Fly</item>
+        <item>DB Skull Crusher</item>
+        <item>DB Triceps Extension</item>
+        <item>DB Shoulder Press</item>
+        <item>DB Jerk Shoulder Press</item>
+        <item>DB Curl</item>
+        <item>DB Bent Over Row</item>
     </array>
 
     <!-- CrossFit Girls-->
