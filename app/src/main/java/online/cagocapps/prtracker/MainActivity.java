@@ -165,10 +165,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityRecyc
 
     @Override
     public void onClick(String tableName, String activity) {
-        Intent intent = new Intent(this, ViewResults.class);
-        intent.putExtra(getString(R.string.ar_tv_category), tableName);
-        intent.putExtra(getString(R.string.ar_tv_activity), activity);
-        startActivity(intent);
+        if(tableName.length()>0 && activity.length()>0) {
+            Intent intent = new Intent(this, ViewResults.class);
+            intent.putExtra(getString(R.string.ar_tv_category), tableName);
+            intent.putExtra(getString(R.string.ar_tv_activity), activity);
+            startActivity(intent);
+        }
     }
 
     @Override
