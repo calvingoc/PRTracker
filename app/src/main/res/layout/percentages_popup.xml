@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
+    android:layout_marginBottom="4dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginRight="4dp"
+    android:layout_marginLeft="4dp">
+
+    <TextView
+        android:id="@+id/per_tv_100"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:text="100%"
+        android:gravity="center"
+        android:background="@drawable/rectangle_border_textview"/>
+
+    <TextView
+        android:id="@+id/per_tv_100weight"
+        android:layout_width="50dp"
+        android:layout_height="0dp"
+        app:layout_constraintLeft_toRightOf="@+id/per_tv_100"
+        android:layout_marginLeft="0dp"
+        android:background="@drawable/rectangle_border_textview"
+        app:layout_constraintTop_toTopOf="@+id/per_tv_100"
+        android:layout_marginTop="0dp"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="@+id/per_tv_100"
+        android:layout_marginBottom="0dp" />
+
+    <TextView
+        android:id="@+id/per_tv_95"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="0dp"
+        android:text="95%"
+        android:background="@drawable/rectangle_border_textview"
+        android:gravity="center"
+        app:layout_constraintRight_toLeftOf="@+id/per_tv_100weight"
+        app:layout_constraintTop_toBottomOf="@+id/per_tv_100" />
+
+    <TextView
+        android:id="@+id/per_tv_95weight"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="0dp"
+        android:gravity="center"
+        android:background="@drawable/rectangle_border_textview"
+        app:layout_constraintBottom_toBottomOf="@+id/per_tv_95"
+        app:layout_constraintLeft_toLeftOf="@+id/per_tv_100weight"
+        app:layout_constraintRight_toRightOf="@+id/per_tv_100weight"
+        app:layout_constraintTop_toBottomOf="@+id/per_tv_100weight" />
+
+    <TextView
+        android:id="@+id/per_tv_90"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="0dp"
+        android:text="90%"
+        android:background="@drawable/rectangle_border_textview"
+        android:gravity="center"
+        app:layout_constraintRight_toLeftOf="@+id/per_tv_95weight"
+        app:layout_constraintTop_toBottomOf="@+id/per_tv_95" />
+
+    <TextView
+        android:id="@+id/per_tv_90weight"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="0dp"
+        android:gravity="center"
+        android:background="@drawable/rectangle_border_textview"
+        app:layout_constraintBottom_toBottomOf="@+id/per_tv_90"
+        app:layout_constraintLeft_toLeftOf="@+id/per_tv_95weight"
+        app:layout_constraintRight_toRightOf="@+id/per_tv_95weight"
+        app:layout_constraintTop_toBottomOf="@+id/per_tv_95weight" />
+
+    <TextView
+        android:id="@+id/per_tv_85"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="0dp"
+        android:text="85%"
+        android:background="@drawable/rectangle_border_textview"
+        android:gravity="center"
+        app:layout_constraintRight_toLeftOf="@+id/per_tv_90weight"
+        app:layout_constraintTop_toBottomOf="@+id/per_tv_90weight" />
+
+    <TextView
+        android:id="@+id/per_tv_85weight"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="0dp"
+        android:gravity="center"
+        android:background="@drawable/rectangle_border_textview"
+        app:layout_constraintBottom_toBottomOf="@+id/per_tv_85"
+        app:layout_constraintLeft_toRightOf="@+id/per_tv_85"
+        app:layout_constraintRight_toRightOf="@+id/per_tv_90weight"
+        app:layout_constraintTop_toBottomOf="@+id/per_tv_90weight" />
+
+    <TextView
+        android:id="@+id/per_tv_80"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="0dp"
+        android:text="80%"
+        android:background="@drawable/rectangle_border_textview"
+        android:gravity="center"
+        app:layout_constraintRight_toLeftOf="@+id/per_tv_85weight"
+        app:layout_constraintTop_toBottomOf="@+id/per_tv_85" />
+
+    <TextView
+        android:id="@+id/per_tv_80weight"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="0dp"
+        android:gravity="center"
+        android:background="@drawable/rectangle_border_textview"
+        app:layout_constraintBottom_toBottomOf="@+id/per_tv_80"
+        app:layout_constraintLeft_toRightOf="@+id/per_tv_80"
+        app:layout_constraintRight_toRightOf="@+id/per_tv_85weight"
+        app:layout_constraintTop_toBottomOf="@+id/per_tv_85weight" />
+
+    <TextView
+        android:id="@+id/per_tv_75"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="0dp"
+        android:text="75%"
+        android:background="@drawable/rectangle_border_textview"
+        android:gravity="center"
+        app:layout_constraintRight_toLeftOf="@+id/per_tv_80weight"
+        app:layout_constraintTop_toBottomOf="@+id/per_tv_80weight" />
+
+    <TextView
+        android:id="@+id/per_tv_75weight"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="0dp"
+        android:gravity="center"
+        android:background="@drawable/rectangle_border_textview"
+        app:layout_constraintBottom_toBottomOf="@+id/per_tv_75"
+        app:layout_constraintLeft_toRightOf="@+id/per_tv_75"
+        app:layout_constraintRight_toRightOf="@+id/per_tv_80weight"
+        app:layout_constraintTop_toBottomOf="@+id/per_tv_80weight" />
+
+    <TextView
+        android:id="@+id/per_tv_70"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        android:text="70%"
+        android:background="@drawable/rectangle_border_textview"
+        android:gravity="center"
+        app:layout_constraintBottom_toTopOf="@+id/per_tv_95weight"
+        app:layout_constraintLeft_toRightOf="@+id/per_tv_100weight"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/per_tv_65"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        android:text="65%"
+        android:background="@drawable/rectangle_border_textview"
+        android:gravity="center"
+        app:layout_constraintLeft_toRightOf="@+id/per_tv_95weight"
+        app:layout_constraintTop_toBottomOf="@+id/per_tv_70" />
+
+    <TextView
+        android:id="@+id/per_tv_60"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        android:text="60%"
+        android:background="@drawable/rectangle_border_textview"
+        android:gravity="center"
+        app:layout_constraintLeft_toRightOf="@+id/per_tv_90weight"
+        app:layout_constraintTop_toBottomOf="@+id/per_tv_65" />
+
+    <TextView
+        android:id="@+id/per_tv_55"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        android:text="55%"
+        android:background="@drawable/rectangle_border_textview"
+        android:gravity="center"
+        app:layout_constraintLeft_toRightOf="@+id/per_tv_85weight"
+        app:layout_constraintTop_toBottomOf="@+id/per_tv_60" />
+
+    <TextView
+        android:id="@+id/per_tv_50"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        android:text="50%"
+        android:background="@drawable/rectangle_border_textview"
+        android:gravity="center"
+        app:layout_constraintLeft_toRightOf="@+id/per_tv_80weight"
+        app:layout_constraintTop_toBottomOf="@+id/per_tv_55" />
+
+    <TextView
+        android:id="@+id/per_tv_45"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        android:text="45%"
+        android:background="@drawable/rectangle_border_textview"
+        android:gravity="center"
+        app:layout_constraintLeft_toRightOf="@+id/per_tv_75weight"
+        app:layout_constraintTop_toBottomOf="@+id/per_tv_50" />
+
+    <TextView
+        android:id="@+id/per_tv_70weight"
+        android:layout_width="50dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        android:gravity="center"
+        android:background="@drawable/rectangle_border_textview"
+        app:layout_constraintBottom_toTopOf="@+id/per_tv_65"
+        app:layout_constraintLeft_toRightOf="@+id/per_tv_70"
+        app:layout_constraintTop_toTopOf="@+id/per_tv_70" />
+
+    <TextView
+        android:id="@+id/per_tv_65weight"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="0dp"
+        android:gravity="center"
+        android:background="@drawable/rectangle_border_textview"
+        app:layout_constraintBottom_toTopOf="@+id/per_tv_60"
+        app:layout_constraintLeft_toRightOf="@+id/per_tv_65"
+        app:layout_constraintRight_toRightOf="@+id/per_tv_70weight"
+        app:layout_constraintTop_toBottomOf="@+id/per_tv_70weight" />
+
+    <TextView
+        android:id="@+id/per_tv_60weight"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="0dp"
+        android:gravity="center"
+        android:background="@drawable/rectangle_border_textview"
+        app:layout_constraintBottom_toTopOf="@+id/per_tv_55"
+        app:layout_constraintLeft_toRightOf="@+id/per_tv_60"
+        app:layout_constraintRight_toRightOf="@+id/per_tv_65weight"
+        app:layout_constraintTop_toBottomOf="@+id/per_tv_65weight" />
+
+    <TextView
+        android:id="@+id/per_tv_55weight"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="0dp"
+        android:gravity="center"
+        android:background="@drawable/rectangle_border_textview"
+        app:layout_constraintBottom_toTopOf="@+id/per_tv_50"
+        app:layout_constraintLeft_toRightOf="@+id/per_tv_55"
+        app:layout_constraintRight_toRightOf="@+id/per_tv_60weight"
+        app:layout_constraintTop_toBottomOf="@+id/per_tv_60weight" />
+
+    <TextView
+        android:id="@+id/per_tv_50weight"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="0dp"
+        android:gravity="center"
+        android:background="@drawable/rectangle_border_textview"
+        app:layout_constraintBottom_toTopOf="@+id/per_tv_45"
+        app:layout_constraintLeft_toRightOf="@+id/per_tv_50"
+        app:layout_constraintRight_toRightOf="@+id/per_tv_55weight"
+        app:layout_constraintTop_toBottomOf="@+id/per_tv_55weight" />
+
+    <TextView
+        android:id="@+id/per_tv_45weight"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="0dp"
+        android:gravity="center"
+        android:background="@drawable/rectangle_border_textview"
+        app:layout_constraintBottom_toBottomOf="@+id/per_tv_45"
+        app:layout_constraintLeft_toRightOf="@+id/per_tv_45"
+        app:layout_constraintRight_toRightOf="@+id/per_tv_50weight"
+        app:layout_constraintTop_toBottomOf="@+id/per_tv_50weight" />
+
+    <Button
+        android:id="@+id/per_button_close"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="0dp"
+        android:background="@drawable/orange_button"
+        android:text="@string/close"
+        app:layout_constraintLeft_toLeftOf="@+id/per_tv_75"
+        app:layout_constraintRight_toRightOf="@+id/per_tv_45weight"
+        app:layout_constraintTop_toBottomOf="@+id/per_tv_75weight" />
+</android.support.constraint.ConstraintLayout>

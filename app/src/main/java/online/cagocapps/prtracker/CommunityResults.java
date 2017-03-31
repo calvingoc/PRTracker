@@ -29,6 +29,7 @@ import online.cagocapps.prtracker.Data.ProfileDBHelper;
 import online.cagocapps.prtracker.Data.ResultObject;
 
 public class CommunityResults extends AppCompatActivity {
+    //set up view variables
     private Spinner spinActivity;
     private Spinner spinCategory;
     private Spinner spinGender;
@@ -41,24 +42,34 @@ public class CommunityResults extends AppCompatActivity {
     private TextView tvCommBest;
     private TextView tvCommAverage;
     private TextView tvStandDev;
+
+    //variables for SQL queries
     private String tableName;
     private String compareColumn;
 
+    //database variables
     private ProfileDBHelper dbHelper;
     private SQLiteDatabase dbWrite;
     private DatabaseReference mDatabase;
 
     private final String TAG = "Community Results";
 
+
+    /**
+     * set up the activity
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_community_results);
 
+        //set up database
         dbHelper = new ProfileDBHelper(this);
         dbWrite = dbHelper.getWritableDatabase();
-
         mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        //find views
         spinActivity = (Spinner) findViewById(R.id.cr_spin_activity);
         spinCategory = (Spinner) findViewById(R.id.cr_spin_category);
         spinGender = (Spinner) findViewById(R.id.cr_spin_gender);
@@ -71,6 +82,8 @@ public class CommunityResults extends AppCompatActivity {
         tvCommBest = (TextView) findViewById(R.id.cr_tv_comm_best_value);
         tvCommAverage = (TextView) findViewById(R.id.cr_tv_comm_average_value);
         tvStandDev = (TextView) findViewById(R.id.cr_tv_stand_dev_value);
+
+        //add listeners to spinners to the page is updated correctly when their values change.
         spinCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -331,16 +344,22 @@ public class CommunityResults extends AppCompatActivity {
         });
     }
 
+    /**
+     * update page to display the correct values for the current activity and community selection
+     */
     private void updatePage(){
+        //set up varibles needed to find user's PR and display page correctly
         int userIDInt = PreferenceManager.getDefaultSharedPreferences(this).getInt(getString(R.string.sp_userID), -1);
         final String userID = String.valueOf(userIDInt);
         final float units = PreferenceManager.getDefaultSharedPreferences(this).getFloat(getString(R.string.sp_units), 1);
+
+        //calculate the stats based off of current community results
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 try {
                     double pr = 0;
-                    Cursor cursor = dbWrite.query(
+                    Cursor cursor = dbWrite.query(//find the user's pr for the given activity
                             tableName,
                             null,
                             ProfileContract.BarbellLifts.LIFT + " = ? and " + ProfileContract.BarbellLifts.PR + " =? and " + ProfileContract.BarbellLifts.USER_ID + " = ?",
@@ -349,7 +368,7 @@ public class CommunityResults extends AppCompatActivity {
                             null,
                             null
                     );
-                    if (cursor.moveToFirst()) {
+                    if (cursor.moveToFirst()) {//finds the correct pr and formats it correctly based off of table and results
                         if (tableName.equals(ProfileContract.BarbellLifts.TABLE_NAME) || tableName.equals(ProfileContract.DumbbellLifts.TABLE_NAME)) {
                             String sets = cursor.getString(cursor.getColumnIndex(ProfileContract.BarbellLifts.ROUNDS));
                             String reps = cursor.getString(cursor.getColumnIndex(ProfileContract.BarbellLifts.REPS));
@@ -398,6 +417,7 @@ public class CommunityResults extends AppCompatActivity {
                         pr = 0;
                     }
                     cursor.close();
+                    //finds weight range
                     int topWeight = 99999;
                     int botWeight = 0;
                     if (spinWeight.getSelectedItem().toString().contains("-")) {
@@ -407,6 +427,7 @@ public class CommunityResults extends AppCompatActivity {
                     } else if (spinWeight.getSelectedItem().toString().contains("+")) {
                         botWeight = 23;
                     }
+                    //find age range
                     int topAge = 99999;
                     int botAge = 0;
                     if (spinAge.getSelectedItem().toString().contains("-")) {
@@ -416,6 +437,7 @@ public class CommunityResults extends AppCompatActivity {
                     } else if (spinWeight.getSelectedItem().toString().contains("+")) {
                         botAge = 61;
                     }
+                    //find years active range
                     int topAct = 99999;
                     int botAct = 0;
                     if (spinYears.getSelectedItem().toString().contains("-")) {
@@ -425,17 +447,20 @@ public class CommunityResults extends AppCompatActivity {
                     } else if (spinWeight.getSelectedItem().toString().contains("+")) {
                         botAge = 21;
                     }
+                    //find skill level
                     String skill = String.valueOf(spinSkill.getSelectedItem().toString().charAt(0));
+                    //find selected gender
                     int gender = -1;
                     if (spinGender.getSelectedItem().toString().equals(getString(R.string.male))) {
                         gender = 0;
                     } else if (spinGender.getSelectedItem().toString().equals("Female")) {
                         gender = 1;
                     }
+                    //set up variables needed to calculate stats
                     double below = 0.0;
                     double total = 0.0;
                     double equal = 0.0;
-                    ArrayList<Integer> results = new ArrayList<>();
+                    ArrayList<Integer> results = new ArrayList<>(); //array to hold results that match criteria
                     for (DataSnapshot genderData : dataSnapshot.child(spinActivity.getSelectedItem().toString()).getChildren()) {
                         if (Integer.valueOf(genderData.getKey()) == gender ||
                                 gender == -1) {
@@ -449,7 +474,7 @@ public class CommunityResults extends AppCompatActivity {
                                                         if (Integer.valueOf(activeData.getKey()) >= botAct && Integer.valueOf(activeData.getKey()) <= topAct) {
                                                             for (DataSnapshot resultsData : activeData.getChildren()) {
                                                                 ResultObject resultObject = resultsData.getValue(ResultObject.class);
-                                                                results.add(resultObject.getResult());
+                                                                results.add(resultObject.getResult());//save result if it matches all required criteria
                                                             }
                                                         }
                                                     }
@@ -461,6 +486,7 @@ public class CommunityResults extends AppCompatActivity {
                             }
                         }
                     }
+                    //calculate percentile
                     double totalResults = 0;
                     double minValue = 999999999;
                     double maxValue = 0;
@@ -477,6 +503,7 @@ public class CommunityResults extends AppCompatActivity {
                             total++;
                         } else total++;
                     }
+                    //calculate and format average
                     double average = totalResults / total;
                     if (compareColumn.equals(ProfileContract.Running.TIME)) {
                         String hours = Double.toString(average / 3600) + ":";
@@ -487,6 +514,7 @@ public class CommunityResults extends AppCompatActivity {
                         tvCommAverage.setText(Double.toString(average * units));
                     } else tvCommAverage.setText(Double.toString(average));
                     tvPercentile.setText(Double.toString((below + .5 * equal * 100) / total));
+                    //find and format community best
                     if (compareColumn.equals(ProfileContract.Running.TIME)) {
                         String hours = Double.toString(minValue / 3600) + ":";
                         String minutes = Double.toString((minValue % 3600) / 60) + ":";
@@ -495,6 +523,8 @@ public class CommunityResults extends AppCompatActivity {
                     } else if (compareColumn.equals(ProfileContract.BarbellLifts.ADJUSTED_ONE_REP_MAX)) {
                         tvCommBest.setText(Double.toString(maxValue * units));
                     } else tvCommBest.setText(Double.toString(maxValue));
+
+                    //calculate standard deviation
                     double sdTotal = 0;
                     for (int i : results) {
                         double sdTemp = average - i;
@@ -525,7 +555,11 @@ public class CommunityResults extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * set up menu for activity
+     * @param menu menu to inflate
+     * @return true if inflated correctly
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -533,6 +567,11 @@ public class CommunityResults extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * handle menu items getting clicked
+     * @param item item that was clicked
+     * @return true if click handled correctly
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will

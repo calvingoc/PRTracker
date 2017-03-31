@@ -60,6 +60,7 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
     private RecyclerView recyclerViewResults;
     private TextView prValue;
     private TextView percentileValue;
+    private Button percentagesButton;
 
     private ViewResultsRecycAdapter mainAdapter;
 
@@ -73,6 +74,7 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
     private boolean plank;
     public boolean firstTime = false;
     public int positionAct;
+    private double prWeight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +95,7 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
         dbWrite = dbHelper.getWritableDatabase();
         prValue = (TextView) findViewById(R.id.vr_tv_prvalue);
         percentileValue = (TextView) findViewById(R.id.vr_tv_percentilevalue);
+        percentagesButton = (Button) findViewById(R.id.vr_button_percentages);
 
         userID = PreferenceManager.getDefaultSharedPreferences(this).getInt(getString(R.string.sp_userID), 1);
         units = PreferenceManager.getDefaultSharedPreferences(this).getFloat(getString(R.string.sp_units), 1);
@@ -456,6 +459,13 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
     }
 
     private void weightBased(){
+        if (compareColumn.equals(ProfileContract.BarbellLifts.ADJUSTED_ONE_REP_MAX)){
+            percentagesButton.setEnabled(true);
+            percentagesButton.setVisibility(View.VISIBLE);
+        }else {
+            percentagesButton.setEnabled(false);
+            percentagesButton.setVisibility(View.INVISIBLE);
+        }
         Cursor cursor = dbWrite.query(
                 tableName,
                 null,
@@ -493,6 +503,7 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
             if (graphResults[i].doubleValue() < min.doubleValue()) min = allResults[i];
             if (pr[i] == 1){
                 if(compareColumn.equals(ProfileContract.BarbellLifts.ADJUSTED_ONE_REP_MAX)){
+                    prWeight = cursor.getDouble(cursor.getColumnIndex(ProfileContract.BarbellLifts.ADJUSTED_ONE_REP_MAX));
                     String formattedResults = Integer.toString(sets[i]) + " X " + Integer.toString(reps[i]) + " X " + Integer.toString(allResults[i].intValue());
                     prValue.setText(formattedResults);
                 } else if (compareColumn.equals(ProfileContract.Running.TIME)){
@@ -521,6 +532,7 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
             if (graphResults[i].doubleValue() < min.doubleValue()) min = allResults[i];
             if (pr[i] == 1) {
                 if (compareColumn.equals(ProfileContract.BarbellLifts.ADJUSTED_ONE_REP_MAX)) {
+                    prWeight = cursor.getDouble(cursor.getColumnIndex(ProfileContract.BarbellLifts.ADJUSTED_ONE_REP_MAX));
                     String formattedResults = Integer.toString(sets[i]) + " X " + Integer.toString(reps[i]) + " X " + Integer.toString(allResults[i].intValue());
                     prValue.setText(formattedResults);
                 } else if (compareColumn.equals(ProfileContract.Running.TIME)) {
@@ -624,8 +636,48 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
                         return null;
                     }
                 });
-        //plotResultsGraph.setRangeBoundaries(min, max, BoundaryMode.FIXED);
+        plotResultsGraph.setRangeBoundaries(min, max, BoundaryMode.FIXED);
     }
+
+    public void percentagesPopup(View view){
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
+        View customView = inflater.inflate(R.layout.percentages_popup, null);
+        final PopupWindow mPopupWindow = new PopupWindow(customView,RecyclerView.LayoutParams.WRAP_CONTENT, RecyclerView.LayoutParams.WRAP_CONTENT);
+        mPopupWindow.setElevation(5.0f);
+        TextView w100 = (TextView) customView.findViewById(R.id.per_tv_100weight);
+        TextView w95 = (TextView) customView.findViewById(R.id.per_tv_95weight);
+        TextView w90 = (TextView) customView.findViewById(R.id.per_tv_90weight);
+        TextView w85 = (TextView) customView.findViewById(R.id.per_tv_85weight);
+        TextView w80 = (TextView) customView.findViewById(R.id.per_tv_80weight);
+        TextView w75 = (TextView) customView.findViewById(R.id.per_tv_75weight);
+        TextView w70 = (TextView) customView.findViewById(R.id.per_tv_70weight);
+        TextView w65 = (TextView) customView.findViewById(R.id.per_tv_65weight);
+        TextView w60 = (TextView) customView.findViewById(R.id.per_tv_60weight);
+        TextView w55 = (TextView) customView.findViewById(R.id.per_tv_55weight);
+        TextView w50 = (TextView) customView.findViewById(R.id.per_tv_50weight);
+        TextView w45 = (TextView) customView.findViewById(R.id.per_tv_45weight);
+        Button close = (Button) customView.findViewById(R.id.per_button_close);
+        w100.setText(String.format("%.2f", prWeight));
+        w95.setText(String.format("%.2f",prWeight * .95));
+        w90.setText(String.format("%.2f",prWeight * .90));
+        w85.setText(String.format("%.2f",prWeight * .85));
+        w80.setText(String.format("%.2f",prWeight * .80));
+        w75.setText(String.format("%.2f",prWeight * .75));
+        w70.setText(String.format("%.2f",prWeight * .70));
+        w65.setText(String.format("%.2f",prWeight * .65));
+        w60.setText(String.format("%.2f",prWeight * .60));
+        w55.setText(String.format("%.2f",prWeight * .55));
+        w50.setText(String.format("%.2f",prWeight * .5));
+        w45.setText(String.format("%.2f",prWeight * .45));
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPopupWindow.dismiss();
+            }
+        });
+        mPopupWindow.showAtLocation(findViewById(R.id.view_results_view), Gravity.CENTER,0,0);
+    }
+
 
     @Override
     protected void onDestroy() {
@@ -633,15 +685,14 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
         dbWrite.close();
     }
 
+
     @Override
     public void onClick(final String deleteID, String date) {
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
 
         View customView = inflater.inflate(R.layout.delete_result_popup, null);
         final PopupWindow mPopupWindow = new PopupWindow(customView, RecyclerView.LayoutParams.WRAP_CONTENT, RecyclerView.LayoutParams.WRAP_CONTENT);
-        if(Build.VERSION.SDK_INT >= 21){
-            mPopupWindow.setElevation(5.0f);
-        }
+        mPopupWindow.setElevation(5.0f);
         Button yesButton = (Button) customView.findViewById(R.id.popup_button_yes);
         Button noButton = (Button) customView.findViewById(R.id.popup_button_no);
         TextView deleMes = (TextView) customView.findViewById(R.id.popup_tv_message);

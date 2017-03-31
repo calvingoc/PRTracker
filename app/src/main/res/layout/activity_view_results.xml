@@ -48,24 +48,24 @@
         app:layout_constraintTop_toBottomOf="@+id/vr_spin_category" />
 
     <TextView
-        android:layout_width="100dp"
+        android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/vr_tv_pr"
-        android:gravity="center"
+        android:gravity="right|center_vertical"
         android:text="PR"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/vr_spin_activity"/>
 
     <TextView
-        android:layout_width="75dp"
-        android:layout_height="0dp"
         android:id="@+id/vr_tv_prvalue"
-        android:gravity="center"
-        app:layout_constraintLeft_toRightOf="@id/vr_tv_pr"
-        app:layout_constraintTop_toTopOf="@id/vr_tv_pr"
-        app:layout_constraintBottom_toBottomOf="@id/vr_tv_pr"/>
-    <TextView
         android:layout_width="100dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="@id/vr_tv_pr"
+        app:layout_constraintLeft_toRightOf="@id/vr_tv_pr"
+        app:layout_constraintTop_toTopOf="@id/vr_tv_pr" />
+    <TextView
+        android:layout_width="80dp"
         android:layout_height="0dp"
         android:id="@+id/vr_tv_percentile"
         android:text="Percentile"
@@ -73,12 +73,27 @@
         app:layout_constraintLeft_toRightOf="@id/vr_tv_prvalue"
         app:layout_constraintTop_toTopOf="@id/vr_tv_pr"
         app:layout_constraintBottom_toBottomOf="@id/vr_tv_pr"/>
+
     <TextView
+        android:id="@+id/vr_tv_percentilevalue"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:id="@+id/vr_tv_percentilevalue"
         android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="@id/vr_tv_pr"
         app:layout_constraintLeft_toRightOf="@id/vr_tv_percentile"
+        app:layout_constraintTop_toTopOf="@id/vr_tv_pr"
+        app:layout_constraintRight_toLeftOf="@+id/vr_button_percentages"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        app:layout_constraintVertical_bias="0.0" />
+    <Button
+        android:layout_width="75dp"
+        android:layout_height="0dp"
+        android:id="@+id/vr_button_percentages"
+        android:text="@string/percentages"
+        android:textSize="20sp"
+        android:background="@drawable/orange_button"
+        android:onClick="percentagesPopup"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@id/vr_tv_pr"
         app:layout_constraintBottom_toBottomOf="@id/vr_tv_pr"/>
