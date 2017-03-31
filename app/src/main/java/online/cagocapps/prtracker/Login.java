@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.preference.PreferenceManager;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,6 +27,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.FirebaseDatabase;
 
 import online.cagocapps.prtracker.Data.ProfileContract;
@@ -193,7 +195,11 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         mAuth.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+                        try {
+                            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+                        }catch (DatabaseException e){
+                            Log.d(TAG,"Persistence exception " + e);
+                        }
                         }
                     }
 
