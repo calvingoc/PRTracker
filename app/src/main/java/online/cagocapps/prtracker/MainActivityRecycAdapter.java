@@ -37,14 +37,16 @@ import online.cagocapps.prtracker.Data.ProfileDBHelper;
 import online.cagocapps.prtracker.Data.ResultObject;
 
 /**
+ * sets up and populates the main activity's recycler view
  * Created by cgehredo on 3/16/2017.
  */
 
 public class MainActivityRecycAdapter extends RecyclerView.Adapter<MainActivityRecycAdapter.mainActivityRecycAdapterViewHolder> {
 
-
+    //database vars
     private ProfileDBHelper dbHelper;
     private SQLiteDatabase dbRead;
+    //display vars
     private String userID;
     private String tableName;
     private String resultID;
@@ -53,15 +55,24 @@ public class MainActivityRecycAdapter extends RecyclerView.Adapter<MainActivityR
 
     private final MainActivityRecycAdapterOnClickHandler mClickHandler;
 
+    /**
+     * handle view getting clicked, passes the tablename and activity back to MainActivity.class
+     */
     public  interface MainActivityRecycAdapterOnClickHandler{
         void onClick(String tableName, String activity);
     }
 
+    /**
+     * localize click handler
+     * @param clickHandler click handler to localize
+     */
     public MainActivityRecycAdapter(MainActivityRecycAdapterOnClickHandler clickHandler){
         mClickHandler = clickHandler;
     }
 
-
+    /**
+     * links variables to views and sets up on click listener
+     */
     public class mainActivityRecycAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public final TextView tvActivity;
         public final ImageView ivPR;
@@ -71,13 +82,21 @@ public class MainActivityRecycAdapter extends RecyclerView.Adapter<MainActivityR
         public final TextView tvPercentile;
         public final TextView tvTableName;
 
-
+        /**
+         * sets up on click listener for entire view
+         * listener takes the table and activity for the result
+         * @param view view that gets the listener
+         */
         @Override
         public void onClick(View view) {
 
             mClickHandler.onClick(tvTableName.getText().toString(), tvActivity.getText().toString());
         }
 
+        /**
+         * links vars to views
+         * @param itemView view that holds the layout
+         */
         public mainActivityRecycAdapterViewHolder(View itemView) {
             super(itemView);
             tvActivity = (TextView) itemView.findViewById(R.id.mai_tv_activity);
@@ -93,6 +112,12 @@ public class MainActivityRecycAdapter extends RecyclerView.Adapter<MainActivityR
         }
     }
 
+    /**
+     * sets up varibles to use in the view and inflates each item
+     * @param parent parent view
+     * @param viewType not used
+     * @return
+     */
     @Override
     public mainActivityRecycAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         context = parent.getContext();
@@ -104,10 +129,15 @@ public class MainActivityRecycAdapter extends RecyclerView.Adapter<MainActivityR
         return new mainActivityRecycAdapterViewHolder(view);
     }
 
+    /**
+     * sets up each item with the correct results
+     * @param holder current view
+     * @param position where in the list of results we are
+     */
     @Override
     public void onBindViewHolder(final mainActivityRecycAdapterViewHolder holder, int position) {
         if (userID != null) {
-            Cursor recentCursor = dbRead.query(
+            Cursor recentCursor = dbRead.query(//find user's recent results
                     ProfileContract.RecentLifts.TABLE_NAME,
                     null,
                     ProfileContract.RecentLifts._ID + " = ?",
@@ -117,7 +147,7 @@ public class MainActivityRecycAdapter extends RecyclerView.Adapter<MainActivityR
                     null
             );
             if (recentCursor.moveToFirst()) {
-                switch (position) {
+                switch (position) {//pull in the correct results based off of position
                     case 0:
                         tableName = ProfileContract.RecentLifts.RESULT_ONE_TABLE;
                         resultID = ProfileContract.RecentLifts.RESULT_ONE_ID;
@@ -144,7 +174,7 @@ public class MainActivityRecycAdapter extends RecyclerView.Adapter<MainActivityR
                 resultID = recentCursor.getString(recentCursor.getColumnIndex(resultID));
                 holder.tvTableName.setText(tableName);
                 recentCursor.close();
-                if (tableName != null && tableName.length()!= 0 && !tableName.equals("")) {
+                if (tableName != null && tableName.length()!= 0 && !tableName.equals("")) {//finds actual results
                     Cursor thisResult = dbRead.query(
                             tableName,
                             null,
@@ -154,13 +184,13 @@ public class MainActivityRecycAdapter extends RecyclerView.Adapter<MainActivityR
                             null,
                             null
                     );
-                    thisResult.moveToFirst();
+                    thisResult.moveToFirst();//finds result and formats it correctly
                     final String activity = thisResult.getString(thisResult.getColumnIndex(ProfileContract.BarbellLifts.LIFT));
                     holder.tvActivity.setText(activity);
                     if(thisResult.getString(thisResult.getColumnIndex(ProfileContract.BarbellLifts.COMMENTS)).length() != 0){
                         holder.tvNotes.setText(thisResult.getString(thisResult.getColumnIndex(ProfileContract.BarbellLifts.COMMENTS)));
                     } else holder.tvNotes.setGravity(View.TEXT_ALIGNMENT_CENTER);
-                    if (thisResult.getInt(thisResult.getColumnIndex(ProfileContract.BarbellLifts.PR)) == 1) {
+                    if (thisResult.getInt(thisResult.getColumnIndex(ProfileContract.BarbellLifts.PR)) == 1) {//show logo if a PR
                         holder.ivPR.setVisibility(View.VISIBLE);
                     } else holder.ivPR.setVisibility(View.INVISIBLE);
                     if (tableName.equals(ProfileContract.BarbellLifts.TABLE_NAME) || tableName.equals(ProfileContract.DumbbellLifts.TABLE_NAME)) {
@@ -206,7 +236,7 @@ public class MainActivityRecycAdapter extends RecyclerView.Adapter<MainActivityR
                         holder.tvResults.setText(hours + minutes + seconds);
                     }
                     thisResult.close();
-                    Cursor graphCursor = dbRead.query(
+                    Cursor graphCursor = dbRead.query(//finds the last ten results of this lift to graph
                             tableName,
                             null,
                             ProfileContract.BarbellLifts.LIFT + " = ?",
@@ -216,7 +246,7 @@ public class MainActivityRecycAdapter extends RecyclerView.Adapter<MainActivityR
                             null
                     );
                     Number[] results = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-                    for (int i = 0; i < 10; i++) {
+                    for (int i = 0; i < 10; i++) {//set up graph arrays
                         if (i == 0){
                             if(graphCursor.moveToLast()) {
                                 if (tableName.equals(ProfileContract.BarbellLifts.TABLE_NAME) || tableName.equals(ProfileContract.DumbbellLifts.TABLE_NAME)) {
@@ -260,7 +290,7 @@ public class MainActivityRecycAdapter extends RecyclerView.Adapter<MainActivityR
                                 }
                             }
                         }
-                    }
+                    }//find min and max results of last ten results
                     Number max = 0;
                     Number min = 1000000;
                     for (Number value : results) {
@@ -271,6 +301,7 @@ public class MainActivityRecycAdapter extends RecyclerView.Adapter<MainActivityR
                     if (min.doubleValue() < 0) min = 0;
                     max = max.doubleValue() + (max.doubleValue()/10.0);
                     graphCursor.close();
+                    //set up graph
                     final Number[] domainLabels = {1, 2, 3, 6, 7, 8, 9, 10, 13, 14};
                     XYSeries resultsSeries = new SimpleXYSeries(
                             Arrays.asList(results), SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "Last Ten Results");
@@ -294,7 +325,7 @@ public class MainActivityRecycAdapter extends RecyclerView.Adapter<MainActivityR
                                 }
                             });
                     holder.plotResultsGraph.setRangeBoundaries(min, max, BoundaryMode.FIXED);
-
+                    //read from realtime data base to find what percentile you are in.
                     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
                     mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -360,11 +391,20 @@ public class MainActivityRecycAdapter extends RecyclerView.Adapter<MainActivityR
         }
     }
 
+    /**
+     * returns number of items in recycler view
+     * @return number of items always 5 for recent results
+     */
     @Override
     public int getItemCount() {
         return 5;
     }
 
+    /**
+     * localizes information needed to set up view
+     * @param id current user ID
+     * @param units preferred units
+     */
     public void setUserID(String id, float units){
         this.units = units;
         userID = id;

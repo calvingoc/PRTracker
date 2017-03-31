@@ -16,10 +16,12 @@ import java.util.List;
 import online.cagocapps.prtracker.Data.ProfileContract;
 
 /**
+ * Recycler view to display all results
  * Created by cgehredo on 3/21/2017.
  */
 
 public class ViewResultsRecycAdapter extends RecyclerView.Adapter<ViewResultsRecycAdapter.viewResultsRecycAdapterViewHolder> {
+    //result variables
     private Number[] results;
     private Long[] dates;
     private int[] pr;

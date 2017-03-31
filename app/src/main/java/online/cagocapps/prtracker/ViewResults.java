@@ -54,6 +54,7 @@ import online.cagocapps.prtracker.Data.ProfileDBHelper;
 import online.cagocapps.prtracker.Data.ResultObject;
 
 public class ViewResults extends AppCompatActivity implements ViewResultsRecycAdapter.vrRecycAdapOnClickHandler{
+    //view vars
     private Spinner spinActivity;
     private Spinner spinCategory;
     private XYPlot plotResultsGraph;
@@ -64,14 +65,15 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
 
     private ViewResultsRecycAdapter mainAdapter;
 
+    //database vars
     private ProfileDBHelper dbHelper;
     private SQLiteDatabase dbWrite;
 
+    //utility vars
     private String compareColumn;
     private String tableName;
     private int userID;
     private float units;
-    private boolean plank;
     public boolean firstTime = false;
     public int positionAct;
     private double prWeight;
@@ -100,7 +102,7 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
         userID = PreferenceManager.getDefaultSharedPreferences(this).getInt(getString(R.string.sp_userID), 1);
         units = PreferenceManager.getDefaultSharedPreferences(this).getFloat(getString(R.string.sp_units), 1);
 
-        spinCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {//sets up spinners
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 ArrayAdapter<String> arrayAdapter;
@@ -147,7 +149,6 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
                                 percentileValue.setText("");
                                 prValue.setText("");
                                 weightBased();
-                                plank = false;
                             }
 
                             @Override
@@ -176,13 +177,10 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
                                     percentileValue.setText("");
                                     prValue.setText("");
                                     weightBased();
-
-                                    plank = true;
                                 }
                                 else{
                                     compareColumn = ProfileContract.BarbellLifts.REPS;
                                     weightBased();
-                                    plank = false;
                                 }
 
                             }
@@ -212,7 +210,6 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
                                 percentileValue.setText("");
                                 prValue.setText("");
                                 weightBased();
-                                plank = false;
                             }
 
                             @Override
@@ -240,7 +237,6 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
                                 percentileValue.setText("");
                                 prValue.setText("");
                                 weightBased();
-                                plank = false;
                             }
 
                             @Override
@@ -276,7 +272,6 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
                                     prValue.setText("");
                                     weightBased();
                                 }
-                                plank = false;
                             }
 
                             @Override
@@ -310,7 +305,6 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
                                     prValue.setText("");
                                     weightBased();
                                 }
-                                plank = false;
                             }
 
                             @Override
@@ -344,7 +338,6 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
                                     prValue.setText("");
                                     weightBased();
                                 }
-                                plank = false;
                             }
 
                             @Override
@@ -368,7 +361,7 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
         });
         String activity = getIntent().getStringExtra(getString(R.string.ar_tv_activity));
         String tableName = getIntent().getStringExtra(getString(R.string.ar_tv_category));
-        if (tableName != null && activity != null) {
+        if (tableName != null && activity != null) { //open to correct results if opened from main activity recycler view
             ArrayAdapter<String> arrayAdapter;
             switch (tableName){
                 case ProfileContract.BarbellLifts.TABLE_NAME:
@@ -458,6 +451,9 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
         }
     }
 
+    /**
+     * somewhat poorly named activity that actually finds the results for the selected activity and populates the recycler view
+     */
     private void weightBased(){
         if (compareColumn.equals(ProfileContract.BarbellLifts.ADJUSTED_ONE_REP_MAX)){
             percentagesButton.setEnabled(true);
@@ -548,7 +544,7 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
         setUpGraph(min, max, graphResults);
         mainAdapter.setVariables(allResults, dates, pr, resultID, reps, sets, compareColumn,notes);
         mainAdapter.notifyDataSetChanged();
-
+        //finds community results
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -610,7 +606,12 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
         });
     }
 
-
+    /**
+     * sets up the graph
+     * @param min lowest result in the range
+     * @param max highest result in the range
+     * @param results array of results to graph.
+     */
     private void setUpGraph(Number min, Number max, final Number[] results){
         max = max.doubleValue() + (max.doubleValue()/10.0);
         min = min.doubleValue() - (min.doubleValue()/10);
@@ -639,6 +640,10 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
         plotResultsGraph.setRangeBoundaries(min, max, BoundaryMode.FIXED);
     }
 
+    /**
+     * shows pop up of weight percentages for user
+     * @param view parent view of button that was pushed.
+     */
     public void percentagesPopup(View view){
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
         View customView = inflater.inflate(R.layout.percentages_popup, null);
@@ -686,6 +691,11 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
     }
 
 
+    /**
+     * handles if a result is clicked, asks if user wants to delete result
+     * @param deleteID ID of result to delete
+     * @param date date of result
+     */
     @Override
     public void onClick(final String deleteID, String date) {
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -749,6 +759,13 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
         mPopupWindow.showAtLocation(findViewById(R.id.view_results_view), Gravity.CENTER,0,0);
     }
 
+    /**
+     * update recent results table if delete result was recent
+     * @param resultID id of deleted result
+     * @param tableName table of deleted result
+     * @param order how recent the result was
+     * @param cursor cursor holding recent results table
+     */
     private void replaceResult(String resultID, String tableName, int order, Cursor cursor){
         ContentValues cv = new ContentValues();
         if (order < 2){
@@ -796,6 +813,11 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
         mainAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * sets up menu for activity
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

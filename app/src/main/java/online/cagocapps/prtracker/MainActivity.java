@@ -35,29 +35,32 @@ import online.cagocapps.prtracker.Data.ProfileContract;
 import online.cagocapps.prtracker.Data.ProfileDBHelper;
 
 public class MainActivity extends AppCompatActivity implements MainActivityRecycAdapter.MainActivityRecycAdapterOnClickHandler{
-
+    //useful vars
     private String email;
     private String TAG = "Main Activity";
-
+    //db vars
     private ProfileDBHelper dbHelper;
     private SQLiteDatabase dbWrite;
-
+    //set up recyclerview vars
     private RecyclerView rvMainActivity;
     private MainActivityRecycAdapter mainAdapter;
 
 
-
+    /**
+     * set up page
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        //open database
         dbHelper = new ProfileDBHelper(this);
         dbWrite = dbHelper.getWritableDatabase();
 
-
+        //set up recycler view
         rvMainActivity = (RecyclerView) findViewById(R.id.ma_rv_results);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false);
         rvMainActivity.setLayoutManager(layoutManager);
@@ -65,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityRecyc
         mainAdapter = new MainActivityRecycAdapter(this);
         rvMainActivity.setAdapter(mainAdapter);
 
-
+        //make the FAB launch the add result activity
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,18 +79,16 @@ public class MainActivity extends AppCompatActivity implements MainActivityRecyc
         });
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
+    /**
+     * onResume make sure the recent results are up to date and checks to see if a user is logged in
+     */
     @Override
     protected void onResume() {
         super.onResume();
-        mainAdapter.notifyDataSetChanged();
+        mainAdapter.notifyDataSetChanged(); //update recent results recycler view
         email = PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.sp_email), null);
         float units = PreferenceManager.getDefaultSharedPreferences(this).getFloat(getString(R.string.sp_units),1);
-        if (email == null) {
+        if (email == null) {// if no user logged in send to log in page
             Intent intent = new Intent(this, Login.class);
             startActivity(intent);
         } else {
@@ -101,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityRecyc
                     null,
                     null
             );
-            if (cursor.moveToFirst()) {
+            if (cursor.moveToFirst()) {//user is logged in make sure current ID is set correctly
                 String ID = cursor.getString(cursor.getColumnIndex(ProfileContract.ProfileValues._ID));
                 String userName = (cursor.getString(cursor.getColumnIndex(ProfileContract.ProfileValues.USER_NAME)));
                 cursor.close();
@@ -109,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityRecyc
                 editor.putInt(getString(R.string.sp_userID), Integer.valueOf(ID));
                 editor.commit();
 
-                mainAdapter.setUserID(ID, units);
+                mainAdapter.setUserID(ID, units);//set up recycler view
                 TextView textViewUserName = (TextView) findViewById(R.id.ma_tv_username);
                 textViewUserName.setText(userName+"?");
 
@@ -119,6 +120,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityRecyc
         }
     }
 
+    /**
+     * inflate menu
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -126,6 +132,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityRecyc
         return true;
     }
 
+    /**
+     * handle menu selection
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -163,9 +174,14 @@ public class MainActivity extends AppCompatActivity implements MainActivityRecyc
 
     }
 
+    /**
+     * launch view results when a recent result is clicked
+     * @param tableName table that holds the clicked recent result
+     * @param activity activity of the recent result
+     */
     @Override
     public void onClick(String tableName, String activity) {
-        if(tableName.length()>0 && activity.length()>0) {
+        if(tableName.length()>0 && activity.length()>0) {//if a result is selected open the correct result in view results
             Intent intent = new Intent(this, ViewResults.class);
             intent.putExtra(getString(R.string.ar_tv_category), tableName);
             intent.putExtra(getString(R.string.ar_tv_activity), activity);

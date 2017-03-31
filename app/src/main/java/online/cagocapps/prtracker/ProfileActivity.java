@@ -33,8 +33,10 @@ public class ProfileActivity extends AppCompatActivity {
     //db vars
     private ProfileDBHelper dbHelper;
     private SQLiteDatabase dbWrite;
-
+    //shared preferences
     private SharedPreferences sharedPreferences;
+
+    //helpful vars
     private boolean newUser;
 
     private String TAG = "ProfileActivity";
@@ -74,7 +76,7 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if(!newUser && !userEmail.equals("error")){
+        if(!newUser && !userEmail.equals("error")){//checks if we are making a new user or editing an old user
             String where = ProfileContract.ProfileValues.EMAIL + " = ?";
             Cursor cursor = dbWrite.query(
                     ProfileContract.ProfileValues.TABLE_NAME,
@@ -103,7 +105,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
-    public void SaveProfile(View view){
+    public void SaveProfile(View view){//save/update user and return to main activity
         int birthyear = Integer.valueOf(etBirthDate.getText().toString());
         if (birthyear > 1900 && birthyear < 2030) {
             ContentValues cv = new ContentValues();

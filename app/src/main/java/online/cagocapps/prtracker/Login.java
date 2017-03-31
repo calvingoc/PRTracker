@@ -46,6 +46,11 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
 
 
     private String TAG = "login";
+
+    /**
+     * set up activity
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +62,6 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
 
         //set up log in
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                //.requestIdToken("49825863480-eapqlgp1bqh3pg6crtu2j05p944ae7qc.apps.googleusercontent.com")
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
@@ -67,6 +71,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
         mAuth = FirebaseAuth.getInstance();
+        //check if authentication went through correctly
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -81,6 +86,9 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         findViewById(R.id.sign_in_button).setOnClickListener(this);
     }
 
+    /**
+     * sets up authorization listener
+     */
     @Override
     protected void onStart() {
         super.onStart();
@@ -88,13 +96,20 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         mAuth.addAuthStateListener(mAuthListener);
     }
 
-
+    /**
+     * show error if log in failed
+     * @param connectionResult holds result status
+     */
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         findViewById(R.id.sign_in_button).setEnabled(false);
         Toast.makeText(this, getString(R.string.connection_failed), Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * handle log in button getting clicked
+     * @param v view that was clicked
+     */
     @Override
     public void onClick(View v) {
         switch (v.getId()){
@@ -104,12 +119,21 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         }
     }
 
+    /**
+     * launch the log in through google authentication
+     */
     private void signIn(){
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
         mGoogleApiClient.connect();
     }
 
+    /**
+     * handle google log in result
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -119,11 +143,12 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         }
     }
 
+    /**
+     * if log in is succesful launch the correct activity to move forward
+     * @param result
+     */
     private void handleSignInResult(GoogleSignInResult result){
-        Log.d(TAG, "handleSignInResult:" + result.isSuccess());
-        Log.d(TAG, "handleSignInstats:" + result.getStatus());
-        Log.d(TAG, "status message " + result.getStatus().getStatusMessage());
-        if (result.isSuccess()){
+        if (result.isSuccess()){//log in worked, now see if that user has a profile
             account = result.getSignInAccount();
             firebaseAuthWithGoogle(account);
             SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
@@ -138,14 +163,14 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                     null,
                     null
             );
-            if (cursor.moveToFirst()){
+            if (cursor.moveToFirst()){// has a profile move to main activity
                 editor.putInt(getString(R.string.sp_userID), cursor.getInt(cursor.getColumnIndex(ProfileContract.ProfileValues._ID)));
                 cursor.close();
                 editor.commit();
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
                 finish();
-            } else {
+            } else { // no profile, bring them to the profile activity
                 cursor.close();
                 editor.commit();
                 Intent intent = new Intent(this, ProfileActivity.class);
@@ -154,11 +179,15 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                 finish();
 
             }
-        } else {
+        } else {//log in failed show error message
             Toast.makeText(this, getString(R.string.failed_login),Toast.LENGTH_SHORT).show();
         }
     }
 
+    /**
+     * set up database with successful credentials
+     * @param account
+     */
     private void firebaseAuthWithGoogle(GoogleSignInAccount account){
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
         mAuth.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
