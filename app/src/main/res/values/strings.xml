@@ -45,6 +45,7 @@
     <string name="pp_kg">Kg</string>
     <string name="pp_units">Units</string>
     <string name="cr_age">Age</string>
+    <string name="pp_missing_values">Please fill out all fields</string>
 
     <string-array name="skill_level_titles">
         <item>1 Pro</item>

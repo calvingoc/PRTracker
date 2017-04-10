@@ -10,6 +10,7 @@ import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -810,6 +811,10 @@ public class AddResult extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        dbWrite.close();
+        try{
+            dbWrite.close();
+        } catch (NullPointerException e){
+            Log.d("AddResult", "db never opened");
+        }
     }
 }

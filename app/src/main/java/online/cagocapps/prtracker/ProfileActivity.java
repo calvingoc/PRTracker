@@ -106,18 +106,26 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void SaveProfile(View view){//save/update user and return to main activity
+        if(etBirthDate.getText().toString().length()==0 || etUsername.getText().toString().length()==0 || etWeight.getText().toString().length() == 0 ||
+                etYearsAct.getText().toString().length() == 0){
+            Toast.makeText(this,getString(R.string.pp_missing_values),Toast.LENGTH_SHORT).show();
+            return;
+        }
         int birthyear = Integer.valueOf(etBirthDate.getText().toString());
+        String username = etUsername.getText().toString();
+        String weight = etWeight.getText().toString();
+        int yearsActive = Integer.valueOf(etYearsAct.getText().toString());
         if (birthyear > 1900 && birthyear < 2030) {
             ContentValues cv = new ContentValues();
             cv.put(ProfileContract.ProfileValues.EMAIL, userEmail);
             cv.put(ProfileContract.ProfileValues.USER_NAME,
-                    etUsername.getText().toString());
+                    username);
             cv.put(ProfileContract.ProfileValues.BIRTHDATE,
-                    etBirthDate.getText().toString());
+                    birthyear);
             cv.put(ProfileContract.ProfileValues.WEIGHT,
-                    etWeight.getText().toString());
+                    weight);
             cv.put(ProfileContract.ProfileValues.YEARS_ACTIVE,
-                    Integer.valueOf(etYearsAct.getText().toString()));
+                    yearsActive);
             cv.put(ProfileContract.ProfileValues.SKILL,
                     String.valueOf(spinSkill.getSelectedItem().toString().charAt(0)));
             int gender = 1;

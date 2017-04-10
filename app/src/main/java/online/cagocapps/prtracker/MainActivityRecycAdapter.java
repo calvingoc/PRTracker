@@ -305,7 +305,7 @@ public class MainActivityRecycAdapter extends RecyclerView.Adapter<MainActivityR
                     final Number[] domainLabels = {1, 2, 3, 6, 7, 8, 9, 10, 13, 14};
                     XYSeries resultsSeries = new SimpleXYSeries(
                             Arrays.asList(results), SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "Last Ten Results");
-                    LineAndPointFormatter resultsFormat = new LineAndPointFormatter(context, R.xml.line_poit_formatter_with_labels);
+                    LineAndPointFormatter resultsFormat = new LineAndPointFormatter(holder.itemView.getContext(), R.xml.line_poit_formatter_with_labels);
                     resultsFormat.getLinePaint().setPathEffect(new DashPathEffect(new float[]{
                             PixelUtils.dpToPix(10),
                             PixelUtils.dpToPix(5)}, 0

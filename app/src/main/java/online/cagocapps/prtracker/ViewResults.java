@@ -471,7 +471,7 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
                 null,
                 null
         );
-        Number[] graphResults = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        Number[] graphResults = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         Number[] allResults = new Number[cursor.getCount()];
         Long[] dates = new Long[cursor.getCount()];
         int[] pr = new int[cursor.getCount()];
@@ -483,20 +483,20 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
         Number min = 10000000;
         Number max = 0;
         if(cursor.moveToLast()){
-            graphResults[9-i] = cursor.getInt(cursor.getColumnIndex(compareColumn));
+            graphResults[19-i] = cursor.getInt(cursor.getColumnIndex(compareColumn));
             allResults[i] = cursor.getInt(cursor.getColumnIndex(compareColumn));
             dates[i] = cursor.getLong(cursor.getColumnIndex(ProfileContract.BarbellLifts.DATE));
             pr[i] = cursor.getInt(cursor.getColumnIndex(ProfileContract.BarbellLifts.PR));
             resultID[i] = cursor.getInt(cursor.getColumnIndex(ProfileContract.BarbellLifts._ID));
             notes[i] = cursor.getString(cursor.getColumnIndex(ProfileContract.BarbellLifts.COMMENTS));
             if (compareColumn.equals(ProfileContract.BarbellLifts.ADJUSTED_ONE_REP_MAX)){
-                graphResults[9 - i] = graphResults[9 - i].floatValue() * units;
+                graphResults[19 - i] = graphResults[19 - i].floatValue() * units;
                 allResults[i] = cursor.getInt(cursor.getColumnIndex(ProfileContract.BarbellLifts.WEIGHT)) * units;
                 sets[i] = cursor.getInt(cursor.getColumnIndex(ProfileContract.BarbellLifts.ROUNDS));
                 reps[i] = cursor.getInt(cursor.getColumnIndex(ProfileContract.BarbellLifts.REPS));
             }
-            if (graphResults[i].doubleValue() > max.doubleValue()) max = allResults[i];
-            if (graphResults[i].doubleValue() < min.doubleValue()) min = allResults[i];
+            if (allResults[i].doubleValue() > max.doubleValue()) max = allResults[i];
+            if (allResults[i].doubleValue() < min.doubleValue()) min = allResults[i];
             if (pr[i] == 1){
                 if(compareColumn.equals(ProfileContract.BarbellLifts.ADJUSTED_ONE_REP_MAX)){
                     prWeight = cursor.getDouble(cursor.getColumnIndex(ProfileContract.BarbellLifts.ADJUSTED_ONE_REP_MAX));
@@ -512,20 +512,20 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
             i++;
         }
         while (cursor.moveToPrevious()){
-            if (i < 10) graphResults[9-i] = cursor.getInt(cursor.getColumnIndex(compareColumn));
+            if (i < 20) graphResults[19-i] = cursor.getInt(cursor.getColumnIndex(compareColumn));
             allResults[i] = cursor.getInt(cursor.getColumnIndex(compareColumn));
             dates[i] = cursor.getLong(cursor.getColumnIndex(ProfileContract.BarbellLifts.DATE));
             pr[i] = cursor.getInt(cursor.getColumnIndex(ProfileContract.BarbellLifts.PR));
             resultID[i] = cursor.getInt(cursor.getColumnIndex(ProfileContract.BarbellLifts._ID));
             notes[i] = cursor.getString(cursor.getColumnIndex(ProfileContract.BarbellLifts.COMMENTS));
             if (compareColumn.equals(ProfileContract.BarbellLifts.ADJUSTED_ONE_REP_MAX)){
-                if (i < 10) graphResults[9 - i] = graphResults[9 - i].floatValue() * units;
+                if (i < 20) graphResults[19 - i] = graphResults[19 - i].floatValue() * units;
                 allResults[i] = cursor.getInt(cursor.getColumnIndex(ProfileContract.BarbellLifts.WEIGHT)) * units;
                 sets[i] = cursor.getInt(cursor.getColumnIndex(ProfileContract.BarbellLifts.ROUNDS));
                 reps[i] = cursor.getInt(cursor.getColumnIndex(ProfileContract.BarbellLifts.REPS));
             }
-            if (graphResults[i].doubleValue() > max.doubleValue()) max = allResults[i];
-            if (graphResults[i].doubleValue() < min.doubleValue()) min = allResults[i];
+            if (allResults[i].doubleValue() > max.doubleValue()) max = allResults[i];
+            if (allResults[i].doubleValue() < min.doubleValue()) min = allResults[i];
             if (pr[i] == 1) {
                 if (compareColumn.equals(ProfileContract.BarbellLifts.ADJUSTED_ONE_REP_MAX)) {
                     prWeight = cursor.getDouble(cursor.getColumnIndex(ProfileContract.BarbellLifts.ADJUSTED_ONE_REP_MAX));
@@ -615,21 +615,22 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
     private void setUpGraph(Number min, Number max, final Number[] results){
         max = max.doubleValue() + (max.doubleValue()/10.0);
         min = min.doubleValue() - (min.doubleValue()/10);
-        final Number[] domainLabels = {1, 2, 3, 6, 7, 8, 9, 10, 13, 14};
         XYSeries resultsSeries = new SimpleXYSeries(
-                Arrays.asList(results), SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "Last Ten Results");
+                Arrays.asList(results), SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "Last Twenty Results");
         LineAndPointFormatter resultsFormat = new LineAndPointFormatter(this, R.xml.line_poit_formatter_with_labels);
+        plotResultsGraph.addSeries(resultsSeries, resultsFormat);
         resultsFormat.getLinePaint().setPathEffect(new DashPathEffect(new float[]{
                 PixelUtils.dpToPix(10),
                 PixelUtils.dpToPix(5)}, 0
         ));
         plotResultsGraph.addSeries(resultsSeries, resultsFormat);
+        plotResultsGraph.setRangeBoundaries(min, max, BoundaryMode.FIXED);
         plotResultsGraph.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM)
                 .setFormat(new Format() {
                     @Override
                     public StringBuffer format(Object o, @NonNull StringBuffer stringBuffer, @NonNull FieldPosition fieldPosition) {
                         int i = Math.round(((Number) o).floatValue());
-                        return stringBuffer.append(domainLabels[i]);
+                        return stringBuffer.append(results[i]);
                     }
 
                     @Override
@@ -637,7 +638,6 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
                         return null;
                     }
                 });
-        plotResultsGraph.setRangeBoundaries(min, max, BoundaryMode.FIXED);
     }
 
     /**
