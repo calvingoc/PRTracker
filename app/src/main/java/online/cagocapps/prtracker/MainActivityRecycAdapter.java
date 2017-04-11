@@ -208,13 +208,16 @@ public class MainActivityRecycAdapter extends RecyclerView.Adapter<MainActivityR
                             String reps = thisResult.getString(thisResult.getColumnIndex(ProfileContract.BarbellLifts.REPS));
                             holder.tvResults.setText(sets + " Rounds " + reps + " Reps" + rx);
                         } else {
-                            String sets = thisResult.getString(thisResult.getColumnIndex(ProfileContract.BarbellLifts.ROUNDS));
                             String reps = thisResult.getString(thisResult.getColumnIndex(ProfileContract.BarbellLifts.REPS));
                             int totalTime = thisResult.getInt(thisResult.getColumnIndex(ProfileContract.CrossFitStandards.TIME));
                             String hours = Integer.toString(totalTime / 3600) + ":";
                             String minutes = Integer.toString((totalTime % 3600) / 60) + ":";
                             String seconds = Integer.toString(((totalTime % 3600) % 60));
-                            holder.tvResults.setText(reps + " Reps in " + hours + minutes + seconds + rx);
+                            if (seconds.equals("0")) seconds = "00";
+                            String result = minutes + seconds + rx;
+                            if (!hours.equals("0:")) result = hours + result;
+                            if (!reps.equals("1")) result = reps + " Reps in " + result;
+                            holder.tvResults.setText(result);
                         }
                     } else if (tableName.equals(ProfileContract.Gymnastics.TABLE_NAME)) {
                         if (thisResult.getString(thisResult.getColumnIndex(ProfileContract.Gymnastics.TIME)) == null) {
@@ -226,14 +229,20 @@ public class MainActivityRecycAdapter extends RecyclerView.Adapter<MainActivityR
                             String hours = Integer.toString(totalTime / 3600) + ":";
                             String minutes = Integer.toString((totalTime % 3600) / 60) + ":";
                             String seconds = Integer.toString(((totalTime % 3600) % 60));
-                            holder.tvResults.setText(hours + minutes + seconds);
+                            if (seconds.equals("0")) seconds = "00";
+                            String result = minutes + seconds;
+                            if (!hours.equals("0:")) result = hours + result;
+                            holder.tvResults.setText(result);
                         }
                     } else {
                         int totalTime = thisResult.getInt(thisResult.getColumnIndex(ProfileContract.CrossFitStandards.TIME));
                         String hours = Integer.toString(totalTime / 3600) + ":";
                         String minutes = Integer.toString((totalTime % 3600) / 60) + ":";
                         String seconds = Integer.toString(((totalTime % 3600) % 60));
-                        holder.tvResults.setText(hours + minutes + seconds);
+                        if (seconds.equals("0")) seconds = "00";
+                        String result = minutes + seconds;
+                        if (!hours.equals("0:")) result = hours + result;
+                        holder.tvResults.setText(result);
                     }
                     thisResult.close();
                     Cursor graphCursor = dbRead.query(//finds the last ten results of this lift to graph

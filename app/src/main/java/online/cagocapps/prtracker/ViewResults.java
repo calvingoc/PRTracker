@@ -506,7 +506,10 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
                     String hours = Integer.toString(allResults[i].intValue() / 3600) + ":";
                     String minutes = Integer.toString((allResults[i].intValue() % 3600) / 60) + ":";
                     String seconds = Integer.toString(((allResults[i].intValue() % 3600) % 60));
-                    prValue.setText(hours + minutes + seconds);
+                    if (seconds.equals("0")) seconds = "00";
+                    String result = minutes + seconds;
+                    if (!hours.equals("0:")) result = hours + result;
+                    prValue.setText(result);
                 } else prValue.setText(allResults[i].toString());
             }
             i++;
@@ -535,7 +538,10 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
                     String hours = Integer.toString(allResults[i].intValue() / 3600) + ":";
                     String minutes = Integer.toString((allResults[i].intValue() % 3600) / 60) + ":";
                     String seconds = Integer.toString(((allResults[i].intValue() % 3600) % 60));
-                    prValue.setText(hours + minutes + seconds);
+                    if (seconds.equals("0")) seconds = "00";
+                    String result = minutes + seconds;
+                    if (!hours.equals("0:")) result = hours + result;
+                    prValue.setText(result);
                 } else prValue.setText(allResults[i].toString());
             }
             i++;
@@ -576,7 +582,8 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
                     double total = 0.0;
                     double equal = 0.0;
                     ArrayList<Integer> results = new ArrayList<Integer>();
-                    for (DataSnapshot comResult : dataSnapshot.child(spinActivity.getSelectedItem().toString()).child(Integer.toString(gender)).child(Integer.toString(skill)).child(Integer.toString(scaledWeight))
+                    String activity = spinActivity.getSelectedItem().toString().replace(".","");
+                    for (DataSnapshot comResult : dataSnapshot.child(activity).child(Integer.toString(gender)).child(Integer.toString(skill)).child(Integer.toString(scaledWeight))
                             .child(Integer.toString(age)).child(yearsAct).getChildren()) {
                         ResultObject resultObject = comResult.getValue(ResultObject.class);
                         results.add(resultObject.getResult());

@@ -92,7 +92,7 @@ public class CommunityResults extends AppCompatActivity {
                     case 0:
                         tableName = ProfileContract.BarbellLifts.TABLE_NAME;
                         arrayAdapter =
-                                new ArrayAdapter<String>(parent.getContext(),
+                                new ArrayAdapter<String>(getApplicationContext(),
                                         android.R.layout.simple_spinner_item,
                                         getResources().getStringArray(R.array.barbell_lifts_array));
                         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -113,7 +113,7 @@ public class CommunityResults extends AppCompatActivity {
                     case 1:
                         tableName = ProfileContract.DumbbellLifts.TABLE_NAME;
                         arrayAdapter =
-                                new ArrayAdapter<String>(parent.getContext(),
+                                new ArrayAdapter<String>(getApplicationContext(),
                                         android.R.layout.simple_spinner_item,
                                         getResources().getStringArray(R.array.dumbbell_lifts_array));
                         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -134,7 +134,7 @@ public class CommunityResults extends AppCompatActivity {
                     case 2:
                         tableName = ProfileContract.Gymnastics.TABLE_NAME;
                         arrayAdapter =
-                                new ArrayAdapter<String>(parent.getContext(),
+                                new ArrayAdapter<String>(getApplicationContext(),
                                         android.R.layout.simple_spinner_item,
                                         getResources().getStringArray(R.array.bodyweight_array));
                         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -162,7 +162,7 @@ public class CommunityResults extends AppCompatActivity {
                     case 3:
                         tableName = ProfileContract.Running.TABLE_NAME;
                         arrayAdapter =
-                                new ArrayAdapter<String>(parent.getContext(),
+                                new ArrayAdapter<String>(getApplicationContext(),
                                         android.R.layout.simple_spinner_item,
                                         getResources().getStringArray(R.array.running_array));
                         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -183,7 +183,7 @@ public class CommunityResults extends AppCompatActivity {
                     case 4:
                         tableName = ProfileContract.Swimming.TABLE_NAME;
                         arrayAdapter =
-                                new ArrayAdapter<String>(parent.getContext(),
+                                new ArrayAdapter<String>(getApplicationContext(),
                                         android.R.layout.simple_spinner_item,
                                         getResources().getStringArray(R.array.swimming_array));
                         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -204,7 +204,7 @@ public class CommunityResults extends AppCompatActivity {
                     case 5:
                         tableName = ProfileContract.CrossFitStandards.TABLE_NAME;
                         arrayAdapter =
-                                new ArrayAdapter<String>(parent.getContext(),
+                                new ArrayAdapter<String>(getApplicationContext(),
                                         android.R.layout.simple_spinner_item,
                                         getResources().getStringArray(R.array.crossfit_girls_array));
                         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -230,7 +230,7 @@ public class CommunityResults extends AppCompatActivity {
                         break;
                     case 6:
                         arrayAdapter =
-                                new ArrayAdapter<String>(parent.getContext(),
+                                new ArrayAdapter<String>(getApplicationContext(),
                                         android.R.layout.simple_spinner_item,
                                         getResources().getStringArray(R.array.crossfit_heroes_array));
                         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -255,7 +255,7 @@ public class CommunityResults extends AppCompatActivity {
                     case 7:
                         tableName = ProfileContract.CrossFitStandards.TABLE_NAME;
                         arrayAdapter =
-                                new ArrayAdapter<String>(parent.getContext(),
+                                new ArrayAdapter<String>(getApplicationContext(),
                                         android.R.layout.simple_spinner_item,
                                         getResources().getStringArray(R.array.crossfit_open_array));
                         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -515,7 +515,7 @@ public class CommunityResults extends AppCompatActivity {
                     } else tvCommAverage.setText(Double.toString(average));
                     tvPercentile.setText(Double.toString((below + .5 * equal * 100) / total));
                     //find and format community best
-                    if (compareColumn.equals(ProfileContract.Running.TIME)) {
+                    if (compareColumn.equals(ProfileContract.Running.TIME) && minValue != 999999999) {
                         String hours = Double.toString(minValue / 3600) + ":";
                         String minutes = Double.toString((minValue % 3600) / 60) + ":";
                         String seconds = Double.toString(((minValue % 3600) % 60));

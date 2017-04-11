@@ -91,7 +91,10 @@ public class ViewResultsRecycAdapter extends RecyclerView.Adapter<ViewResultsRec
             String hours = Integer.toString(results[position].intValue() / 3600) + ":";
             String minutes = Integer.toString((results[position].intValue() % 3600) / 60) + ":";
             String seconds = Integer.toString(((results[position].intValue() % 3600) % 60));
-            holder.tvResult.setText(hours + minutes + seconds);
+            if (seconds.equals("0")) seconds = "00";
+            String result = minutes + seconds;
+            if (!hours.equals("0:")) result = hours + result;
+            holder.tvResult.setText(result);
         } else holder.tvResult.setText(results[position].toString());
         holder.tvID.setText(Integer.toString(resultID[position]));
         holder.tvNotes.setText(notes[position]);

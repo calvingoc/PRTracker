@@ -761,6 +761,7 @@ public class AddResult extends AppCompatActivity {
                 userEmail = userEmail.replace(".", "");
                 ResultObject resultObject = new ResultObject();
                 resultObject.setResult(prValue);
+                activity = activity.replace(".","");
                 reference.child(activity).child(Integer.toString(gender)).child(Integer.toString(skill)).child(Integer.toString(scaledWeight))
                         .child(Integer.toString(age)).child(yearsAct).child(userEmail).setValue(resultObject);//update realtime database
             }
@@ -799,6 +800,7 @@ public class AddResult extends AppCompatActivity {
                 ResultObject resultObject = new ResultObject();
                 resultObject.setResult(prValue);
                 String email = userEmail.replace(".","");
+                activity = activity.replace(".","");
                 reference.child(activity).child(Integer.toString(gender)).child(Integer.toString(skill)).child(Integer.toString(scaledWeight))
                         .child(Integer.toString(age)).child(yearsAct).child(email).setValue(resultObject);//update realtime database
             }
