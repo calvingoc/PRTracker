@@ -141,7 +141,7 @@
         android:textColor="@color/colorPrimaryDark"
         app:layout_constraintBottom_toBottomOf="@id/ar_tv_time"
         app:layout_constraintLeft_toRightOf="@id/ar_tv_time"
-        app:layout_constraintRight_toRightOf="@+id/ar_spin_distance"
+        app:layout_constraintRight_toLeftOf="@id/ar_et_minutes"
         app:layout_constraintTop_toTopOf="@id/ar_tv_time"
         app:layout_constraintVertical_bias="0.0" />
 
@@ -181,31 +181,6 @@
         app:layout_constraintRight_toRightOf="parent"
         android:enabled="false"/>
 
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:id="@+id/ar_tv_distance"
-        android:text="@string/ar_tv_distance"
-        android:gravity="center"
-        android:textColor="@color/colorPrimaryDark"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ar_et_minutes"
-        app:layout_constraintRight_toRightOf="@id/ar_tv_activity"/>
-
-    <Spinner
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:id="@+id/ar_spin_distance"
-        android:entries="@array/swimming_distance_array"
-        android:textColor="@color/colorPrimaryDark"
-        app:layout_constraintLeft_toRightOf="@id/ar_tv_distance"
-        app:layout_constraintTop_toBottomOf="@id/ar_et_minutes"
-        app:layout_constraintBottom_toBottomOf="@id/ar_tv_distance"
-        app:layout_constraintHorizontal_bias="0.0"
-        android:layout_marginRight="8dp"
-        app:layout_constraintVertical_bias="0.0"
-        app:layout_constraintRight_toLeftOf="@+id/ar_tog_units" />
-
     <EditText
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -217,7 +192,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/ar_butt_save"
-        app:layout_constraintTop_toBottomOf="@+id/ar_spin_distance"
+        app:layout_constraintTop_toBottomOf="@+id/ar_tog_units"
         android:hint="@string/ar_tv_notes"
         app:layout_constraintHorizontal_bias="0.0"
         android:layout_marginBottom="1dp"
@@ -238,7 +213,7 @@
     <ToggleButton
         android:id="@+id/ar_tog_units"
         android:layout_width="80dp"
-        android:layout_height="0dp"
+        android:layout_height="50dp"
         android:text="ToggleButton"
         android:textOff="@string/pp_pounds"
         android:textOn="@string/pp_kg"
@@ -248,7 +223,6 @@
         android:layout_marginLeft="0dp"
         app:layout_constraintLeft_toLeftOf="@+id/ar_et_minutes"
         app:layout_constraintRight_toLeftOf="@+id/ar_check_rx"
-        app:layout_constraintBottom_toBottomOf="@+id/ar_spin_distance"
         app:layout_constraintHorizontal_bias="0.526"
         android:layout_marginBottom="3dp"
         app:layout_constraintVertical_bias="0.0" />

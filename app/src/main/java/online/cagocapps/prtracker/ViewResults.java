@@ -418,7 +418,7 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
                     arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinActivity.setAdapter(arrayAdapter);
                     String[] selections = getResources().getStringArray(R.array.crossfit_girls_array);
-                    for (int i = 0; i > selections.length; i++){
+                    for (int i = 0; i < selections.length; i++){
                         if (selections[i].equals(activity)){
                             spinCategory.setSelection(5);
                             arrayAdapter =
@@ -431,7 +431,7 @@ public class ViewResults extends AppCompatActivity implements ViewResultsRecycAd
                     }
                     selections = getResources().getStringArray(R.array.crossfit_heroes_array);
 
-                    for (int i = 0; i > selections.length; i++){
+                    for (int i = 0; i < selections.length; i++){
                         if (selections[i].equals(activity)){
                             spinCategory.setSelection(6);
                             arrayAdapter =

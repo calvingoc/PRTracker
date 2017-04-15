@@ -48,8 +48,6 @@ public class AddResult extends AppCompatActivity {
     private EditText etMinutes;
     private EditText etSeconds;
     private CheckBox checkRX;
-    private TextView tvDistance;
-    private Spinner spinDistance;
     private EditText etNotes;
     private ToggleButton togUnits;
 
@@ -93,8 +91,6 @@ public class AddResult extends AppCompatActivity {
         etMinutes = (EditText) findViewById(R.id.ar_et_minutes);
         etSeconds = (EditText) findViewById(R.id.ar_et_secs);
         checkRX = (CheckBox) findViewById(R.id.ar_check_rx);
-        tvDistance = (TextView) findViewById(R.id.ar_tv_distance);
-        spinDistance = (Spinner) findViewById(R.id.ar_spin_distance);
         etNotes = (EditText) findViewById(R.id.ar_et_notes);
         togUnits = (ToggleButton) findViewById(R.id.ar_tog_units);
         if (units == 1) togUnits.setChecked(false);
@@ -109,7 +105,7 @@ public class AddResult extends AppCompatActivity {
                     case 0: //set up activity spinner for barbell lifts
                         arrayAdapter =
                                 new ArrayAdapter<String>(view.getContext(),
-                                        android.R.layout.simple_spinner_item,
+                                        R.layout.spinner_format,
                                         getResources().getStringArray(R.array.barbell_lifts_array));
                         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         spinActivity.setAdapter(arrayAdapter);
@@ -130,7 +126,7 @@ public class AddResult extends AppCompatActivity {
                     case 1: //set up for dumbbell lifts
                         arrayAdapter =
                                 new ArrayAdapter<String>(view.getContext(),
-                                        android.R.layout.simple_spinner_item,
+                                        R.layout.spinner_format,
                                         getResources().getStringArray(R.array.dumbbell_lifts_array));
                         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         spinActivity.setAdapter(arrayAdapter);
@@ -151,7 +147,7 @@ public class AddResult extends AppCompatActivity {
                     case 2: //set up for bodyweight/gymnastic lifts
                         arrayAdapter =
                                 new ArrayAdapter<String>(view.getContext(),
-                                        android.R.layout.simple_spinner_item,
+                                        R.layout.spinner_format,
                                         getResources().getStringArray(R.array.bodyweight_array));
                         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         spinActivity.setAdapter(arrayAdapter);
@@ -179,7 +175,7 @@ public class AddResult extends AppCompatActivity {
                     case 3: //running set up
                         arrayAdapter =
                                 new ArrayAdapter<String>(view.getContext(),
-                                        android.R.layout.simple_spinner_item,
+                                        R.layout.spinner_format,
                                         getResources().getStringArray(R.array.running_array));
                         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         spinActivity.setAdapter(arrayAdapter);
@@ -200,7 +196,7 @@ public class AddResult extends AppCompatActivity {
                     case 4: //swimming set up
                         arrayAdapter =
                                 new ArrayAdapter<String>(view.getContext(),
-                                        android.R.layout.simple_spinner_item,
+                                        R.layout.spinner_format,
                                         getResources().getStringArray(R.array.swimming_array));
                         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         spinActivity.setAdapter(arrayAdapter);
@@ -221,7 +217,7 @@ public class AddResult extends AppCompatActivity {
                     case 5: //crossfit girls set up
                         arrayAdapter =
                                 new ArrayAdapter<String>(view.getContext(),
-                                        android.R.layout.simple_spinner_item,
+                                        R.layout.spinner_format,
                                         getResources().getStringArray(R.array.crossfit_girls_array));
                         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         spinActivity.setAdapter(arrayAdapter);
@@ -245,7 +241,7 @@ public class AddResult extends AppCompatActivity {
                     case 6://heroes array set up
                         arrayAdapter =
                                 new ArrayAdapter<String>(view.getContext(),
-                                        android.R.layout.simple_spinner_item,
+                                        R.layout.spinner_format,
                                         getResources().getStringArray(R.array.crossfit_heroes_array));
                         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         spinActivity.setAdapter(arrayAdapter);
@@ -266,7 +262,7 @@ public class AddResult extends AppCompatActivity {
                     case 7://crossfit open array
                         arrayAdapter =
                                 new ArrayAdapter<String>(view.getContext(),
-                                        android.R.layout.simple_spinner_item,
+                                        R.layout.spinner_format,
                                         getResources().getStringArray(R.array.crossfit_open_array));
                         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         spinActivity.setAdapter(arrayAdapter);
@@ -295,7 +291,6 @@ public class AddResult extends AppCompatActivity {
 
             }
         });
-
     }
 
     /**
@@ -311,8 +306,6 @@ public class AddResult extends AppCompatActivity {
         etMinutes.setEnabled(false);
         etSeconds.setEnabled(false);
         checkRX.setEnabled(false);
-        tvDistance.setEnabled(false);
-        spinDistance.setEnabled(false);
         clearDisabled();
         resultType = 0;
     }
@@ -330,8 +323,6 @@ public class AddResult extends AppCompatActivity {
         etMinutes.setEnabled(false);
         etSeconds.setEnabled(false);
         checkRX.setEnabled(false);
-        spinDistance.setEnabled(false);
-        tvDistance.setEnabled(false);
         clearDisabled();
         resultType = 1;
     }
@@ -349,8 +340,6 @@ public class AddResult extends AppCompatActivity {
         etMinutes.setEnabled(true);
         etSeconds.setEnabled(true);
         checkRX.setEnabled(false);
-        spinDistance.setEnabled(false);
-        tvDistance.setEnabled(false);
         clearDisabled();
         resultType = 2;
     }
@@ -368,8 +357,6 @@ public class AddResult extends AppCompatActivity {
         etMinutes.setEnabled(true);
         etSeconds.setEnabled(true);
         checkRX.setEnabled(false);
-        spinDistance.setEnabled(true);
-        tvDistance.setEnabled(true);
         clearDisabled();
         resultType = 3;
     }
@@ -387,8 +374,6 @@ public class AddResult extends AppCompatActivity {
         etMinutes.setEnabled(true);
         etSeconds.setEnabled(true);
         checkRX.setEnabled(true);
-        spinDistance.setEnabled(false);
-        tvDistance.setEnabled(false);
         clearDisabled();
         resultType = 4;
     }
@@ -406,8 +391,6 @@ public class AddResult extends AppCompatActivity {
         etMinutes.setEnabled(false);
         etSeconds.setEnabled(false);
         checkRX.setEnabled(true);
-        spinDistance.setEnabled(false);
-        tvDistance.setEnabled(false);
         clearDisabled();
         resultType = 5;
     }
@@ -467,9 +450,6 @@ public class AddResult extends AppCompatActivity {
         checkRX.setChecked(checkRX.isEnabled());
         if (checkRX.isEnabled()) checkRX.setTextColor(getColor(R.color.colorPrimaryDark));
         else checkRX.setTextColor(getColor(R.color.colorAccent));
-        if(!spinDistance.isEnabled()){
-            spinDistance.setPrompt(null);
-        }
     }
 
     /**
@@ -515,7 +495,6 @@ public class AddResult extends AppCompatActivity {
         int totalTime = (hours * 3600) + (minutes * 60) + seconds;
         int rx = 0;
         if (checkRX.isChecked()) rx = 1;
-        String distance = spinDistance.getSelectedItem().toString();
         String notes = etNotes.getText().toString();
 
         //set up content values to add a line to the SQL table
@@ -547,8 +526,7 @@ public class AddResult extends AppCompatActivity {
                 break;
 
             case 3: //swimming
-                String swim = distance + " " + activity;
-                cv.put(ProfileContract.Swimming.STROKE, swim);
+                cv.put(ProfileContract.Swimming.STROKE, activity);
                 cv.put(ProfileContract.Swimming.TIME, totalTime);
                 break;
 
@@ -814,7 +792,7 @@ public class AddResult extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         try{
-            dbWrite.close();
+            if (dbWrite != null) dbWrite.close();
         } catch (NullPointerException e){
             Log.d("AddResult", "db never opened");
         }

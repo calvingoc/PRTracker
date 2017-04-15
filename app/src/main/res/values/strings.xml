@@ -403,29 +403,34 @@
     </array>
 
     <!-- Swimming -->
-    <string name="freestyle">Freestyle - Front Crawl</string>
+    <string name="freestyle">Freestyle</string>
     <string name="backstroke">Back Stroke</string>
     <string name="breast">Breast Stroke</string>
     <string name="butterfly">Butterfly</string>
     <string name="medley">Medley</string>
 
     <array name="swimming_array">
-        <item>Freestyle - Front Crawl</item>
-        <item>Back Stroke</item>
-        <item>Breast Stroke</item>
-        <item>Butteryfly</item>
-        <item>Medley</item>
+        <item>25m Freestyle</item>
+        <item>50m Freestyle</item>
+        <item>100m Freestyle</item>
+        <item>200m Freestyle</item>
+        <item>500m Freestyle</item>
+        <item>1000m Freestyle</item>
+        <item>25m Back Stroke</item>
+        <item>50m Back Stroke</item>
+        <item>100m Back Stroke</item>
+        <item>200m Back Stroke</item>
+        <item>25m Breast Stroke</item>
+        <item>50m Breast Stroke</item>
+        <item>100m Breast Stroke</item>
+        <item>200m Breast Stroke</item>
+        <item>25m Butteryfly</item>
+        <item>50m Butteryfly</item>
+        <item>100m Butteryfly</item>
+        <item>200m Butteryfly</item>
+        <item>100m Medley</item>
+        <item>200m Medley</item>
+        <item>400m Medley</item>
     </array>
-
-    <array name="swimming_distance_array">
-        <item>25m</item>
-        <item>50m</item>
-        <item>100m</item>
-        <item>200m</item>
-        <item>400m</item>
-        <item>500m</item>
-        <item>1000m</item>
-    </array>
-
 
 </resources>
