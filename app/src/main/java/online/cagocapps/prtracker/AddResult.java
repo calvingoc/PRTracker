@@ -101,189 +101,194 @@ public class AddResult extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 ArrayAdapter<String> arrayAdapter;
-                switch (position) {
-                    case 0: //set up activity spinner for barbell lifts
-                        arrayAdapter =
-                                new ArrayAdapter<String>(view.getContext(),
-                                        R.layout.spinner_format,
-                                        getResources().getStringArray(R.array.barbell_lifts_array));
-                        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        spinActivity.setAdapter(arrayAdapter);
-                        spinActivity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                weightBased(); //set up the page for weight measured lifts
-                                plank = false;
-                            }
-
-                            @Override
-                            public void onNothingSelected(AdapterView<?> adapterView) {
-
-                            }
-                        });
-                        tableName = ProfileContract.BarbellLifts.TABLE_NAME; //set up table name so the correct table is edited
-                        break;
-                    case 1: //set up for dumbbell lifts
-                        arrayAdapter =
-                                new ArrayAdapter<String>(view.getContext(),
-                                        R.layout.spinner_format,
-                                        getResources().getStringArray(R.array.dumbbell_lifts_array));
-                        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        spinActivity.setAdapter(arrayAdapter);
-                        spinActivity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                weightBased();
-                                plank = false;
-                            }
-
-                            @Override
-                            public void onNothingSelected(AdapterView<?> adapterView) {
-
-                            }
-                        });
-                        tableName = ProfileContract.DumbbellLifts.TABLE_NAME;
-                        break;
-                    case 2: //set up for bodyweight/gymnastic lifts
-                        arrayAdapter =
-                                new ArrayAdapter<String>(view.getContext(),
-                                        R.layout.spinner_format,
-                                        getResources().getStringArray(R.array.bodyweight_array));
-                        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        spinActivity.setAdapter(arrayAdapter);
-                        spinActivity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                if (i == 16) { // special setup for planks as they are time based and longer times are better
-                                    timeBased();
-                                    plank = true;
-                                }
-                                else{ //bodyWeightBased
-                                    bodyWeightBased();
+                try {
+                    switch (position) {
+                        case 0: //set up activity spinner for barbell lifts
+                            arrayAdapter =
+                                    new ArrayAdapter<String>(view.getContext(),
+                                            R.layout.spinner_format,
+                                            getResources().getStringArray(R.array.barbell_lifts_array));
+                            arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            spinActivity.setAdapter(arrayAdapter);
+                            spinActivity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                @Override
+                                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                    weightBased(); //set up the page for weight measured lifts
                                     plank = false;
                                 }
 
-                            }
+                                @Override
+                                public void onNothingSelected(AdapterView<?> adapterView) {
 
-                            @Override
-                            public void onNothingSelected(AdapterView<?> adapterView) {
+                                }
+                            });
+                            tableName = ProfileContract.BarbellLifts.TABLE_NAME; //set up table name so the correct table is edited
+                            break;
+                        case 1: //set up for dumbbell lifts
+                            arrayAdapter =
+                                    new ArrayAdapter<String>(view.getContext(),
+                                            R.layout.spinner_format,
+                                            getResources().getStringArray(R.array.dumbbell_lifts_array));
+                            arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            spinActivity.setAdapter(arrayAdapter);
+                            spinActivity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                @Override
+                                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                    weightBased();
+                                    plank = false;
+                                }
 
-                            }
-                        });
-                        tableName = ProfileContract.Gymnastics.TABLE_NAME;
-                        break;
-                    case 3: //running set up
-                        arrayAdapter =
-                                new ArrayAdapter<String>(view.getContext(),
-                                        R.layout.spinner_format,
-                                        getResources().getStringArray(R.array.running_array));
-                        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        spinActivity.setAdapter(arrayAdapter);
-                        spinActivity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                timeBased();
-                                plank = false;
-                            }
+                                @Override
+                                public void onNothingSelected(AdapterView<?> adapterView) {
 
-                            @Override
-                            public void onNothingSelected(AdapterView<?> adapterView) {
+                                }
+                            });
+                            tableName = ProfileContract.DumbbellLifts.TABLE_NAME;
+                            break;
+                        case 2: //set up for bodyweight/gymnastic lifts
+                            arrayAdapter =
+                                    new ArrayAdapter<String>(view.getContext(),
+                                            R.layout.spinner_format,
+                                            getResources().getStringArray(R.array.bodyweight_array));
+                            arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            spinActivity.setAdapter(arrayAdapter);
+                            spinActivity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                @Override
+                                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                    if (i == 16) { // special setup for planks as they are time based and longer times are better
+                                        timeBased();
+                                        plank = true;
+                                    } else { //bodyWeightBased
+                                        bodyWeightBased();
+                                        plank = false;
+                                    }
 
-                            }
-                        });
-                        tableName = ProfileContract.Running.TABLE_NAME;
-                        break;
-                    case 4: //swimming set up
-                        arrayAdapter =
-                                new ArrayAdapter<String>(view.getContext(),
-                                        R.layout.spinner_format,
-                                        getResources().getStringArray(R.array.swimming_array));
-                        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        spinActivity.setAdapter(arrayAdapter);
-                        spinActivity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                swimmingBased();
-                                plank = false;
-                            }
+                                }
 
-                            @Override
-                            public void onNothingSelected(AdapterView<?> adapterView) {
+                                @Override
+                                public void onNothingSelected(AdapterView<?> adapterView) {
 
-                            }
-                        });
-                        tableName = ProfileContract.Swimming.TABLE_NAME;
-                        break;
-                    case 5: //crossfit girls set up
-                        arrayAdapter =
-                                new ArrayAdapter<String>(view.getContext(),
-                                        R.layout.spinner_format,
-                                        getResources().getStringArray(R.array.crossfit_girls_array));
-                        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        spinActivity.setAdapter(arrayAdapter);
-                        spinActivity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                if (i == 0 || i == 2 || i == 3 || i == 4
-                                        || i == 5 || i == 6 || i == 7 || i == 8 || i == 9)
-                                    crossFitBased();//split between timebased crossfit and AMRAPS
-                                else crossFitAMRAP();
-                                plank = false;
-                            }
+                                }
+                            });
+                            tableName = ProfileContract.Gymnastics.TABLE_NAME;
+                            break;
+                        case 3: //running set up
+                            arrayAdapter =
+                                    new ArrayAdapter<String>(view.getContext(),
+                                            R.layout.spinner_format,
+                                            getResources().getStringArray(R.array.running_array));
+                            arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            spinActivity.setAdapter(arrayAdapter);
+                            spinActivity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                @Override
+                                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                    timeBased();
+                                    plank = false;
+                                }
 
-                            @Override
-                            public void onNothingSelected(AdapterView<?> adapterView) {
+                                @Override
+                                public void onNothingSelected(AdapterView<?> adapterView) {
 
-                            }
-                        });
-                        tableName = ProfileContract.CrossFitStandards.TABLE_NAME;
-                        break;
-                    case 6://heroes array set up
-                        arrayAdapter =
-                                new ArrayAdapter<String>(view.getContext(),
-                                        R.layout.spinner_format,
-                                        getResources().getStringArray(R.array.crossfit_heroes_array));
-                        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        spinActivity.setAdapter(arrayAdapter);
-                        spinActivity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                if (i == 0 || i == 1 || i == 2 || i == 3 || i == 4 || i == 6)
-                                    crossFitBased();
-                                else crossFitAMRAP();
-                                plank = false;
-                            }
+                                }
+                            });
+                            tableName = ProfileContract.Running.TABLE_NAME;
+                            break;
+                        case 4: //swimming set up
+                            arrayAdapter =
+                                    new ArrayAdapter<String>(view.getContext(),
+                                            R.layout.spinner_format,
+                                            getResources().getStringArray(R.array.swimming_array));
+                            arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            spinActivity.setAdapter(arrayAdapter);
+                            spinActivity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                @Override
+                                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                    swimmingBased();
+                                    plank = false;
+                                }
 
-                            @Override
-                            public void onNothingSelected(AdapterView<?> adapterView) {}
-                        });
-                        tableName = ProfileContract.CrossFitStandards.TABLE_NAME;
-                        break;
-                    case 7://crossfit open array
-                        arrayAdapter =
-                                new ArrayAdapter<String>(view.getContext(),
-                                        R.layout.spinner_format,
-                                        getResources().getStringArray(R.array.crossfit_open_array));
-                        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        spinActivity.setAdapter(arrayAdapter);
-                        spinActivity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                if (i == 14 || i == 18 || i == 23 || i == 25 || i ==26)
-                                    crossFitBased();
-                                else crossFitAMRAP();
-                                plank = false;
-                            }
+                                @Override
+                                public void onNothingSelected(AdapterView<?> adapterView) {
 
-                            @Override
-                            public void onNothingSelected(AdapterView<?> adapterView) {
+                                }
+                            });
+                            tableName = ProfileContract.Swimming.TABLE_NAME;
+                            break;
+                        case 5: //crossfit girls set up
+                            arrayAdapter =
+                                    new ArrayAdapter<String>(view.getContext(),
+                                            R.layout.spinner_format,
+                                            getResources().getStringArray(R.array.crossfit_girls_array));
+                            arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            spinActivity.setAdapter(arrayAdapter);
+                            spinActivity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                @Override
+                                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                    if (i == 0 || i == 2 || i == 3 || i == 4
+                                            || i == 5 || i == 6 || i == 7 || i == 8 || i == 9)
+                                        crossFitBased();//split between timebased crossfit and AMRAPS
+                                    else crossFitAMRAP();
+                                    plank = false;
+                                }
 
-                            }
-                        });
-                        tableName = ProfileContract.CrossFitStandards.TABLE_NAME;
-                        break;
+                                @Override
+                                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                                }
+                            });
+                            tableName = ProfileContract.CrossFitStandards.TABLE_NAME;
+                            break;
+                        case 6://heroes array set up
+                            arrayAdapter =
+                                    new ArrayAdapter<String>(view.getContext(),
+                                            R.layout.spinner_format,
+                                            getResources().getStringArray(R.array.crossfit_heroes_array));
+                            arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            spinActivity.setAdapter(arrayAdapter);
+                            spinActivity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                @Override
+                                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                    if (i == 0 || i == 1 || i == 2 || i == 3 || i == 4 || i == 6)
+                                        crossFitBased();
+                                    else crossFitAMRAP();
+                                    plank = false;
+                                }
+
+                                @Override
+                                public void onNothingSelected(AdapterView<?> adapterView) {
+                                }
+                            });
+                            tableName = ProfileContract.CrossFitStandards.TABLE_NAME;
+                            break;
+                        case 7://crossfit open array
+                            arrayAdapter =
+                                    new ArrayAdapter<String>(view.getContext(),
+                                            R.layout.spinner_format,
+                                            getResources().getStringArray(R.array.crossfit_open_array));
+                            arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            spinActivity.setAdapter(arrayAdapter);
+                            spinActivity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                @Override
+                                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                    if (i == 14 || i == 18 || i == 23 || i == 25 || i == 26)
+                                        crossFitBased();
+                                    else crossFitAMRAP();
+                                    plank = false;
+                                }
+
+                                @Override
+                                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                                }
+                            });
+                            tableName = ProfileContract.CrossFitStandards.TABLE_NAME;
+                            break;
+                    }
+                    spinActivity.setEnabled(true);
                 }
-                spinActivity.setEnabled(true);
+                catch (NullPointerException e){
+                    Log.d("addResult", "null pointer");
+                }
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
